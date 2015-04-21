@@ -7,36 +7,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 
-public class LoginActivity extends ActionBarActivity {
-    private static final String TAG= "LoginActivity";
-    private TextView mSignUpTextView;
-    private static final int Intent_User_Index = 123;
+public class UserDemographicActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
-        mSignUpTextView = (TextView)findViewById(R.id.sign_up_text_view);
-    }
-
-    public void signUp(View button){
-        Intent createAccountIntent = new Intent(this, CreateAccountActivity.class);
-        startActivityForResult(createAccountIntent, Intent_User_Index);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        setContentView(R.layout.activity_user_demographic);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_user_demographic, menu);
         return true;
     }
 

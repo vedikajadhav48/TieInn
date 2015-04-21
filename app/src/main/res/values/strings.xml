@@ -7,6 +7,12 @@
     <string name="edit_text_email_address">Email</string>
     <string name="edit_text_password">Password</string>
     <string name="login_button_text">Log In</string>
+    <string name="sign_up_text">Sign Up</string>
     <string name="create_account_button_text">Create Account</string>
+    <string name="title_activity_create_account">CreateAccountActivity</string>
+    <string name="edit_text_name">Name</string>
+    <string name="edit_text_confirm_password">Confirm Password</string>
+    <string name="have_account_button_text">Have Account?</string>
+    <string name="title_activity_user_demographic">UserDemographicActivity</string>
 
 </resources>

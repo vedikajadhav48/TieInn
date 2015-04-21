@@ -7,25 +7,24 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 
-public class LoginActivity extends ActionBarActivity {
+public class CreateAccountActivity extends ActionBarActivity {
     private static final String TAG= "LoginActivity";
-    private TextView mSignUpTextView;
+    private Button mCreateAccountButton;
     private static final int Intent_User_Index = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_create_account);
 
-        mSignUpTextView = (TextView)findViewById(R.id.sign_up_text_view);
+        mCreateAccountButton = (Button)findViewById(R.id.create_account_button);
     }
 
-    public void signUp(View button){
-        Intent createAccountIntent = new Intent(this, CreateAccountActivity.class);
-        startActivityForResult(createAccountIntent, Intent_User_Index);
+    public void createAccount(View button){
+        Intent userDemographicIntent = new Intent(this, UserDemographicActivity.class);
+        startActivityForResult(userDemographicIntent, Intent_User_Index);
     }
 
     @Override
@@ -36,7 +35,7 @@ public class LoginActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_create_account, menu);
         return true;
     }
 
