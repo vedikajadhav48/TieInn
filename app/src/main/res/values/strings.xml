@@ -4,7 +4,7 @@
     <string name="app_name">TieInn</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="edit_text_email_address">Email</string>
+    <string name="edit_text_username">Username</string>
     <string name="edit_text_password">Password</string>
     <string name="login_button_text">Log In</string>
     <string name="sign_up_text">Sign Up</string>
@@ -14,5 +14,33 @@
     <string name="edit_text_confirm_password">Confirm Password</string>
     <string name="have_account_button_text">Have Account?</string>
     <string name="title_activity_user_demographic">UserDemographicActivity</string>
+    <string name="facebook_app_id">1415149058803482</string>
+    <string name="demographic_question_1">What is your age?</string>
+    <string name="demographic_question_2">What university do you attend?</string>
+    <string name="demographic_question_3">What is your major?</string>
+    
+    <string-array name="age_array">
+        <item>16-20</item>
+        <item>21-25</item>
+        <item>26-30</item>
+        <item>31-35</item>
+        <item>36-40</item>
+        <item>41-45</item>
+        <item>46-50</item>
+        <item>51-55</item>
+        <item>56-60</item>
+    </string-array>
+
+    <string-array name="university_array">
+        <item>San Diego State University</item>
+        <item>University of California San Diego</item>
+    </string-array>
+
+    <string-array name="major_array">
+        <item>Computer Science</item>
+        <item>Marketing</item>
+        <item>Business</item>
+        <item>Music</item>
+    </string-array>
 
 </resources>

@@ -35,13 +35,15 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
     <EditText
-        android:id="@+id/edit_text_email_address"
+        android:id="@+id/edit_text_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:inputType="textEmailAddress"
-        android:hint="@string/edit_text_email_address"
-        android:imeOptions="actionNext"/>
+        android:hint="@string/edit_text_username"
+        android:imeOptions="actionNext"
+        android:layout_marginBottom="10dp"/>
+        <requestFocus />
 
         <EditText
             android:id="@+id/edit_text_password"
@@ -51,6 +53,8 @@
             android:inputType="textPassword"
             android:hint="@string/edit_text_password"
             android:imeOptions="actionDone"/>
+        <requestFocus />
+
     </LinearLayout>
 
     <LinearLayout
@@ -59,23 +63,23 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/log_in_button"
+            android:id="@+id/login_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="4dp"
             android:layout_weight="0.5"
             android:text="@string/login_button_text"/>
 
-        <Button
-            android:id="@+id/facebook_log_in_button"
+        <com.facebook.login.widget.LoginButton
+            xmlns:fb="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/facebook_login_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="4dp"
             android:layout_weight="0.5"
-            android:background="@color/blue"
-            android:text="@string/login_button_text"/>
+            fb:login_text="@string/login_button_text"/>
 
-        </LinearLayout>
+    </LinearLayout>
     </LinearLayout>
 
     <TextView

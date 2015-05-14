@@ -42,12 +42,12 @@
                 android:imeOptions="actionNext"/>
 
             <EditText
-                android:id="@+id/edit_text_email_address"
+                android:id="@+id/edit_text_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:inputType="textEmailAddress"
-                android:hint="@string/edit_text_email_address"
+                android:hint="@string/edit_text_username"
                 android:imeOptions="actionNext"/>
 
             <EditText

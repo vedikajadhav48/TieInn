@@ -7,18 +7,29 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 
 public class CreateAccountActivity extends ActionBarActivity {
     private static final String TAG= "LoginActivity";
     private Button mCreateAccountButton;
     private static final int Intent_User_Index = 123;
+    private EditText nameEditText;
+    private EditText usernameEditText;
+    private EditText passwordEditText;
+    private EditText confirmPasswordEditText;
+    private String name;
+    private String username;
+    private String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
-
+        nameEditText = (EditText)findViewById(R.id.edit_text_name);
+        usernameEditText = (EditText) findViewById(R.id.edit_text_username);
+        passwordEditText = (EditText) findViewById(R.id.edit_text_password);
+        confirmPasswordEditText = (EditText) findViewById(R.id.edit_text_confirm_password);
         mCreateAccountButton = (Button)findViewById(R.id.create_account_button);
     }
 

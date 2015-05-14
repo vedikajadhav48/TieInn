@@ -6,15 +6,43 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 
 
-public class UserDemographicActivity extends ActionBarActivity {
+public class UserDemographicActivity extends ActionBarActivity implements AdapterView.OnItemSelectedListener {
+    private Spinner ageSpinner;
+    private Spinner universitySpinner;
+    private Spinner majorSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_demographic);
+        ageSpinner = (Spinner) findViewById(R.id.age_spinner);
+        universitySpinner = (Spinner) findViewById(R.id.university_spinner);
+        majorSpinner = (Spinner) findViewById(R.id.major_spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.age_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        ageSpinner.setAdapter(adapter);
+
+        adapter = ArrayAdapter.createFromResource(this, R.array.university_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        universitySpinner.setAdapter(adapter);
+
+        adapter = ArrayAdapter.createFromResource(this, R.array.major_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        majorSpinner.setAdapter(adapter);
+
+        ageSpinner.setOnItemSelectedListener(this);
+        universitySpinner.setOnItemSelectedListener(this);
+        majorSpinner.setOnItemSelectedListener(this);
     }
 
     @Override
@@ -37,5 +65,15 @@ public class UserDemographicActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }
