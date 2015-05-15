@@ -6,26 +6,26 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#444488"
+        android:background="@color/maroon"
         android:orientation="vertical" >
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="toggleMenu"
-            android:text="Button 1" />
+            android:text="@string/events_and_postings" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="toggleMenu"
-            android:text="Button 2" />
+            android:text="@string/greek_life" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="toggleMenu"
-            android:text="Button 3" />
+            android:text="@string/class_schedule" />
     </LinearLayout>
 
     <LinearLayout
@@ -38,7 +38,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:background="#888888">
 
             <Button
                 android:layout_width="wrap_content"

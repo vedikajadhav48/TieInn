@@ -45,5 +45,9 @@
     <string name="title_activity_home">Home</string>
     <string name="done_button_text">Done</string>
     <string name="news_feed_textView">NewsFeed</string>
+    <string name="events_and_postings">Events and Postings</string>
+    <string name="greek_life">Greek Life</string>
+    <string name="class_schedule">Class Schedule</string>
+    <string name="professor_contact_info">Professor Contact Info</string>
 
 </resources>

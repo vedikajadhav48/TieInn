@@ -1,0 +1,30 @@
+This is a Tie-In app which is still under development stage. Me(working on Android version) and Thong(working on iOS version)
+are working with Josh and Cameron to achieve the following goals:
+
+What is Tie-In?
+Tie-In is an academic related smartphone application for San Diego State University.
+
+Target Audience:
+-->SDSU students and staff to begin with. Faculty, Professors, and Students will all use this app.
+-->If we are able to have it successfully work at SDSU we can then begin to expand it for other campuses in San Diego
+ (4 year universities and community colleges).
+-->This app has the potential to be used by every college in the nation
+
+Goals achieved till now:
+--> Login screens
+--> CreateAccountScreen
+--> UserDemographic screen
+--> Home screen, Swipe-In menu which will contain links to events and postings, Blackboard, News Feed of clubs and organizations, contact information etc.
+--> Added Facebook login button so that when people log into the tie-inn app with Facebook they can grant permissions to our app to retrieve their information.
+
+Yet to cover?
+-->Links to events and postings.
+-->An app that ultimately combines Blackboard, Web portal, SDSU pages (scholarships, events, etc.) and Rohan email page
+Clubs, originations, ands Greek posting boards.
+-->News feed ( Displaying all campus, clubs, events, organizations information)
+-->Professor rating page (similar to “Rate My Professor” but all posts would include users name for honest and legitimate reviews)
+-->Ability to find the contact information for every professor and faculty member on campus in an easily accessible way.
+
+Not working:
+--> Connectivity to MySQL database that is created using phpMyAdmin
+--> Facebook login works first time while the app logins but second time it stops working and gives error : This app has no Android key hashes configured.
