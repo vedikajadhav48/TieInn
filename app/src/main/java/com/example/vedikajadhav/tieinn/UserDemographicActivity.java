@@ -16,6 +16,7 @@ public class UserDemographicActivity extends ActionBarActivity implements Adapte
     private Spinner ageSpinner;
     private Spinner universitySpinner;
     private Spinner majorSpinner;
+    private Button mDoneButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,15 @@ public class UserDemographicActivity extends ActionBarActivity implements Adapte
         ageSpinner.setOnItemSelectedListener(this);
         universitySpinner.setOnItemSelectedListener(this);
         majorSpinner.setOnItemSelectedListener(this);
+
+        mDoneButton = (Button)findViewById(R.id.done_button);
+        mDoneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent homeIntent = new Intent(getApplicationContext(), Home.class);
+                startActivity(homeIntent);
+            }
+        });
     }
 
     @Override

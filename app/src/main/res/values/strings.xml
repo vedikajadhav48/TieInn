@@ -8,6 +8,7 @@
     <string name="edit_text_password">Password</string>
     <string name="login_button_text">Log In</string>
     <string name="sign_up_text">Sign Up</string>
+    <string name="forgot_password">Forgot Password?</string>
     <string name="create_account_button_text">Create Account</string>
     <string name="title_activity_create_account">CreateAccountActivity</string>
     <string name="edit_text_name">Name</string>
@@ -18,7 +19,7 @@
     <string name="demographic_question_1">What is your age?</string>
     <string name="demographic_question_2">What university do you attend?</string>
     <string name="demographic_question_3">What is your major?</string>
-    
+
     <string-array name="age_array">
         <item>16-20</item>
         <item>21-25</item>
@@ -30,17 +31,19 @@
         <item>51-55</item>
         <item>56-60</item>
     </string-array>
-
     <string-array name="university_array">
         <item>San Diego State University</item>
         <item>University of California San Diego</item>
     </string-array>
-
     <string-array name="major_array">
         <item>Computer Science</item>
         <item>Marketing</item>
         <item>Business</item>
         <item>Music</item>
     </string-array>
+
+    <string name="title_activity_home">Home</string>
+    <string name="done_button_text">Done</string>
+    <string name="news_feed_textView">NewsFeed</string>
 
 </resources>

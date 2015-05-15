@@ -39,6 +39,9 @@
                 android:background="@color/white"
                 android:inputType="textPersonName"
                 android:hint="@string/edit_text_name"
+                android:layout_marginBottom="1dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:imeOptions="actionNext"/>
 
             <EditText
@@ -48,6 +51,9 @@
                 android:background="@color/white"
                 android:inputType="textEmailAddress"
                 android:hint="@string/edit_text_username"
+                android:layout_marginBottom="1dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:imeOptions="actionNext"/>
 
             <EditText
@@ -57,6 +63,9 @@
                 android:background="@color/white"
                 android:inputType="textPassword"
                 android:hint="@string/edit_text_password"
+                android:layout_marginBottom="1dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:imeOptions="actionNext"/>
 
         <EditText
@@ -66,13 +75,15 @@
             android:background="@color/white"
             android:inputType="textPassword"
             android:hint="@string/edit_text_confirm_password"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:imeOptions="actionDone"/>
         
         <Button
             android:id="@+id/create_account_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:text="@string/create_account_button_text"
             android:onClick="createAccount"/>
 
@@ -85,7 +96,5 @@
         android:layout_weight="0"
         android:clickable="true"
         android:text="@string/have_account_button_text"/>
-
-
 
 </LinearLayout>

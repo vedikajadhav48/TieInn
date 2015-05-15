@@ -1,0 +1,60 @@
+<com.example.vedikajadhav.view.viewgroup.FlyOutContainer xmlns:android="http://schemas.android.com/apk/res/android"
+                                                              android:layout_width="match_parent"
+                                                              android:layout_height="match_parent" >
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#444488"
+        android:orientation="vertical" >
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="toggleMenu"
+            android:text="Button 1" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="toggleMenu"
+            android:text="Button 2" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="toggleMenu"
+            android:text="Button 3" />
+    </LinearLayout>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="toggleMenu"
+                android:background="@drawable/reveal_icon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textSize="20dp"
+            android:paddingLeft="70dp"
+            android:text="@string/news_feed_textView" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</com.example.vedikajadhav.view.viewgroup.FlyOutContainer>
