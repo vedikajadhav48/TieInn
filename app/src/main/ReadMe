@@ -28,3 +28,5 @@ Clubs, originations, ands Greek posting boards.
 Not working:
 --> Connectivity to MySQL database that is created using phpMyAdmin
 --> Facebook login works first time while the app logins but second time it stops working and gives error : This app has no Android key hashes configured.
+
+References: https://developers.facebook.com/docs/facebook-login/android/v2.3
