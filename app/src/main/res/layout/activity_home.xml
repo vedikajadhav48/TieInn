@@ -1,6 +1,7 @@
 <com.example.vedikajadhav.view.viewgroup.FlyOutContainer xmlns:android="http://schemas.android.com/apk/res/android"
-                                                              android:layout_width="match_parent"
-                                                              android:layout_height="match_parent" >
+                                                         xmlns:facebook="http://schemas.android.com/apk/res-auto"
+                                                         android:layout_width="match_parent"
+                                                         android:layout_height="match_parent">
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -9,23 +10,34 @@
         android:background="@color/maroon"
         android:orientation="vertical" >
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="toggleMenu"
-            android:text="@string/events_and_postings" />
+        <ImageView
+            android:id="@+id/image_profile_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="toggleMenu"
-            android:text="@string/greek_life" />
+            android:text="@string/home" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="toggleMenu"
-            android:text="@string/class_schedule" />
+            android:text="@string/account" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="toggleMenu"
+            android:text="@string/contact_us" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="toggleMenu"
+            android:text="@string/logout" />
     </LinearLayout>
 
     <LinearLayout
@@ -45,7 +57,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="toggleMenu"
-                android:background="@drawable/reveal_icon" />
+                android:background="@drawable/reveal_icon"/>
 
         <TextView
             android:layout_width="wrap_content"
