@@ -73,7 +73,7 @@ public class LoginActivity extends ActionBarActivity{
     private ProgressDialog pDialog;
     // JSON parser class
     JSONParser jsonParser = new JSONParser();
-    private static final String LOGIN_URL = "http://www.tieinn.comuv.com/login.php";
+    private static final String LOGIN_URL = "www.tieinn.comuv.com/login.php";
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
 
