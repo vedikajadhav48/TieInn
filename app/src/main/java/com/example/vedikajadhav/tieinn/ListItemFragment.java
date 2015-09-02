@@ -9,9 +9,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-
-import com.example.vedikajadhav.tieinn.dummy.DummyContent;
-
 /**
  * A fragment representing a list of Items.
  * <p/>

@@ -7,9 +7,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.vedikajadhav.tieinn.dummy.DummyContent;
-
-
 public class DetailActivity extends FragmentActivity {
 
     @Override

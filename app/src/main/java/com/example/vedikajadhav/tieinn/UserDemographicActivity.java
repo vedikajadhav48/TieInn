@@ -49,7 +49,7 @@ public class UserDemographicActivity extends ActionBarActivity implements Adapte
         mDoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent homeIntent = new Intent(getApplicationContext(), Home.class);
+                Intent homeIntent = new Intent(getApplicationContext(), HomeActivity.class);
                 startActivity(homeIntent);
             }
         });

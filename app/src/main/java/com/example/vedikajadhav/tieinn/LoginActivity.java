@@ -123,9 +123,9 @@ public class LoginActivity extends ActionBarActivity{
                 request.setParameters(parameters);
                 request.executeAsync();*/
 
-                Intent home = new Intent(getApplicationContext(), MainHostActivity.class);
+                Intent home = new Intent(getApplicationContext(), HomeActivity.class);
                 //home.putExtra(EXTRA_LOGIN_RESULT, loginResult);
-                home.putExtra(MainHostActivity.Intent_fb_user_id, fb_user_id);
+                home.putExtra(HomeActivity.Intent_fb_user_id, fb_user_id);
                // startActivityForResult(createAccountIntent, Intent_User_Index);
                 startActivity(home);
 
@@ -233,7 +233,7 @@ class AttemptLogin extends AsyncTask<String, String, String> {
             success = json.getInt(TAG_SUCCESS);
             if (success == 1) {
                 Log.d("Successfully Login!", json.toString());
-                Intent ii = new Intent(LoginActivity.this,MainHostActivity.class);
+                Intent ii = new Intent(LoginActivity.this,HomeActivity.class);
                 finish();
                 // this finish() method is used to tell android os that we are done with current
                 // activity now! Moving to other activity

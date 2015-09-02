@@ -1,73 +1,38 @@
-<com.example.vedikajadhav.view.viewgroup.FlyOutContainer xmlns:android="http://schemas.android.com/apk/res/android"
-                                                         xmlns:facebook="http://schemas.android.com/apk/res-auto"
-                                                         android:layout_width="match_parent"
-                                                         android:layout_height="match_parent">
-
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/maroon"
-        android:orientation="vertical" >
-
-        <ImageView
-            android:id="@+id/image_profile_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="toggleMenu"
-            android:text="@string/home" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="toggleMenu"
-            android:text="@string/account" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="toggleMenu"
-            android:text="@string/contact_us" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="toggleMenu"
-            android:text="@string/logout" />
-    </LinearLayout>
-
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#ffffff"
-        android:orientation="vertical">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:paddingLeft="@dimen/activity_horizontal_margin"
+              android:paddingRight="@dimen/activity_horizontal_margin"
+              android:paddingTop="@dimen/activity_vertical_margin"
+              android:paddingBottom="@dimen/activity_vertical_margin"
+              android:background="@color/maroon"
+              android:orientation="vertical"
+              tools:context="com.example.vedikajadhav.tieinn.HomeActivity">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="#888888">
+            android:orientation="horizontal">
 
-            <Button
+            <ImageView
+                android:id="@+id/image_profile_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/profile_name_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="toggleMenu"
-                android:background="@drawable/reveal_icon"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:textSize="20dp"
-            android:paddingLeft="70dp"
-            android:text="@string/news_feed_textView" />
+                />
 
         </LinearLayout>
-    </LinearLayout>
 
-</com.example.vedikajadhav.view.viewgroup.FlyOutContainer>
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </ListView>
+
+</LinearLayout>
