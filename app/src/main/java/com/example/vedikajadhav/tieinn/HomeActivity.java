@@ -1,5 +1,6 @@
 package com.example.vedikajadhav.tieinn;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -57,6 +58,27 @@ public class HomeActivity extends ActionBarActivity {
 
                 //show alert
                 Toast.makeText(getApplicationContext(), "Position"+ itemPosition+ "ListItem" + itemValue, Toast.LENGTH_LONG).show();
+                switch(position){
+                    case 0:
+                        Intent intent0 = new Intent(getApplicationContext(), DiscussionBoardActivity.class);
+                        startActivity(intent0);
+                        break;
+                    case 1:
+                        Intent intent1 = new Intent(getApplicationContext(), AccountActivity.class);
+                        startActivity(intent1);
+                        break;
+                    case 2:
+                        Intent intent2 = new Intent(getApplicationContext(), ContactUsActivity.class);
+                        startActivity(intent2);
+                        break;
+                    case 3:
+                        Intent intent3 = new Intent(getApplicationContext(), LogoutActivity.class);
+                        startActivity(intent3);
+                        break;
+                    default:
+                }
+               // Intent intent = new Intent(getApplicationContext(), .class);
+                //intent.setClass()
             }
         });
         // profilePictureView = (ProfilePictureView) findViewById(R.id.profile_picture_view);

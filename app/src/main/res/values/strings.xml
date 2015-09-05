@@ -58,5 +58,14 @@
     <string name="title_activity_main_host">MainHostActivity</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_detail">DetailActivity</string>
+    <string name="title_activity_discussion_board">DiscussionBoard</string>
+    <string name="title_activity_account">AccountActivity</string>
+    <string name="title_activity_contact_us">ContactUsActivity</string>
+    <string name="title_activity_logout">LogoutActivity</string>
+    <string name="contact_us_text">Contact information:</string>
+    <string name="contact_us_info">veds1988@yahoo.com</string>
+    <string name="send_feedback_button_text">Send Feedback</string>
+    <string name="post_question_button_text">Post Question</string>
+    <string name="question_edit_text_hint">What is your question?</string>
 
 </resources>
