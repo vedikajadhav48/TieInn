@@ -77,6 +77,10 @@
             android:name=".LogoutActivity"
             android:label="@string/title_activity_logout" >
         </activity>
+        <activity
+            android:name=".CategoryActivity"
+            android:label="@string/title_activity_category" >
+        </activity>
     </application>
 
 </manifest>

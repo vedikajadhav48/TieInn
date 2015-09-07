@@ -73,9 +73,10 @@ public class LoginActivity extends ActionBarActivity{
     private ProgressDialog pDialog;
     // JSON parser class
     JSONParser jsonParser = new JSONParser();
-    private static final String LOGIN_URL = "www.tieinn.comuv.com/login.php";
+    private static final String LOGIN_URL = "http://tieinn.comuv.com/login.php?";
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
+    private static final String TAG_PROFILE_NAME = "profileName";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +88,7 @@ public class LoginActivity extends ActionBarActivity{
         mPasswordEditText = (EditText)findViewById(R.id.edit_text_password_to_login);
        // username = userNameEditText.getText().toString();
        // password = passwordEditText.getText().toString();
-        info = (TextView)findViewById(R.id.info);
+        //info = (TextView)findViewById(R.id.info);
         mLoginButton = (Button)findViewById(R.id.login_button);
         mFacebookLoginButton = (LoginButton)findViewById(R.id.facebook_login_button);
         mSignUpTextView = (TextView)findViewById(R.id.sign_up_text_view);
@@ -238,9 +239,9 @@ class AttemptLogin extends AsyncTask<String, String, String> {
                 // this finish() method is used to tell android os that we are done with current
                 // activity now! Moving to other activity
                 startActivity(ii);
-                return json.getString(TAG_MESSAGE);
+                return json.getString(TAG_PROFILE_NAME);
             }else{
-                return json.getString(TAG_MESSAGE);
+                return json.getString(TAG_PROFILE_NAME);
             }
         }
         catch (JSONException e) {
