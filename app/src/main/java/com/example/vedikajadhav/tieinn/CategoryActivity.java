@@ -1,8 +1,11 @@
 package com.example.vedikajadhav.tieinn;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,11 +16,29 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.vedikajadhav.tieinnLibrary.JSONParser;
 import com.squareup.picasso.Picasso;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class CategoryActivity extends ActionBarActivity {
     private ListView categoryListView;
+
+    // Progress Dialog
+    private ProgressDialog pDialog;
+    // JSON parser class
+    JSONParser jsonParser = new JSONParser();
+    private static final String QUESTION_FEED_URL = "http://tieinn.comuv.com/getQuestion.php?";
+    private static final String TAG_SUCCESS = "success";
+    private static final String TAG_QUESTION = "question";
+    private static final String TAG_CATEGORY = "category";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,25 +69,25 @@ public class CategoryActivity extends ActionBarActivity {
 
                 //show alert
                 Toast.makeText(getApplicationContext(), "Position" + itemPosition + "ListItem" + itemValue, Toast.LENGTH_LONG).show();
-                /*switch(position){
+                switch(position){
                     case 0:
-                        Intent intent0 = new Intent(getApplicationContext(), CategoryActivity.class);
+                        Intent intent0 = new Intent(getApplicationContext(), HousingCategoryActivity.class);
                         startActivity(intent0);
                         break;
                     case 1:
-                        Intent intent1 = new Intent(getApplicationContext(), AccountActivity.class);
+                        Intent intent1 = new Intent(getApplicationContext(), HousingCategoryActivity.class);
                         startActivity(intent1);
                         break;
                     case 2:
-                        Intent intent2 = new Intent(getApplicationContext(), ContactUsActivity.class);
+                        Intent intent2 = new Intent(getApplicationContext(), HousingCategoryActivity.class);
                         startActivity(intent2);
                         break;
                     case 3:
-                        Intent intent3 = new Intent(getApplicationContext(), LogoutActivity.class);
+                        Intent intent3 = new Intent(getApplicationContext(), HousingCategoryActivity.class);
                         startActivity(intent3);
                         break;
                     default:
-                }*/
+                }
                 // Intent intent = new Intent(getApplicationContext(), .class);
                 //intent.setClass()
             }
@@ -94,5 +115,66 @@ public class CategoryActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    class FeedQuestions extends AsyncTask<String, String, String> {
+        /** * Before starting background thread Show Progress Dialog * */
+        boolean failure = false;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(CategoryActivity.this);
+            pDialog.setMessage("Registering...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... args) {
+            // TODO Auto-generated method stub
+            // here Check for success tag
+            int success;
+           // String profileName = mProfileNameEditText.getText().toString();
+            //String username = mUsernameEditText.getText().toString();
+            //String password = mPasswordEditText.getText().toString();
+            try {
+                List<NameValuePair> params = new ArrayList<NameValuePair>();
+                params.add(new BasicNameValuePair("category", "Housing"));
+               // params.add(new BasicNameValuePair("password", password));
+               // params.add(new BasicNameValuePair("profileName", profileName));
+                Log.d("request!", "starting");
+                JSONObject json = jsonParser.makeHttpRequest( QUESTION_FEED_URL, "POST", params);
+                // checking log for json response
+                Log.d("Registration attempt", json.toString());
+                // success tag for json
+                success = json.getInt(TAG_SUCCESS);
+                if (success == 1) {
+                    Log.d("Successfully Login!", json.toString());
+                    Intent ii = new Intent(CategoryActivity.this,HousingCategoryActivity.class);
+                    finish();
+                    // this finish() method is used to tell android os that we are done with current
+                    // activity now! Moving to other activity
+                    ii.putExtra(HousingCategoryActivity.Intent_question, json.getString(TAG_QUESTION));
+                    startActivity(ii);
+                    return json.getString(TAG_QUESTION);
+                }else{
+                    return json.getString(TAG_QUESTION);
+                }
+            }
+            catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        /** * Once the background process is done we need to Dismiss the progress dialog asap * **/
+        protected void onPostExecute(String message) {
+            pDialog.dismiss();
+            if (message != null){
+                Toast.makeText(CategoryActivity.this, message, Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }

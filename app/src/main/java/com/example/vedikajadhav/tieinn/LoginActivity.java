@@ -177,7 +177,8 @@ public class LoginActivity extends ActionBarActivity{
 
     public void signUp(View button){
         Intent createAccountIntent = new Intent(this, CreateAccountActivity.class);
-        startActivityForResult(createAccountIntent, Intent_User_Index);
+        startActivity(createAccountIntent);
+        //startActivityForResult(createAccountIntent, Intent_User_Index);
     }
 
     public void forgotPassword(View button){
@@ -238,6 +239,7 @@ class AttemptLogin extends AsyncTask<String, String, String> {
                 finish();
                 // this finish() method is used to tell android os that we are done with current
                 // activity now! Moving to other activity
+                ii.putExtra(HomeActivity.Intent_profile_name, json.getString(TAG_PROFILE_NAME));
                 startActivity(ii);
                 return json.getString(TAG_PROFILE_NAME);
             }else{

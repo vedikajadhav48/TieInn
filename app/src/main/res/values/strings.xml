@@ -71,6 +71,7 @@
     <string name="answer_button_text">Write Answer</string>
     <string name="title_activity_category">CategoryActivity</string>
     <string name="choose_category_text">Select a Category for discussion:</string>
+
     <string-array name="category_list_menu_items">
         <item>ACADEMIC</item>
         <item>HOUSING</item>
@@ -78,5 +79,7 @@
         <item>TRAVEL</item>
         <item>OTHER</item>
     </string-array>
+
+    <string name="title_activity_housing_category">HousingCategoryActivity</string>
 
 </resources>

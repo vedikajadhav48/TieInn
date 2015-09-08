@@ -24,6 +24,8 @@ public class HomeActivity extends ActionBarActivity {
     private ProfilePictureView profilePictureView;
     private String fbUserId;
     public static final String Intent_fb_user_id = "com.example.vedikajadhav.tieinn.Intent_fb_user_id";
+    private String profileName;
+    public static final String Intent_profile_name = "com.example.vedikajadhav.tieinn.Intent_profile_name";
     private Bitmap fbProfilePicBitmap;
     private ImageView imageProfileView;
     private TextView profileNameTextView;
@@ -87,15 +89,19 @@ public class HomeActivity extends ActionBarActivity {
 
         // this.setContentView(root);
 
+        profileName = getIntent().getStringExtra(Intent_profile_name);
         fbUserId = getIntent().getStringExtra(Intent_fb_user_id);
+
         imageProfileView = (ImageView) findViewById(R.id.image_profile_view);
         profileNameTextView = (TextView) findViewById(R.id.profile_name_text);
+
+        profileNameTextView.setText("Welcome, " + profileName + "!");
         Picasso.with(getApplicationContext()).load("https://graph.facebook.com/" + fbUserId+ "/picture?type=large").into(imageProfileView);
 
         //profileNameTextView = (TextView) findViewById(R.id.profile_name_text);
         //profilePictureView.setProfileId(fbUserId);
 
-        profileNameTextView.setText(fbUserId);
+
 
     }
 
