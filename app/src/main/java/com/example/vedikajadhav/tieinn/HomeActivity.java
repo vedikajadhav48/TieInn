@@ -1,6 +1,8 @@
 package com.example.vedikajadhav.tieinn;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -74,8 +76,12 @@ public class HomeActivity extends ActionBarActivity {
                         startActivity(intent2);
                         break;
                     case 3:
-                        Intent intent3 = new Intent(getApplicationContext(), LogoutActivity.class);
-                        startActivity(intent3);
+                        SharedPreferences sharedpreferences = getSharedPreferences(LoginActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedpreferences.edit();
+                        editor.clear();
+                        editor.commit();
+                        /*Intent intent3 = new Intent(getApplicationContext(), LogoutActivity.class);
+                        startActivity(intent3);*/
                         break;
                     default:
                 }
@@ -104,6 +110,13 @@ public class HomeActivity extends ActionBarActivity {
 
 
     }
+
+/*    public  void logout(View view){
+        SharedPreferences sharedpreferences = getSharedPreferences(LoginActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.clear();
+        editor.commit();
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

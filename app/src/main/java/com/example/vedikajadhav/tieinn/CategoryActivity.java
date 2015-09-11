@@ -21,6 +21,7 @@ import com.squareup.picasso.Picasso;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,6 +38,7 @@ public class CategoryActivity extends ActionBarActivity {
     JSONParser jsonParser = new JSONParser();
     private static final String QUESTION_FEED_URL = "http://tieinn.comuv.com/getQuestion.php?";
     private static final String TAG_SUCCESS = "success";
+    private static final String TAG_MESSAGE = "message";
     private static final String TAG_QUESTION = "question";
     private static final String TAG_CATEGORY = "category";
 
@@ -71,12 +73,13 @@ public class CategoryActivity extends ActionBarActivity {
                 Toast.makeText(getApplicationContext(), "Position" + itemPosition + "ListItem" + itemValue, Toast.LENGTH_LONG).show();
                 switch(position){
                     case 0:
-                        Intent intent0 = new Intent(getApplicationContext(), HousingCategoryActivity.class);
+                        Intent intent0 = new Intent(getApplicationContext(), AcademicCategoryActivity.class);
                         startActivity(intent0);
                         break;
                     case 1:
-                        Intent intent1 = new Intent(getApplicationContext(), HousingCategoryActivity.class);
-                        startActivity(intent1);
+                        new FeedQuestions().execute();
+                        //Intent intent1 = new Intent(getApplicationContext(), HousingCategoryActivity.class);
+                        //startActivity(intent1);
                         break;
                     case 2:
                         Intent intent2 = new Intent(getApplicationContext(), HousingCategoryActivity.class);
@@ -125,7 +128,7 @@ public class CategoryActivity extends ActionBarActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             pDialog = new ProgressDialog(CategoryActivity.this);
-            pDialog.setMessage("Registering...");
+            pDialog.setMessage("Feeding Questions...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(true);
             pDialog.show();
@@ -146,6 +149,7 @@ public class CategoryActivity extends ActionBarActivity {
                // params.add(new BasicNameValuePair("profileName", profileName));
                 Log.d("request!", "starting");
                 JSONObject json = jsonParser.makeHttpRequest( QUESTION_FEED_URL, "POST", params);
+               // JSONArray json = jsonParser.makeHttpRequest( QUESTION_FEED_URL, "POST", params);
                 // checking log for json response
                 Log.d("Registration attempt", json.toString());
                 // success tag for json
@@ -157,10 +161,11 @@ public class CategoryActivity extends ActionBarActivity {
                     // this finish() method is used to tell android os that we are done with current
                     // activity now! Moving to other activity
                     ii.putExtra(HousingCategoryActivity.Intent_question, json.getString(TAG_QUESTION));
+                    ii.putExtra(HousingCategoryActivity.Intent_category, json.getString(TAG_CATEGORY));
                     startActivity(ii);
-                    return json.getString(TAG_QUESTION);
+                    return json.getString(TAG_MESSAGE);
                 }else{
-                    return json.getString(TAG_QUESTION);
+                    return json.getString(TAG_MESSAGE);
                 }
             }
             catch (JSONException e) {

@@ -3,6 +3,7 @@ package com.example.vedikajadhav.tieinn;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
@@ -78,6 +79,12 @@ public class LoginActivity extends ActionBarActivity{
     private static final String TAG_MESSAGE = "message";
     private static final String TAG_PROFILE_NAME = "profileName";
 
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String Name = "nameKey";
+    public static final String Pass = "passKey";
+    public static final String Email = "emailKey";
+    SharedPreferences sharedpreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +100,7 @@ public class LoginActivity extends ActionBarActivity{
         mFacebookLoginButton = (LoginButton)findViewById(R.id.facebook_login_button);
         mSignUpTextView = (TextView)findViewById(R.id.sign_up_text_view);
         mForgotPasswordTextView = (TextView)findViewById(R.id.forgot_password_text_view);
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         //facebook_login_button.setText("Log In");
 
         mFacebookLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -163,8 +171,14 @@ public class LoginActivity extends ActionBarActivity{
             Toast.makeText(getApplicationContext(),
                     "Username and Password field empty", Toast.LENGTH_SHORT).show();
         }*/
+        username = mUserNameEditText.getText().toString();
+        password = mPasswordEditText.getText().toString();
+        SharedPreferences.Editor editor = sharedpreferences.edit();
 
-        // TODO Auto-generated method stub
+        editor.putString(Name, username);
+        editor.putString(Pass, password);
+        //editor.putString(Email, e);
+        editor.commit();
         switch (button.getId()) {
             case R.id.login_button:
                  new AttemptLogin().execute();
@@ -221,8 +235,6 @@ class AttemptLogin extends AsyncTask<String, String, String> {
     // TODO Auto-generated method stub
     // here Check for success tag
         int success;
-        String username = mUserNameEditText.getText().toString();
-        String password = mPasswordEditText.getText().toString();
         try {
             List<NameValuePair> params = new ArrayList<NameValuePair>();
             params.add(new BasicNameValuePair("username", username));

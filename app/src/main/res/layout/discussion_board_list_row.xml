@@ -10,12 +10,23 @@
         android:layout_height="wrap_content"
         android:padding="3dip"
         android:layout_alignParentLeft="true"
-        android:layout_marginRight="5dip">
+        android:layout_marginRight="5dip"
+        android:orientation="vertical">
     
         <ImageView
             android:id="@+id/discussionBoardQuestionImage"
             android:layout_width="50dip"
             android:layout_height="50dip"/>
+
+        <TextView
+            android:id="@+id/discussionBoardQuestionCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#040404"
+            android:typeface="sans"
+            android:textSize="15dip"
+            android:textStyle="bold"/>
+
     </LinearLayout>
 
     <TextView

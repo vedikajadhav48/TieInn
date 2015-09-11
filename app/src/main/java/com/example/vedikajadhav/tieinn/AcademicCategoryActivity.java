@@ -15,7 +15,7 @@ import com.example.vedikajadhav.tieinnModel.DiscussionItem;
 import java.util.ArrayList;
 
 
-public class HousingCategoryActivity extends ActionBarActivity {
+public class AcademicCategoryActivity extends ActionBarActivity {
 
     private EditText questionEditText;
     private Button questionPostButton;
@@ -32,22 +32,23 @@ public class HousingCategoryActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_housing_category);
+        setContentView(R.layout.activity_academic_category);
 
-      /*  for(int i=0; i<5; i++){
+        for(int i=0; i<5; i++){
             //JSONObject firstPerson = (JSONObject) data.get(i);
 
             newDiscussionItem.setDiscussionItemText(getResources().getString(R.string.discussion_item_question));
+            newDiscussionItem.setDiscussionCategory("Academic");
             //newInstructor.setFirstName(firstPerson.getString("firstName"));
             // newInstructor.setLastName(firstPerson.getString("lastName"));
             mHousingCategoryList.add(0,newDiscussionItem);
-        }*/
+        }
 
-        question = getIntent().getStringExtra(Intent_question);
-        category = getIntent().getStringExtra(Intent_category);
-        newDiscussionItem.setDiscussionItemText(question);
-        newDiscussionItem.setDiscussionCategory(category);
-        mHousingCategoryList.add(0,newDiscussionItem);
+       // question = getIntent().getStringExtra(Intent_question);
+       // category = getIntent().getStringExtra(Intent_category);
+       // newDiscussionItem.setDiscussionItemText(question);
+        //newDiscussionItem.setDiscussionCategory("Academic");
+       // mHousingCategoryList.add(0,newDiscussionItem);
         questionEditText = (EditText)findViewById(R.id.question_edit_text);
         questionPostButton = (Button)findViewById(R.id.question_post_button);
         discussionListView = (ListView)findViewById(R.id.discussionBoardItemList);
@@ -73,7 +74,7 @@ public class HousingCategoryActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_housing_category, menu);
+        getMenuInflater().inflate(R.menu.menu_academic_category, menu);
         return true;
     }
 

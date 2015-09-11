@@ -85,6 +85,10 @@
             android:name=".HousingCategoryActivity"
             android:label="@string/title_activity_housing_category" >
         </activity>
+        <activity
+            android:name=".AcademicCategoryActivity"
+            android:label="@string/title_activity_academic_category" >
+        </activity>
     </application>
 
 </manifest>

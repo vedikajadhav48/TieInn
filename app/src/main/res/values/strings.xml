@@ -81,5 +81,6 @@
     </string-array>
 
     <string name="title_activity_housing_category">HousingCategoryActivity</string>
+    <string name="title_activity_academic_category">AcademicCategoryActivity</string>
 
 </resources>

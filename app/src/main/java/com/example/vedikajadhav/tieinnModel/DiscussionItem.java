@@ -10,6 +10,7 @@ import android.widget.ListView;
  */
 public class DiscussionItem {
     private ImageView mDiscussionItemImage;
+    private String mDiscussionCategory;
     private String mDiscussionItemText;
     private String mDiscussionItemPostDate;
     private Button mDiscussionItemAnswerButton;
@@ -21,6 +22,14 @@ public class DiscussionItem {
 
     public void setDiscussionItemImage(ImageView discussionItemImage) {
         mDiscussionItemImage = discussionItemImage;
+    }
+
+    public String getDiscussionCategory() {
+        return mDiscussionCategory;
+    }
+
+    public void setDiscussionCategory(String discussionCategory) {
+        mDiscussionCategory = discussionCategory;
     }
 
     public Button getDiscussionItemAnswerButton() {
