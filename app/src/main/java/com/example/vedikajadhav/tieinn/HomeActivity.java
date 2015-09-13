@@ -17,8 +17,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.vedikajadhav.tieinnLibrary.SessionManager;
 import com.facebook.login.widget.ProfilePictureView;
 import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
 
 
 public class HomeActivity extends ActionBarActivity {
@@ -32,11 +35,39 @@ public class HomeActivity extends ActionBarActivity {
     private ImageView imageProfileView;
     private TextView profileNameTextView;
     ListView listView;
+    // Session Manager Class
+    SessionManager session;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        // Session class instance
+        session = new SessionManager(getApplicationContext());
+
+        /**
+         * Call this function whenever you want to check user login
+         * This will redirect user to LoginActivity is he is not
+         * logged in
+         * */
+       // session.checkLogin();
+
+        // Check user login (this is the important point)
+        // If User is not logged in , This will redirect user to LoginActivity
+        // and finish current activity from activity stack.
+        if(session.checkLogin()) {
+            finish();
+        }
+
+        // get user data from session
+        HashMap<String, String> user = session.getUserDetails();
+
+        // name
+        String name = user.get(SessionManager.KEY_NAME);
+
+        // email
+        String email = user.get(SessionManager.KEY_EMAIL);
 
         //Get LisMenuItemView object from xml
         listView = (ListView)findViewById(R.id.listView);
@@ -76,10 +107,14 @@ public class HomeActivity extends ActionBarActivity {
                         startActivity(intent2);
                         break;
                     case 3:
-                        SharedPreferences sharedpreferences = getSharedPreferences(LoginActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+                       /* SharedPreferences sharedpreferences = getSharedPreferences(LoginActivity.MyPREFERENCES, Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedpreferences.edit();
                         editor.clear();
-                        editor.commit();
+                        editor.commit();*/
+                        // Clear the session data
+                        // This will clear all session data and
+                        // redirect user to LoginActivity
+                        session.logoutUser();
                         /*Intent intent3 = new Intent(getApplicationContext(), LogoutActivity.class);
                         startActivity(intent3);*/
                         break;
@@ -106,17 +141,18 @@ public class HomeActivity extends ActionBarActivity {
 
         //profileNameTextView = (TextView) findViewById(R.id.profile_name_text);
         //profilePictureView.setProfileId(fbUserId);
-
-
-
     }
 
-/*    public  void logout(View view){
+    public  void logout(View view){
         SharedPreferences sharedpreferences = getSharedPreferences(LoginActivity.MyPREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.clear();
         editor.commit();
-    }*/
+    }
+
+    public void close(View view){
+        finish();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

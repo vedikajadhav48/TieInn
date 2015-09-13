@@ -2,6 +2,7 @@ package com.example.vedikajadhav.tieinn;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +12,10 @@ import android.widget.ListView;
 
 import com.example.vedikajadhav.tieinnLibrary.DiscussionListAdapter;
 import com.example.vedikajadhav.tieinnModel.DiscussionItem;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -28,6 +33,7 @@ public class HousingCategoryActivity extends ActionBarActivity {
     public static final String Intent_category = "com.example.vedikajadhav.tieinn.Intent_category";
     private String question;
     private String category;
+    private JSONArray questionsJSONArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +49,24 @@ public class HousingCategoryActivity extends ActionBarActivity {
             mHousingCategoryList.add(0,newDiscussionItem);
         }*/
 
+        //question = getIntent().getStringExtra(Intent_question);
         question = getIntent().getStringExtra(Intent_question);
         category = getIntent().getStringExtra(Intent_category);
-        newDiscussionItem.setDiscussionItemText(question);
-        newDiscussionItem.setDiscussionCategory(category);
-        mHousingCategoryList.add(0,newDiscussionItem);
+        try {
+            questionsJSONArray = new JSONArray(question);
+            for(int i=0; i<questionsJSONArray.length(); i++){
+                JSONObject firstQuestion = (JSONObject) questionsJSONArray.get(i);
+                DiscussionItem newDiscussionItem = new DiscussionItem();
+                newDiscussionItem.setDiscussionItemText(firstQuestion.getString("Question"));
+                newDiscussionItem.setDiscussionCategory(firstQuestion.getString("Category"));
+               // newInstructor.setLastName(firstPerson.getString("lastName"));
+                mHousingCategoryList.add(0, newDiscussionItem);
+            }
+            //instructorAdapter.notifyDataSetChanged();
+           // Log.i(TAG, "getInstructorList" + instructorAdapter);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         questionEditText = (EditText)findViewById(R.id.question_edit_text);
         questionPostButton = (Button)findViewById(R.id.question_post_button);
         discussionListView = (ListView)findViewById(R.id.discussionBoardItemList);

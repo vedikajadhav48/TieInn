@@ -2,6 +2,7 @@ package com.example.vedikajadhav.tieinn;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -20,6 +21,9 @@ import com.example.vedikajadhav.tieinnLibrary.JSONParser;
 import com.squareup.picasso.Picasso;
 
 import org.apache.http.NameValuePair;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,6 +45,10 @@ public class CategoryActivity extends ActionBarActivity {
     private static final String TAG_MESSAGE = "message";
     private static final String TAG_QUESTION = "question";
     private static final String TAG_CATEGORY = "category";
+    JSONArray responseJSONArray;
+    //ArrayList<String> combinedResponse = new ArrayList<String>();
+    //OnTaskFinishedListener mOnTaskFinishedListener;
+    AndroidHttpClient mAndroidHttpClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +78,7 @@ public class CategoryActivity extends ActionBarActivity {
                 String itemValue = (String)categoryListView.getItemAtPosition(position);
 
                 //show alert
-                Toast.makeText(getApplicationContext(), "Position" + itemPosition + "ListItem" + itemValue, Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "Position" + itemPosition + "ListItem" + itemValue, Toast.LENGTH_LONG).show();
                 switch(position){
                     case 0:
                         Intent intent0 = new Intent(getApplicationContext(), AcademicCategoryActivity.class);
@@ -145,8 +153,10 @@ public class CategoryActivity extends ActionBarActivity {
             try {
                 List<NameValuePair> params = new ArrayList<NameValuePair>();
                 params.add(new BasicNameValuePair("category", "Housing"));
-               // params.add(new BasicNameValuePair("password", password));
-               // params.add(new BasicNameValuePair("profileName", profileName));
+                //ResponseHandler<JSONArray> responseHandler = new BasicResponseHandler();
+                //HttpGet getMethod = new HttpGet(QUESTION_FEED_URL);
+                //responseJSONArray = mAndroidHttpClient.execute(getMethod, responseHandler);
+                //combinedResponse.add(responseBody);
                 Log.d("request!", "starting");
                 JSONObject json = jsonParser.makeHttpRequest( QUESTION_FEED_URL, "POST", params);
                // JSONArray json = jsonParser.makeHttpRequest( QUESTION_FEED_URL, "POST", params);
@@ -160,8 +170,8 @@ public class CategoryActivity extends ActionBarActivity {
                     finish();
                     // this finish() method is used to tell android os that we are done with current
                     // activity now! Moving to other activity
-                    ii.putExtra(HousingCategoryActivity.Intent_question, json.getString(TAG_QUESTION));
-                    ii.putExtra(HousingCategoryActivity.Intent_category, json.getString(TAG_CATEGORY));
+                    ii.putExtra(HousingCategoryActivity.Intent_question, json.getString(TAG_MESSAGE));
+                   // ii.putExtra(HousingCategoryActivity.Intent_category, json.getString(TAG_CATEGORY));
                     startActivity(ii);
                     return json.getString(TAG_MESSAGE);
                 }else{
@@ -179,6 +189,7 @@ public class CategoryActivity extends ActionBarActivity {
             pDialog.dismiss();
             if (message != null){
                 Toast.makeText(CategoryActivity.this, message, Toast.LENGTH_LONG).show();
+                Log.i("messageJSONARRAY", message);
             }
         }
     }

@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.vedikajadhav.tieinnLibrary.DatabaseHandler;
 import com.example.vedikajadhav.tieinnLibrary.JSONParser;
+import com.example.vedikajadhav.tieinnLibrary.SessionManager;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -79,6 +80,8 @@ public class LoginActivity extends ActionBarActivity{
     private static final String TAG_MESSAGE = "message";
     private static final String TAG_PROFILE_NAME = "profileName";
 
+    // Session Manager Class
+    SessionManager session;
     public static final String MyPREFERENCES = "MyPrefs" ;
     public static final String Name = "nameKey";
     public static final String Pass = "passKey";
@@ -91,6 +94,10 @@ public class LoginActivity extends ActionBarActivity{
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
         setContentView(R.layout.activity_login);
+
+        // Session Manager
+        session = new SessionManager(getApplicationContext());
+
         mUserNameEditText = (EditText)findViewById(R.id.edit_text_username_to_login);
         mPasswordEditText = (EditText)findViewById(R.id.edit_text_password_to_login);
        // username = userNameEditText.getText().toString();
@@ -100,7 +107,7 @@ public class LoginActivity extends ActionBarActivity{
         mFacebookLoginButton = (LoginButton)findViewById(R.id.facebook_login_button);
         mSignUpTextView = (TextView)findViewById(R.id.sign_up_text_view);
         mForgotPasswordTextView = (TextView)findViewById(R.id.forgot_password_text_view);
-        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        //sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         //facebook_login_button.setText("Log In");
 
         mFacebookLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -109,6 +116,7 @@ public class LoginActivity extends ActionBarActivity{
                 Log.i(TAG, "onSuccess");
                 fb_user_id = loginResult.getAccessToken().getUserId();
                 access_Token = loginResult.getAccessToken().getToken();
+
                 /*info.setText(
                         "User ID: "
                                 + loginResult.getAccessToken().getUserId()
@@ -173,12 +181,16 @@ public class LoginActivity extends ActionBarActivity{
         }*/
         username = mUserNameEditText.getText().toString();
         password = mPasswordEditText.getText().toString();
-        SharedPreferences.Editor editor = sharedpreferences.edit();
+/*        SharedPreferences.Editor editor = sharedpreferences.edit();
 
         editor.putString(Name, username);
         editor.putString(Pass, password);
         //editor.putString(Email, e);
-        editor.commit();
+        editor.commit();*/
+        // Creating user login session
+        // For testing i am stroing name, email as follow
+        // Use user real data
+        session.createLoginSession(username, "anroidhive@gmail.com");
         switch (button.getId()) {
             case R.id.login_button:
                  new AttemptLogin().execute();
@@ -248,11 +260,17 @@ class AttemptLogin extends AsyncTask<String, String, String> {
             if (success == 1) {
                 Log.d("Successfully Login!", json.toString());
                 Intent ii = new Intent(LoginActivity.this,HomeActivity.class);
+                ii.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                // Add new Flag to start new Activity
+                ii.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                ii.putExtra(HomeActivity.Intent_profile_name, json.getString(TAG_PROFILE_NAME));
+                startActivity(ii);
                 finish();
                 // this finish() method is used to tell android os that we are done with current
                 // activity now! Moving to other activity
-                ii.putExtra(HomeActivity.Intent_profile_name, json.getString(TAG_PROFILE_NAME));
-                startActivity(ii);
+                /*ii.putExtra(HomeActivity.Intent_profile_name, json.getString(TAG_PROFILE_NAME));
+                startActivity(ii);*/
                 return json.getString(TAG_PROFILE_NAME);
             }else{
                 return json.getString(TAG_PROFILE_NAME);
