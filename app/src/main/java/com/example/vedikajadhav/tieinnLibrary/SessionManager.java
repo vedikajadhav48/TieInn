@@ -14,7 +14,7 @@ import java.util.HashMap;
  */
 public class SessionManager{
 
-   // private static SessionManager session = new SessionManager();
+    private static SessionManager mSessionInstance;
 
     // Shared Preferences
     SharedPreferences pref;
@@ -44,16 +44,19 @@ public class SessionManager{
     public static final String KEY_EMAIL = "email";
 
     // Constructor
-    public SessionManager(Context context){
+    private SessionManager(Context context){
         this._context = context;
         pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = pref.edit();
     }
 
     //static instance method
-  /*  public static SessionManager getInstance(Context context){
-        return session;
-    }*/
+    public static synchronized SessionManager getInstance(Context context){
+        if(mSessionInstance == null){
+            mSessionInstance = new SessionManager(context);
+        }
+        return mSessionInstance;
+    }
 
     /**
      * Create login session

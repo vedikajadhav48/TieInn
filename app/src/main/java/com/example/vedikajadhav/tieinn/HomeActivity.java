@@ -44,14 +44,7 @@ public class HomeActivity extends ActionBarActivity {
         setContentView(R.layout.activity_home);
 
         // Session class instance
-        session = new SessionManager(getApplicationContext());
-
-        /**
-         * Call this function whenever you want to check user login
-         * This will redirect user to LoginActivity is he is not
-         * logged in
-         * */
-       // session.checkLogin();
+        session = SessionManager.getInstance(getApplicationContext());
 
         // Check user login (this is the important point)
         // If User is not logged in , This will redirect user to LoginActivity
@@ -64,7 +57,7 @@ public class HomeActivity extends ActionBarActivity {
         HashMap<String, String> user = session.getUserDetails();
 
         // id
-        String userIDPref = user.get(SessionManager.KEY_USERID);
+        String userID = user.get(SessionManager.KEY_USERID);
         //convert string userIDPref to int userID
 
         // name
@@ -109,28 +102,15 @@ public class HomeActivity extends ActionBarActivity {
                         startActivity(intent2);
                         break;
                     case 3:
-                       /* SharedPreferences sharedpreferences = getSharedPreferences(LoginActivity.MyPREFERENCES, Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedpreferences.edit();
-                        editor.clear();
-                        editor.commit();*/
                         // Clear the session data
                         // This will clear all session data and
                         // redirect user to LoginActivity
                         session.logoutUser();
-                        /*Intent intent3 = new Intent(getApplicationContext(), LogoutActivity.class);
-                        startActivity(intent3);*/
                         break;
                     default:
                 }
-               // Intent intent = new Intent(getApplicationContext(), .class);
-                //intent.setClass()
             }
         });
-        // profilePictureView = (ProfilePictureView) findViewById(R.id.profile_picture_view);
-
-        // this.root = (FlyOutContainer) this.getLayoutInflater().inflate(R.layout.activity_home, null);
-
-        // this.setContentView(root);
 
         profileName = getIntent().getStringExtra(Intent_profile_name);
         fbUserId = getIntent().getStringExtra(Intent_fb_user_id);
@@ -140,9 +120,6 @@ public class HomeActivity extends ActionBarActivity {
 
         profileNameTextView.setText("Welcome, " + profileName + "!");
         Picasso.with(getApplicationContext()).load("https://graph.facebook.com/" + fbUserId+ "/picture?type=large").into(imageProfileView);
-
-        //profileNameTextView = (TextView) findViewById(R.id.profile_name_text);
-        //profilePictureView.setProfileId(fbUserId);
     }
 
     public  void logout(View view){

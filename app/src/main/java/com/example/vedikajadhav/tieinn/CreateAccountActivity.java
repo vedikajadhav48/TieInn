@@ -36,9 +36,7 @@ public class CreateAccountActivity extends ActionBarActivity {
     private String username;
     private String password;
 
-    // Progress Dialog
     private ProgressDialog pDialog;
-    // JSON parser class
     JSONParser jsonParser = new JSONParser();
     private static final String REGISTRATION_URL = "http://tieinn.comuv.com/registration.php?";
     private static final String TAG_SUCCESS = "success";
@@ -57,8 +55,6 @@ public class CreateAccountActivity extends ActionBarActivity {
     }
 
     public void createAccount(View button){
-        //Intent userDemographicIntent = new Intent(this, UserDemographicActivity.class);
-        //startActivityForResult(userDemographicIntent, Intent_User_Index);
         if(mPasswordEditText.getText().toString().equals(mConfirmPasswordEditText.getText().toString())){
             new AttemptRegistration().execute();
         }else{
@@ -132,7 +128,6 @@ public class CreateAccountActivity extends ActionBarActivity {
                     finish();
                     // this finish() method is used to tell android os that we are done with current
                     // activity now! Moving to other activity
-                   // ii.putExtra(HomeActivity.Intent_profile_name, json.getString(TAG_PROFILE_NAME));
                     startActivity(ii);
                     return json.getString(TAG_MESSAGE);
                 }else{

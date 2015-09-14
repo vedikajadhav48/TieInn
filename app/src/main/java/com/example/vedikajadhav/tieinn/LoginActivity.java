@@ -85,12 +85,6 @@ public class LoginActivity extends ActionBarActivity{
 
     // Session Manager Class
     SessionManager session;
-    //public static SessionManager session = null;
-    public static final String MyPREFERENCES = "MyPrefs" ;
-    public static final String UserID = "userIDKey";
-    public static final String Name = "nameKey";
-    public static final String Email = "emailKey";
-    SharedPreferences sharedpreferences;
     int responseCode = 0;
 
     @Override
@@ -100,19 +94,13 @@ public class LoginActivity extends ActionBarActivity{
         callbackManager = CallbackManager.Factory.create();
         setContentView(R.layout.activity_login);
 
-        // Session Manager
-       // session = new SessionManager(getApplicationContext());
-
         mUserNameEditText = (EditText)findViewById(R.id.edit_text_username_to_login);
         mPasswordEditText = (EditText)findViewById(R.id.edit_text_password_to_login);
-       // username = userNameEditText.getText().toString();
-       // password = passwordEditText.getText().toString();
-        //info = (TextView)findViewById(R.id.info);
         mLoginButton = (Button)findViewById(R.id.login_button);
         mFacebookLoginButton = (LoginButton)findViewById(R.id.facebook_login_button);
         mSignUpTextView = (TextView)findViewById(R.id.sign_up_text_view);
         mForgotPasswordTextView = (TextView)findViewById(R.id.forgot_password_text_view);
-        //sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+
         //facebook_login_button.setText("Log In");
 
         mFacebookLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -186,15 +174,7 @@ public class LoginActivity extends ActionBarActivity{
         }*/
         username = mUserNameEditText.getText().toString();
         password = mPasswordEditText.getText().toString();
-/*        SharedPreferences.Editor editor = sharedpreferences.edit();
 
-        editor.putString(Name, username);
-        editor.putString(Pass, password);
-        //editor.putString(Email, e);
-        editor.commit();*/
-        // Creating user login session
-        // For testing i am stroing name, email as follow
-        // Use user real data
        // session.createLoginSession("1", username, "anroidhive@gmail.com");
         switch (button.getId()) {
             case R.id.login_button:
@@ -205,14 +185,13 @@ public class LoginActivity extends ActionBarActivity{
             default: break;
         }
         // Session Manager
-        session = new SessionManager(getApplicationContext());
-        session.createLoginSession(userID, username, "anroidhive@gmail.com");
+/*        session = SessionManager.getInstance(getApplicationContext());
+        session.createLoginSession(userID, username, "anroidhive@gmail.com");*/
     }
 
     public void signUp(View button){
         Intent createAccountIntent = new Intent(this, CreateAccountActivity.class);
         startActivity(createAccountIntent);
-        //startActivityForResult(createAccountIntent, Intent_User_Index);
     }
 
     public void forgotPassword(View button){
@@ -229,13 +208,6 @@ public class LoginActivity extends ActionBarActivity{
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-/*    private class LoginThread implements Runnable{
-
-        @Override
-        public void run() {
-            Log.i(TAG, "Logn Thread getting executed");
-        }
-    }*/
 class AttemptLogin extends AsyncTask<String, String, String> {
     /** * Before starting background thread Show Progress Dialog * */
     boolean failure = false;
@@ -263,9 +235,11 @@ class AttemptLogin extends AsyncTask<String, String, String> {
             JSONObject json = jsonParser.makeHttpRequest( LOGIN_URL, "POST", params);
             // checking log for json response
             Log.d("Login attempt", json.toString());
+
             // success tag for json
             success = json.getInt(TAG_SUCCESS);
             userID = json.getInt(TAG_USERID);
+
             //responseCode = json.getStatusLine().getStatusCode();
             if (success == 1) {
                 Log.d("Successfully Login!", json.toString());
@@ -279,8 +253,6 @@ class AttemptLogin extends AsyncTask<String, String, String> {
                 finish();
                 // this finish() method is used to tell android os that we are done with current
                 // activity now! Moving to other activity
-                /*ii.putExtra(HomeActivity.Intent_profile_name, json.getString(TAG_PROFILE_NAME));
-                startActivity(ii);*/
                 return json.getString(TAG_PROFILE_NAME);
             }else{
                 return json.getString(TAG_PROFILE_NAME);
@@ -295,6 +267,8 @@ class AttemptLogin extends AsyncTask<String, String, String> {
     /** * Once the background process is done we need to Dismiss the progress dialog asap * **/
     protected void onPostExecute(String message) {
         pDialog.dismiss();
+        session = SessionManager.getInstance(getApplicationContext());
+        session.createLoginSession(userID, username, "anroidhive@gmail.com");
         if (message != null){
             //Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
         }

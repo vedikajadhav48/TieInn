@@ -35,20 +35,11 @@ public class AcademicCategoryActivity extends ActionBarActivity {
         setContentView(R.layout.activity_academic_category);
 
         for(int i=0; i<5; i++){
-            //JSONObject firstPerson = (JSONObject) data.get(i);
-
             newDiscussionItem.setDiscussionItemText(getResources().getString(R.string.discussion_item_question));
             newDiscussionItem.setDiscussionCategory("Academic");
-            //newInstructor.setFirstName(firstPerson.getString("firstName"));
-            // newInstructor.setLastName(firstPerson.getString("lastName"));
             mHousingCategoryList.add(0,newDiscussionItem);
         }
 
-       // question = getIntent().getStringExtra(Intent_question);
-       // category = getIntent().getStringExtra(Intent_category);
-       // newDiscussionItem.setDiscussionItemText(question);
-        //newDiscussionItem.setDiscussionCategory("Academic");
-       // mHousingCategoryList.add(0,newDiscussionItem);
         questionEditText = (EditText)findViewById(R.id.question_edit_text);
         questionPostButton = (Button)findViewById(R.id.question_post_button);
         discussionListView = (ListView)findViewById(R.id.discussionBoardItemList);
@@ -63,12 +54,6 @@ public class AcademicCategoryActivity extends ActionBarActivity {
         newDiscussionItem.setDiscussionItemText(questionToPost);
         mHousingCategoryList.add(0, newDiscussionItem);
         discussionListAdapter.notifyDataSetChanged();
-        /*discussionListView.post(new Runnable() {
-            @Override
-            public void run() {
-                discussionListView.smoothScrollToPosition(0);
-            }
-        });*/
     }
 
     @Override

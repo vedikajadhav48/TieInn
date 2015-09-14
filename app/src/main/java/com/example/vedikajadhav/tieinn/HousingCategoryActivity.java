@@ -51,21 +51,13 @@ public class HousingCategoryActivity extends ActionBarActivity {
     ProgressDialog pDialog;
     private static final String POST_QUESTION_URL = "http://tieinn.comuv.com/postQuestion.php?";
 
+    SessionManager session;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_housing_category);
 
-      /*  for(int i=0; i<5; i++){
-            //JSONObject firstPerson = (JSONObject) data.get(i);
-
-            newDiscussionItem.setDiscussionItemText(getResources().getString(R.string.discussion_item_question));
-            //newInstructor.setFirstName(firstPerson.getString("firstName"));
-            // newInstructor.setLastName(firstPerson.getString("lastName"));
-            mHousingCategoryList.add(0,newDiscussionItem);
-        }*/
-
-        //question = getIntent().getStringExtra(Intent_question);
         question = getIntent().getStringExtra(Intent_question);
         category = getIntent().getStringExtra(Intent_category);
         try {
@@ -75,11 +67,9 @@ public class HousingCategoryActivity extends ActionBarActivity {
                 DiscussionItem newDiscussionItem = new DiscussionItem();
                 newDiscussionItem.setDiscussionItemText(firstQuestion.getString("Question"));
                 newDiscussionItem.setDiscussionCategory(firstQuestion.getString("Category"));
-               // newInstructor.setLastName(firstPerson.getString("lastName"));
                 mHousingCategoryList.add(0, newDiscussionItem);
             }
             //instructorAdapter.notifyDataSetChanged();
-           // Log.i(TAG, "getInstructorList" + instructorAdapter);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -100,15 +90,16 @@ public class HousingCategoryActivity extends ActionBarActivity {
         pDialog.setMessage("Loading...");
         pDialog.show();*/
         // get user data from session
-        //HashMap<String, String> user = session.getUserDetails();
+        session = SessionManager.getInstance(getApplicationContext());
+        HashMap<String, String> user = session.getUserDetails();
 
         // id
-       // String userIDPref = user.get(SessionManager.KEY_USERID);
+        String userID = user.get(SessionManager.KEY_USERID);
         //convert string userIDPref to int userID
 
         // Post params to be sent to the server
         Map<String, String> params = new HashMap<String, String>();
-       // params.put("userID", userIDPref);
+        params.put("userID", userID);
         params.put("question", questionToPost);
         params.put("category", "Housing");
 

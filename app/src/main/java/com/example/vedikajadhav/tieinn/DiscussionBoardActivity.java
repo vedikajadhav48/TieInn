@@ -32,11 +32,7 @@ public class DiscussionBoardActivity extends ActionBarActivity {
         setContentView(R.layout.activity_discussion_board);
 
         for(int i=0; i<5; i++){
-            //JSONObject firstPerson = (JSONObject) data.get(i);
-
             newInstructor.setDiscussionItemText(getResources().getString(R.string.discussion_item_question));
-            //newInstructor.setFirstName(firstPerson.getString("firstName"));
-           // newInstructor.setLastName(firstPerson.getString("lastName"));
             mDiscussionBoardList.add(0,newInstructor);
         }
         questionEditText = (EditText)findViewById(R.id.question_edit_text);
@@ -53,12 +49,6 @@ public class DiscussionBoardActivity extends ActionBarActivity {
         newDiscussionItem.setDiscussionItemText(questionToPost);
         mDiscussionBoardList.add(0, newDiscussionItem);
         discussionListAdapter.notifyDataSetChanged();
-        /*discussionListView.post(new Runnable() {
-            @Override
-            public void run() {
-                discussionListView.smoothScrollToPosition(0);
-            }
-        });*/
     }
 
 

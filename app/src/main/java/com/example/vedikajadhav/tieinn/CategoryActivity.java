@@ -36,19 +36,13 @@ import java.util.List;
 public class CategoryActivity extends ActionBarActivity {
     private ListView categoryListView;
 
-    // Progress Dialog
     private ProgressDialog pDialog;
-    // JSON parser class
     JSONParser jsonParser = new JSONParser();
     private static final String QUESTION_FEED_URL = "http://tieinn.comuv.com/getQuestion.php?";
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
     private static final String TAG_QUESTION = "question";
     private static final String TAG_CATEGORY = "category";
-    JSONArray responseJSONArray;
-    //ArrayList<String> combinedResponse = new ArrayList<String>();
-    //OnTaskFinishedListener mOnTaskFinishedListener;
-    AndroidHttpClient mAndroidHttpClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,8 +93,6 @@ public class CategoryActivity extends ActionBarActivity {
                         break;
                     default:
                 }
-                // Intent intent = new Intent(getApplicationContext(), .class);
-                //intent.setClass()
             }
         });
     }
@@ -147,19 +139,11 @@ public class CategoryActivity extends ActionBarActivity {
             // TODO Auto-generated method stub
             // here Check for success tag
             int success;
-           // String profileName = mProfileNameEditText.getText().toString();
-            //String username = mUsernameEditText.getText().toString();
-            //String password = mPasswordEditText.getText().toString();
             try {
                 List<NameValuePair> params = new ArrayList<NameValuePair>();
                 params.add(new BasicNameValuePair("category", "Housing"));
-                //ResponseHandler<JSONArray> responseHandler = new BasicResponseHandler();
-                //HttpGet getMethod = new HttpGet(QUESTION_FEED_URL);
-                //responseJSONArray = mAndroidHttpClient.execute(getMethod, responseHandler);
-                //combinedResponse.add(responseBody);
                 Log.d("request!", "starting");
                 JSONObject json = jsonParser.makeHttpRequest( QUESTION_FEED_URL, "POST", params);
-               // JSONArray json = jsonParser.makeHttpRequest( QUESTION_FEED_URL, "POST", params);
                 // checking log for json response
                 Log.d("Registration attempt", json.toString());
                 // success tag for json
@@ -171,7 +155,6 @@ public class CategoryActivity extends ActionBarActivity {
                     // this finish() method is used to tell android os that we are done with current
                     // activity now! Moving to other activity
                     ii.putExtra(HousingCategoryActivity.Intent_question, json.getString(TAG_MESSAGE));
-                   // ii.putExtra(HousingCategoryActivity.Intent_category, json.getString(TAG_CATEGORY));
                     startActivity(ii);
                     return json.getString(TAG_MESSAGE);
                 }else{
