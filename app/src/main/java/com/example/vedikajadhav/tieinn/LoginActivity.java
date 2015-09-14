@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.example.vedikajadhav.tieinnLibrary.DatabaseHandler;
 import com.example.vedikajadhav.tieinnLibrary.JSONParser;
 import com.example.vedikajadhav.tieinnLibrary.SessionManager;
+import com.example.vedikajadhav.tieinnLibrary.Utils;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -65,6 +66,7 @@ public class LoginActivity extends ActionBarActivity{
     private static final int Intent_User_Index = 123;
     private static String KEY_SUCCESS = "message";
     private static final LoginResult EXTRA_LOGIN_RESULT = null;
+    private int userID;
     private String fb_user_id;
     private String access_Token;
 
@@ -79,14 +81,17 @@ public class LoginActivity extends ActionBarActivity{
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
     private static final String TAG_PROFILE_NAME = "profileName";
+    private static final String TAG_USERID = "userID";
 
     // Session Manager Class
     SessionManager session;
+    //public static SessionManager session = null;
     public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String UserID = "userIDKey";
     public static final String Name = "nameKey";
-    public static final String Pass = "passKey";
     public static final String Email = "emailKey";
     SharedPreferences sharedpreferences;
+    int responseCode = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +101,7 @@ public class LoginActivity extends ActionBarActivity{
         setContentView(R.layout.activity_login);
 
         // Session Manager
-        session = new SessionManager(getApplicationContext());
+       // session = new SessionManager(getApplicationContext());
 
         mUserNameEditText = (EditText)findViewById(R.id.edit_text_username_to_login);
         mPasswordEditText = (EditText)findViewById(R.id.edit_text_password_to_login);
@@ -190,7 +195,7 @@ public class LoginActivity extends ActionBarActivity{
         // Creating user login session
         // For testing i am stroing name, email as follow
         // Use user real data
-        session.createLoginSession(username, "anroidhive@gmail.com");
+       // session.createLoginSession("1", username, "anroidhive@gmail.com");
         switch (button.getId()) {
             case R.id.login_button:
                  new AttemptLogin().execute();
@@ -199,6 +204,9 @@ public class LoginActivity extends ActionBarActivity{
                  // registration activity , other than this we could also do this without switch case.
             default: break;
         }
+        // Session Manager
+        session = new SessionManager(getApplicationContext());
+        session.createLoginSession(userID, username, "anroidhive@gmail.com");
     }
 
     public void signUp(View button){
@@ -257,6 +265,8 @@ class AttemptLogin extends AsyncTask<String, String, String> {
             Log.d("Login attempt", json.toString());
             // success tag for json
             success = json.getInt(TAG_SUCCESS);
+            userID = json.getInt(TAG_USERID);
+            //responseCode = json.getStatusLine().getStatusCode();
             if (success == 1) {
                 Log.d("Successfully Login!", json.toString());
                 Intent ii = new Intent(LoginActivity.this,HomeActivity.class);
@@ -286,7 +296,7 @@ class AttemptLogin extends AsyncTask<String, String, String> {
     protected void onPostExecute(String message) {
         pDialog.dismiss();
         if (message != null){
-            Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
+            //Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
         }
     }
 }

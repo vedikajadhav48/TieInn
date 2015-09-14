@@ -1,5 +1,6 @@
 package com.example.vedikajadhav.tieinnLibrary;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,7 +12,10 @@ import java.util.HashMap;
 /**
  * Created by Vedika Jadhav on 9/10/2015.
  */
-public class SessionManager {
+public class SessionManager{
+
+   // private static SessionManager session = new SessionManager();
+
     // Shared Preferences
     SharedPreferences pref;
 
@@ -25,10 +29,13 @@ public class SessionManager {
     int PRIVATE_MODE = 0;
 
     // Sharedpref file name
-    private static final String PREF_NAME = "AndroidHivePref";
+    private static final String PREF_NAME = "TieinnPref";
 
     // All Shared Preferences Keys
     private static final String IS_LOGIN = "IsLoggedIn";
+
+    // UserID (make variable public to access from outside)
+    public static final String KEY_USERID = "userID";
 
     // User name (make variable public to access from outside)
     public static final String KEY_NAME = "name";
@@ -43,12 +50,20 @@ public class SessionManager {
         editor = pref.edit();
     }
 
+    //static instance method
+  /*  public static SessionManager getInstance(Context context){
+        return session;
+    }*/
+
     /**
      * Create login session
      * */
-    public void createLoginSession(String name, String email){
+    public void createLoginSession(int userID, String name, String email){
         // Storing login value as TRUE
         editor.putBoolean(IS_LOGIN, true);
+
+        //Storing UserID in pref
+        editor.putInt(KEY_USERID, userID);
 
         // Storing name in pref
         editor.putString(KEY_NAME, name);
@@ -87,8 +102,12 @@ public class SessionManager {
     /**
      * Get stored session data
      * */
-    public HashMap<String, String> getUserDetails(){
+    public HashMap<String, String > getUserDetails(){
         HashMap<String, String> user = new HashMap<String, String>();
+
+        // user id
+        user.put(KEY_USERID, String.valueOf(pref.getInt(KEY_USERID, 0)));
+
         // user name
         user.put(KEY_NAME, pref.getString(KEY_NAME, null));
 
@@ -107,7 +126,7 @@ public class SessionManager {
         editor.clear();
         editor.commit();
 
-        // After logout redirect user to Loing Activity
+        // After logout redirect user to Login Activity
         Intent i = new Intent(_context, LoginActivity.class);
         // Closing all the Activities
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

@@ -63,6 +63,10 @@ public class HomeActivity extends ActionBarActivity {
         // get user data from session
         HashMap<String, String> user = session.getUserDetails();
 
+        // id
+        String userIDPref = user.get(SessionManager.KEY_USERID);
+        //convert string userIDPref to int userID
+
         // name
         String name = user.get(SessionManager.KEY_NAME);
 
@@ -91,8 +95,6 @@ public class HomeActivity extends ActionBarActivity {
                 //ListView clicked item value
                 String itemValue = (String)listView.getItemAtPosition(position);
 
-                //show alert
-                Toast.makeText(getApplicationContext(), "Position"+ itemPosition+ "ListItem" + itemValue, Toast.LENGTH_LONG).show();
                 switch(position){
                     case 0:
                         Intent intent0 = new Intent(getApplicationContext(), CategoryActivity.class);

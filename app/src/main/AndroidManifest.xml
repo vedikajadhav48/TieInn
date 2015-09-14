@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
+        android:name="com.example.vedikajadhav.tieinnLibrary.AppController"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -26,10 +27,6 @@
             android:label="@string/title_activity_create_account" >
         </activity>
         <activity
-            android:name=".UserDemographicActivity"
-            android:label="@string/title_activity_user_demographic" >
-        </activity>
-        <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
@@ -44,19 +41,6 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-
-        <activity
-            android:name=".Home"
-            android:label="@string/title_activity_home" >
-        </activity>
-        <activity
-            android:name=".MainHostActivity"
-            android:label="@string/title_activity_main_host" >
-        </activity>
-        <activity
-            android:name=".DetailActivity"
-            android:label="@string/title_activity_detail" >
-        </activity>
         <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home" >

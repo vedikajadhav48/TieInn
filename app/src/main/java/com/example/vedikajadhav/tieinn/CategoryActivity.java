@@ -188,7 +188,6 @@ public class CategoryActivity extends ActionBarActivity {
         protected void onPostExecute(String message) {
             pDialog.dismiss();
             if (message != null){
-                Toast.makeText(CategoryActivity.this, message, Toast.LENGTH_LONG).show();
                 Log.i("messageJSONARRAY", message);
             }
         }
