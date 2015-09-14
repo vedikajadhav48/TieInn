@@ -3,59 +3,54 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
-    
+
     <LinearLayout
-        android:id="@+id/thumbnail"
+        android:id="@+id/answer_thumbnail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="3dip"
         android:layout_alignParentLeft="true"
         android:layout_marginRight="5dip"
         android:orientation="vertical">
-    
+
         <ImageView
-            android:id="@+id/discussionBoardQuestionImage"
+            android:id="@+id/answer_thumbnail_image"
             android:layout_width="50dip"
             android:layout_height="50dip"/>
-
-        <TextView
-            android:id="@+id/discussionBoardQuestionCategory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#040404"
-            android:typeface="sans"
-            android:textSize="15dip"
-            android:textStyle="bold"/>
 
     </LinearLayout>
 
     <TextView
-        android:id="@+id/discussionBoardQuestionText"
+        android:id="@+id/answerText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/thumbnail"
-        android:layout_toRightOf="@+id/thumbnail"
+        android:layout_alignTop="@+id/answer_thumbnail"
+        android:layout_toRightOf="@+id/answer_thumbnail"
         android:textColor="#040404"
         android:typeface="sans"
         android:textSize="15dip"
         android:textStyle="bold"/>
 
-    <ListView
-        android:id="@+id/answerItemList"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:divider="#b5b5b5"
-        android:dividerHeight="1dp"/>
-    
     <Button
-        android:id="@+id/discussionBoardAnswerButton"
+        android:id="@+id/recommendAnswerButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/discussionBoardQuestionText"
+        android:layout_below="@id/answerText"
         android:textColor="#343434"
         android:textSize="10dip"
         android:layout_marginTop="1dip"
-        android:layout_toRightOf="@+id/thumbnail"
-        android:text="@string/answer_button_text" />
+        android:layout_toRightOf="@+id/answer_thumbnail"
+        android:text="@string/recommend_answer_button_text" />
+
+    <Button
+        android:id="@+id/editAnswerButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/answerText"
+        android:textColor="#343434"
+        android:textSize="10dip"
+        android:layout_marginTop="1dip"
+        android:layout_toRightOf="@+id/recommendAnswerButton"
+        android:text="@string/edit_answer_button_text" />
 
 </RelativeLayout>

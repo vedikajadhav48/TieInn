@@ -154,7 +154,7 @@ public class CategoryActivity extends ActionBarActivity {
                     finish();
                     // this finish() method is used to tell android os that we are done with current
                     // activity now! Moving to other activity
-                    ii.putExtra(HousingCategoryActivity.Intent_question, json.getString(TAG_MESSAGE));
+                    ii.putExtra(HousingCategoryActivity.Intent_message, json.getString(TAG_MESSAGE));
                     startActivity(ii);
                     return json.getString(TAG_MESSAGE);
                 }else{

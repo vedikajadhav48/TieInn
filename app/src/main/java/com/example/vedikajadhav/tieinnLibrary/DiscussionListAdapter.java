@@ -8,10 +8,14 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.vedikajadhav.tieinn.R;
+import com.example.vedikajadhav.tieinnModel.AnswerItem;
 import com.example.vedikajadhav.tieinnModel.DiscussionItem;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -25,6 +29,8 @@ public class DiscussionListAdapter extends ArrayAdapter<DiscussionItem> {
    // private static LayoutInflater inflater=null;
  //   public ImageLoader imageLoader;
     private Context mContext;
+    AnswerListAdapter answerListAdapter;
+    private ArrayList<AnswerItem> mHousingAnswerList = new ArrayList<>();
 
     public DiscussionListAdapter(ArrayList<DiscussionItem> discussionItemList, Context context) {
         super(context.getApplicationContext(), 0, discussionItemList);
@@ -61,11 +67,19 @@ public class DiscussionListAdapter extends ArrayAdapter<DiscussionItem> {
         ImageView thumbImage=(ImageView)convertView.findViewById(R.id.discussionBoardQuestionImage);
         TextView categoryTextView = (TextView)convertView.findViewById(R.id.discussionBoardQuestionCategory);
         TextView questionTextView=(TextView)convertView.findViewById(R.id.discussionBoardQuestionText);
+        ListView answerListView = (ListView)convertView.findViewById(R.id.answerItemList);
         Button answerButton=(Button)convertView.findViewById(R.id.discussionBoardAnswerButton);
 
         //thumbImage.setImag;
         categoryTextView.setText(discussionItem.getDiscussionCategory());
         questionTextView.setText(discussionItem.getDiscussionItemText());
+        for(int i=0; i<5; i++){
+            AnswerItem newAnswerItem = new AnswerItem();
+            newAnswerItem.setAnswerItemText("Starbucks is the favourite coffee place");
+            mHousingAnswerList.add(0, newAnswerItem);
+        }
+        answerListAdapter = new AnswerListAdapter(mHousingAnswerList, getContext());
+        answerListView.setAdapter(answerListAdapter);
      /*   TextView title = (TextView)vi.findViewById(R.id.title); // title
         TextView artist = (TextView)vi.findViewById(R.id.artist); // artist name
         TextView duration = (TextView)vi.findViewById(R.id.duration); // duration*/

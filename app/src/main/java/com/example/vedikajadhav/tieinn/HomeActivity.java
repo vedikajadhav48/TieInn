@@ -122,13 +122,6 @@ public class HomeActivity extends ActionBarActivity {
         Picasso.with(getApplicationContext()).load("https://graph.facebook.com/" + fbUserId+ "/picture?type=large").into(imageProfileView);
     }
 
-    public  void logout(View view){
-        SharedPreferences sharedpreferences = getSharedPreferences(LoginActivity.MyPREFERENCES, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.clear();
-        editor.commit();
-    }
-
     public void close(View view){
         finish();
     }

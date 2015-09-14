@@ -68,6 +68,7 @@
     <string name="post_question_button_text">Post Question</string>
     <string name="question_edit_text_hint">What is your question?</string>
     <string name="discussion_item_question">What is the procedure of registering for classes?</string>
+    <string name="answer_list_item">Starbucks is the favourite coffee place</string>
     <string name="answer_button_text">Write Answer</string>
     <string name="title_activity_category">CategoryActivity</string>
     <string name="choose_category_text">Select a Category for discussion:</string>
@@ -82,5 +83,7 @@
 
     <string name="title_activity_housing_category">HousingCategoryActivity</string>
     <string name="title_activity_academic_category">AcademicCategoryActivity</string>
+    <string name="recommend_answer_button_text">Recommend</string>
+    <string name="edit_answer_button_text">Edit</string>
 
 </resources>

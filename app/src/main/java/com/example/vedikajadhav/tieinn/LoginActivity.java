@@ -24,7 +24,7 @@ import android.widget.Toast;
 import com.example.vedikajadhav.tieinnLibrary.DatabaseHandler;
 import com.example.vedikajadhav.tieinnLibrary.JSONParser;
 import com.example.vedikajadhav.tieinnLibrary.SessionManager;
-import com.example.vedikajadhav.tieinnLibrary.Utils;
+import com.example.vedikajadhav.tieinnModel.DiscussionItem;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -80,8 +80,8 @@ public class LoginActivity extends ActionBarActivity{
     private static final String LOGIN_URL = "http://tieinn.comuv.com/login.php?";
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
-    private static final String TAG_PROFILE_NAME = "profileName";
-    private static final String TAG_USERID = "userID";
+    private static final String TAG_PROFILE_NAME = "ProfileName";
+    private static final String TAG_USERID = "UserID";
 
     // Session Manager Class
     SessionManager session;
@@ -100,8 +100,6 @@ public class LoginActivity extends ActionBarActivity{
         mFacebookLoginButton = (LoginButton)findViewById(R.id.facebook_login_button);
         mSignUpTextView = (TextView)findViewById(R.id.sign_up_text_view);
         mForgotPasswordTextView = (TextView)findViewById(R.id.forgot_password_text_view);
-
-        //facebook_login_button.setText("Log In");
 
         mFacebookLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -227,6 +225,7 @@ class AttemptLogin extends AsyncTask<String, String, String> {
     // TODO Auto-generated method stub
     // here Check for success tag
         int success;
+        String message;
         try {
             List<NameValuePair> params = new ArrayList<NameValuePair>();
             params.add(new BasicNameValuePair("username", username));
@@ -238,7 +237,12 @@ class AttemptLogin extends AsyncTask<String, String, String> {
 
             // success tag for json
             success = json.getInt(TAG_SUCCESS);
-            userID = json.getInt(TAG_USERID);
+            message = json.getString(TAG_MESSAGE);
+            JSONObject user = new JSONObject(message);
+           // newDiscussionItem.setDiscussionItemText(user.getString("UserID"));
+          //  newDiscussionItem.setDiscussionCategory(user.getString("Category"));
+            userID = Integer.parseInt(user.getString(TAG_USERID));
+
 
             //responseCode = json.getStatusLine().getStatusCode();
             if (success == 1) {
@@ -248,14 +252,14 @@ class AttemptLogin extends AsyncTask<String, String, String> {
 
                 // Add new Flag to start new Activity
                 ii.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                ii.putExtra(HomeActivity.Intent_profile_name, json.getString(TAG_PROFILE_NAME));
+                ii.putExtra(HomeActivity.Intent_profile_name, user.getString(TAG_PROFILE_NAME));
                 startActivity(ii);
                 finish();
                 // this finish() method is used to tell android os that we are done with current
                 // activity now! Moving to other activity
-                return json.getString(TAG_PROFILE_NAME);
+                return user.getString(TAG_PROFILE_NAME);
             }else{
-                return json.getString(TAG_PROFILE_NAME);
+                return user.getString(TAG_PROFILE_NAME);
             }
         }
         catch (JSONException e) {
