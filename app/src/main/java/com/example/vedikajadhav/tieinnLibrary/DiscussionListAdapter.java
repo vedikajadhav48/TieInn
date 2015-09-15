@@ -23,11 +23,6 @@ import java.util.ArrayList;
  * Created by Vedika Jadhav on 9/5/2015.
  */
 public class DiscussionListAdapter extends ArrayAdapter<DiscussionItem> {
-
-    //private Activity activity;
-  //  private ArrayList&lt;HashMap&lt;String, String&gt;&gt; data;
-   // private static LayoutInflater inflater=null;
- //   public ImageLoader imageLoader;
     private Context mContext;
     AnswerListAdapter answerListAdapter;
     private ArrayList<AnswerItem> mHousingAnswerList = new ArrayList<>();
@@ -35,9 +30,6 @@ public class DiscussionListAdapter extends ArrayAdapter<DiscussionItem> {
     public DiscussionListAdapter(ArrayList<DiscussionItem> discussionItemList, Context context) {
         super(context.getApplicationContext(), 0, discussionItemList);
         mContext = context;
-       // data=d;
-      //  inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-       // imageLoader=new ImageLoader(activity.getApplicationContext());
     }
 
 /*    @Override
@@ -57,9 +49,7 @@ public class DiscussionListAdapter extends ArrayAdapter<DiscussionItem> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-       // View vi=convertView;
         if(convertView==null){
-            //convertView = inflater.inflate(R.layout.discussion_board_list_row, null);
             convertView = ((Activity)mContext).getLayoutInflater().inflate(R.layout.discussion_board_list_row, null);
         }
 
@@ -70,7 +60,6 @@ public class DiscussionListAdapter extends ArrayAdapter<DiscussionItem> {
         ListView answerListView = (ListView)convertView.findViewById(R.id.answerItemList);
         Button answerButton=(Button)convertView.findViewById(R.id.discussionBoardAnswerButton);
 
-        //thumbImage.setImag;
         categoryTextView.setText(discussionItem.getDiscussionCategory());
         questionTextView.setText(discussionItem.getDiscussionItemText());
         for(int i=0; i<5; i++){
@@ -80,19 +69,6 @@ public class DiscussionListAdapter extends ArrayAdapter<DiscussionItem> {
         }
         answerListAdapter = new AnswerListAdapter(mHousingAnswerList, getContext());
         answerListView.setAdapter(answerListAdapter);
-     /*   TextView title = (TextView)vi.findViewById(R.id.title); // title
-        TextView artist = (TextView)vi.findViewById(R.id.artist); // artist name
-        TextView duration = (TextView)vi.findViewById(R.id.duration); // duration*/
-       /* ImageView thumb_image=(ImageView)vi.findViewById(R.id.list_image); // thumb image
-
-        HashMap&lt;String, String&gt; song = new HashMap&lt;String, String&gt;();
-        song = data.get(position);
-
-        // Setting all values in listview
-        title.setText(song.get(CustomizedListView.KEY_TITLE));
-        artist.setText(song.get(CustomizedListView.KEY_ARTIST));
-        duration.setText(song.get(CustomizedListView.KEY_DURATION));
-        imageLoader.DisplayImage(song.get(CustomizedListView.KEY_THUMB_URL), thumb_image);*/
         return convertView;
     }
 }

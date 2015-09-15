@@ -38,76 +38,72 @@ import java.util.Map;
 
 public class HousingCategoryActivity extends ActionBarActivity {
     private static final String TAG = "HousingCategoryACtivity";
-    private EditText questionEditText;
-    private Button questionPostButton;
-    ListView discussionListView;
-    DiscussionListAdapter discussionListAdapter;
-    AnswerListAdapter answerListAdapter;
-    private ArrayList<DiscussionItem> mHousingCategoryList = new ArrayList<>();
+    private EditText mQuestionEditText;
+    private Button mQuestionPostButton;
+    ListView mDiscussionListView;
+    DiscussionListAdapter mDiscussionListAdapter;
+    AnswerListAdapter mAnswerListAdapter;
+    private ArrayList<DiscussionItem> mHousingDiscussionList = new ArrayList<>();
     private ArrayList<AnswerItem> mHousingAnswerList = new ArrayList<>();
-    DiscussionItem newDiscussionItem = new DiscussionItem();
-    private String questionToPost;
+    DiscussionItem mDiscussionItem = new DiscussionItem();
+    AnswerItem mAnswerItem = new AnswerItem();
+    private String mQuestionToPost;
     public static final String Intent_message = "com.example.vedikajadhav.tieinn.Intent_message";
     public static final String Intent_category = "com.example.vedikajadhav.tieinn.Intent_category";
-    private String message;
-    private String category;
-    private JSONArray questionsJSONArray;
+    private String mMessage;
+    private String mCategory;
+    private JSONArray mQuestionsJSONArray;
     ProgressDialog pDialog;
     private static final String POST_QUESTION_URL = "http://tieinn.comuv.com/postQuestion.php?";
 
-    SessionManager session;
-    String userID;
+    SessionManager mSession;
+    String mUserID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_housing_category);
 
-        message = getIntent().getStringExtra(Intent_message);
+        mQuestionEditText = (EditText)findViewById(R.id.question_edit_text);
+        mQuestionPostButton = (Button)findViewById(R.id.question_post_button);
+        mDiscussionListView = (ListView)findViewById(R.id.housing_discussion_board_item_list);
+
+        mMessage = getIntent().getStringExtra(Intent_message);
         try {
-            questionsJSONArray = new JSONArray(message);
-            for(int i=0; i<questionsJSONArray.length(); i++){
-                JSONObject firstQuestion = (JSONObject) questionsJSONArray.get(i);
-                DiscussionItem newDiscussionItem = new DiscussionItem();
-                AnswerItem newAnswerItem = new AnswerItem();
-                newDiscussionItem.setDiscussionItemText(firstQuestion.getString("Question"));
-                newDiscussionItem.setDiscussionCategory(firstQuestion.getString("Category"));
-                mHousingCategoryList.add(0, newDiscussionItem);
+            mQuestionsJSONArray = new JSONArray(mMessage);
+            for(int i=0; i<mQuestionsJSONArray.length(); i++){
+                JSONObject question = (JSONObject) mQuestionsJSONArray.get(i);
+                mDiscussionItem = new DiscussionItem();
+                mDiscussionItem.setDiscussionItemText(question.getString("Question"));
+                mDiscussionItem.setDiscussionCategory(question.getString("Category"));
+                mHousingDiscussionList.add(0, mDiscussionItem);
                 //mHousingAnswerList.add(0, newAnswerItem);
             }
             //instructorAdapter.notifyDataSetChanged();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        questionEditText = (EditText)findViewById(R.id.question_edit_text);
-        questionPostButton = (Button)findViewById(R.id.question_post_button);
-        discussionListView = (ListView)findViewById(R.id.discussionBoardItemList);
-        discussionListAdapter = new DiscussionListAdapter(mHousingCategoryList, this);
-        discussionListView.setAdapter(discussionListAdapter);
+        mDiscussionListAdapter = new DiscussionListAdapter(mHousingDiscussionList, this);
+        mDiscussionListView.setAdapter(mDiscussionListAdapter);
 
     }
 
     public void postQuestion(View postQuestionButton){
-        questionToPost = questionEditText.getText().toString();
-// Tag used to cancel the request
-        String tag_json_obj = "json_obj_req";
+        mQuestionToPost = mQuestionEditText.getText().toString();
 
 /*        pDialog = new ProgressDialog(this);
         pDialog.setMessage("Loading...");
         pDialog.show();*/
         // get user data from session
-        session = SessionManager.getInstance(getApplicationContext());
-        HashMap<String, String> user = session.getUserDetails();
-
-        // id
-        userID = user.get(SessionManager.KEY_USERID);
-        //convert string userIDPref to int userID
+        mSession = SessionManager.getInstance(getApplicationContext());
+        HashMap<String, String> user = mSession.getUserDetails();
+        mUserID = user.get(SessionManager.KEY_USERID);
 
         // Post params to be sent to the server
         JSONObject params = new JSONObject();
         try {
-            params.put("userID", userID);
-            params.put("question", questionToPost);
+            params.put("userID", mUserID);
+            params.put("question", mQuestionToPost);
             params.put("category", "Housing");
         } catch (JSONException e) {
             e.printStackTrace();
@@ -138,9 +134,9 @@ public class HousingCategoryActivity extends ActionBarActivity {
                         Log.i(TAG, message);
                         if (success == 1) {
                             DiscussionItem newDiscussionItem = new DiscussionItem();
-                            newDiscussionItem.setDiscussionItemText(questionToPost);
-                            mHousingCategoryList.add(0, newDiscussionItem);
-                            discussionListAdapter.notifyDataSetChanged();
+                            newDiscussionItem.setDiscussionItemText(mQuestionToPost);
+                            mHousingDiscussionList.add(0, newDiscussionItem);
+                            mDiscussionListAdapter.notifyDataSetChanged();
                         }
                        // pDialog.hide();
                     }
@@ -170,29 +166,7 @@ public class HousingCategoryActivity extends ActionBarActivity {
 
         };
 
-// Adding request to request queue
-        AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_housing_category, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(jsonObjReq);
     }
 }

@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class AcademicCategoryActivity extends ActionBarActivity {
 
-    private EditText questionEditText;
+    private EditText mQuestionEditText;
     private Button questionPostButton;
     ListView discussionListView;
     DiscussionListAdapter discussionListAdapter;
@@ -37,10 +37,11 @@ public class AcademicCategoryActivity extends ActionBarActivity {
         for(int i=0; i<5; i++){
             newDiscussionItem.setDiscussionItemText(getResources().getString(R.string.discussion_item_question));
             newDiscussionItem.setDiscussionCategory("Academic");
+
             mHousingCategoryList.add(0,newDiscussionItem);
         }
 
-        questionEditText = (EditText)findViewById(R.id.question_edit_text);
+        mQuestionEditText = (EditText)findViewById(R.id.question_edit_text);
         questionPostButton = (Button)findViewById(R.id.question_post_button);
         discussionListView = (ListView)findViewById(R.id.discussionBoardItemList);
         discussionListAdapter = new DiscussionListAdapter(mHousingCategoryList, this);
@@ -49,7 +50,7 @@ public class AcademicCategoryActivity extends ActionBarActivity {
     }
 
     public void postQuestion(View postQuestionButton){
-        questionToPost = questionEditText.getText().toString();
+        questionToPost = mQuestionEditText.getText().toString();
         DiscussionItem newDiscussionItem = new DiscussionItem();
         newDiscussionItem.setDiscussionItemText(questionToPost);
         mHousingCategoryList.add(0, newDiscussionItem);

@@ -21,7 +21,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.vedikajadhav.tieinnLibrary.DatabaseHandler;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.vedikajadhav.tieinnLibrary.AppController;
 import com.example.vedikajadhav.tieinnLibrary.JSONParser;
 import com.example.vedikajadhav.tieinnLibrary.SessionManager;
 import com.example.vedikajadhav.tieinnModel.DiscussionItem;
@@ -49,28 +54,25 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class LoginActivity extends ActionBarActivity{
     private static final String TAG= "LoginActivity";
     private EditText mUserNameEditText = null;
     private EditText mPasswordEditText = null;
-    private String username;
-    private String password;
+    private String mUsername;
+    private String mPassword;
     private TextView mSignUpTextView;
     private Button mLoginButton;
     private LoginButton mFacebookLoginButton;
     private TextView mForgotPasswordTextView;
-    private Handler mLoginHandler = new Handler();
-    private static final int Intent_User_Index = 123;
-    private static String KEY_SUCCESS = "message";
-    private static final LoginResult EXTRA_LOGIN_RESULT = null;
-    private int userID;
-    private String fb_user_id;
-    private String access_Token;
-
-    private TextView info;
+    private int mUserID;
+    private String mProfileName;
+    private String mFacebookUserID;
+    private String mAccessToken;
     private CallbackManager callbackManager;
 
     // Progress Dialog
@@ -84,8 +86,10 @@ public class LoginActivity extends ActionBarActivity{
     private static final String TAG_USERID = "UserID";
 
     // Session Manager Class
-    SessionManager session;
-    int responseCode = 0;
+    SessionManager mSession;
+    private int mResponseCode = 0;
+    private TextView mInfo;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,9 +108,8 @@ public class LoginActivity extends ActionBarActivity{
         mFacebookLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Log.i(TAG, "onSuccess");
-                fb_user_id = loginResult.getAccessToken().getUserId();
-                access_Token = loginResult.getAccessToken().getToken();
+                mFacebookUserID = loginResult.getAccessToken().getUserId();
+                mAccessToken = loginResult.getAccessToken().getToken();
 
                 /*info.setText(
                         "User ID: "
@@ -132,9 +135,7 @@ public class LoginActivity extends ActionBarActivity{
                 request.executeAsync();*/
 
                 Intent home = new Intent(getApplicationContext(), HomeActivity.class);
-                //home.putExtra(EXTRA_LOGIN_RESULT, loginResult);
-                home.putExtra(HomeActivity.Intent_fb_user_id, fb_user_id);
-               // startActivityForResult(createAccountIntent, Intent_User_Index);
+                home.putExtra(HomeActivity.Intent_fb_user_id, mFacebookUserID);
                 startActivity(home);
 
 
@@ -143,19 +144,20 @@ public class LoginActivity extends ActionBarActivity{
             @Override
             public void onCancel() {
                 Log.i(TAG, "onCancel");
-                info.setText("Login attempt canceled.");
+                mInfo.setText("Login attempt canceled.");
             }
 
             @Override
             public void onError(FacebookException e) {
                 Log.i(TAG, "onError");
-                info.setText("Login attempt failed.");
+                mInfo.setText("Login attempt failed.");
             }
         });
     }
 
     public void login(View button){
-        Log.i(TAG, "Login through tieIn app");
+        mUsername = mUserNameEditText.getText().toString();
+        mPassword = mPasswordEditText.getText().toString();
         //if((!userNameEditText.getText().toString().equals("")) && (!passwordEditText.getText().toString().equals(""))){
          /* if(true){
            // NetAsync(button);
@@ -170,22 +172,79 @@ public class LoginActivity extends ActionBarActivity{
             Toast.makeText(getApplicationContext(),
                     "Username and Password field empty", Toast.LENGTH_SHORT).show();
         }*/
-        username = mUserNameEditText.getText().toString();
-        password = mPasswordEditText.getText().toString();
 
-       // session.createLoginSession("1", username, "anroidhive@gmail.com");
+        // here we have used, switch case, because on login activity you may
+        // also want to show registration button, so if the user is new ! we can go the
+        // registration activity , other than this we could also do this without switch case.
         switch (button.getId()) {
             case R.id.login_button:
                  new AttemptLogin().execute();
-                 // here we have used, switch case, because on login activity you may
-                 // also want to show registration button, so if the user is new ! we can go the
-                 // registration activity , other than this we could also do this without switch case.
+               // normalLogin();
             default: break;
         }
-        // Session Manager
-/*        session = SessionManager.getInstance(getApplicationContext());
-        session.createLoginSession(userID, username, "anroidhive@gmail.com");*/
     }
+
+/*    public void normalLogin(){
+
+*//*        pDialog = new ProgressDialog(this);
+        pDialog.setMessage("Loading...");
+        pDialog.show();*//*
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET, LOGIN_URL, null,
+                new Response.Listener<JSONObject>() {
+                    // here Check for success tag
+                    int success;
+                    String message;
+                    JSONObject userInfoResponse;
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.i(TAG, response.toString());
+                        // success tag for json
+                        try {
+                            success = response.getInt(TAG_SUCCESS);
+                            message = response.getString(TAG_MESSAGE);
+                            userInfoResponse = new JSONObject(message);
+                            mUserID = Integer.parseInt(userInfoResponse.getString(TAG_USERID));
+                            mProfileName = userInfoResponse.getString(TAG_PROFILE_NAME);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        //responseCode = json.getStatusLine().getStatusCode();
+                        if (success == 1) {
+                            Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            // Add new Flag to start new Activity
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.putExtra(HomeActivity.Intent_profile_name, mProfileName);
+                            startActivity(intent);
+                            // this finish() method is used to tell android os that we are done with current
+                            // activity now! Moving to other activity
+                            finish();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                // pDialog.hide();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("username", mUsername);
+                params.put("password", mPassword);
+
+                return params;
+            }
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(jsonObjReq);
+    }*/
 
     public void signUp(View button){
         Intent createAccountIntent = new Intent(this, CreateAccountActivity.class);
@@ -195,11 +254,6 @@ public class LoginActivity extends ActionBarActivity{
     public void forgotPassword(View button){
         Log.i(TAG, "Forgot Password");
     }
-
-   /* @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -228,8 +282,8 @@ class AttemptLogin extends AsyncTask<String, String, String> {
         String message;
         try {
             List<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("username", username));
-            params.add(new BasicNameValuePair("password", password));
+            params.add(new BasicNameValuePair("username", mUsername));
+            params.add(new BasicNameValuePair("password", mPassword));
             Log.d("request!", "starting");
             JSONObject json = jsonParser.makeHttpRequest( LOGIN_URL, "POST", params);
             // checking log for json response
@@ -239,10 +293,7 @@ class AttemptLogin extends AsyncTask<String, String, String> {
             success = json.getInt(TAG_SUCCESS);
             message = json.getString(TAG_MESSAGE);
             JSONObject user = new JSONObject(message);
-           // newDiscussionItem.setDiscussionItemText(user.getString("UserID"));
-          //  newDiscussionItem.setDiscussionCategory(user.getString("Category"));
-            userID = Integer.parseInt(user.getString(TAG_USERID));
-
+            mUserID = Integer.parseInt(user.getString(TAG_USERID));
 
             //responseCode = json.getStatusLine().getStatusCode();
             if (success == 1) {
@@ -271,8 +322,8 @@ class AttemptLogin extends AsyncTask<String, String, String> {
     /** * Once the background process is done we need to Dismiss the progress dialog asap * **/
     protected void onPostExecute(String message) {
         pDialog.dismiss();
-        session = SessionManager.getInstance(getApplicationContext());
-        session.createLoginSession(userID, username, "anroidhive@gmail.com");
+        mSession = SessionManager.getInstance(getApplicationContext());
+        mSession.createLoginSession(mUserID, mUsername, "anroidhive@gmail.com");
         if (message != null){
             //Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
         }

@@ -32,7 +32,7 @@
     </LinearLayout>
 
     <ListView
-        android:id="@+id/discussionBoardItemList"
+        android:id="@+id/housing_discussion_board_item_list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:divider="#b5b5b5"

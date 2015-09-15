@@ -13,6 +13,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.vedikajadhav.tieinnLibrary.AppController;
 import com.example.vedikajadhav.tieinnLibrary.JSONParser;
 
 import org.apache.http.NameValuePair;
@@ -21,7 +27,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class CreateAccountActivity extends ActionBarActivity {
@@ -32,9 +40,10 @@ public class CreateAccountActivity extends ActionBarActivity {
     private EditText mUsernameEditText;
     private EditText mPasswordEditText;
     private EditText mConfirmPasswordEditText;
-    private String name;
-    private String username;
-    private String password;
+    private String mProfileName;
+    private String mUsername;
+    private String mPassword;
+    private String mConfirmPassword;
 
     private ProgressDialog pDialog;
     JSONParser jsonParser = new JSONParser();
@@ -47,7 +56,7 @@ public class CreateAccountActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
-        mProfileNameEditText = (EditText)findViewById(R.id.edit_text_name);
+        mProfileNameEditText = (EditText)findViewById(R.id.edit_text_profile_name);
         mUsernameEditText = (EditText) findViewById(R.id.edit_text_username);
         mPasswordEditText = (EditText) findViewById(R.id.edit_text_password);
         mConfirmPasswordEditText = (EditText) findViewById(R.id.edit_text_confirm_password);
@@ -55,38 +64,71 @@ public class CreateAccountActivity extends ActionBarActivity {
     }
 
     public void createAccount(View button){
-        if(mPasswordEditText.getText().toString().equals(mConfirmPasswordEditText.getText().toString())){
+        mProfileName = mProfileNameEditText.getText().toString();
+        mUsername = mUsernameEditText.getText().toString();
+        mPassword = mPasswordEditText.getText().toString();
+        mConfirmPassword = mConfirmPasswordEditText.getText().toString();
+
+        if(mPassword.equals(mConfirmPassword)){
             new AttemptRegistration().execute();
+            //registerUserOnNetwork();
         }else{
             Toast.makeText(CreateAccountActivity.this, "password and confirmPassword values do not match", Toast.LENGTH_LONG).show();
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
+    public void registerUserOnNetwork(){
+/*        pDialog = new ProgressDialog(this);
+        pDialog.setMessage("Loading...");
+        pDialog.show();*/
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET, REGISTRATION_URL, null,
+                new Response.Listener<JSONObject>() {
+                    // here Check for success tag
+                    int success;
+                    String message;
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_create_account, menu);
-        return true;
-    }
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.i(TAG, response.toString());
+                        try {
+                            // success tag for json
+                            success = response.getInt(TAG_SUCCESS);
+                            message = response.getString(TAG_MESSAGE);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        //responseCode = json.getStatusLine().getStatusCode();
+                        if (success == 1) {
+                            Intent intent = new Intent(CreateAccountActivity.this,LoginActivity.class);
+                            // this finish() method is used to tell android os that we are done with current
+                            // activity now! Moving to other activity
+                            finish();
+                            startActivity(intent);
+                        }
+                    }
+                }, new Response.ErrorListener() {
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                // pDialog.hide();
+            }
+        }) {
 
-        return super.onOptionsItemSelected(item);
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("profileName", mProfileName);
+                params.put("username", mUsername);
+                params.put("password", mPassword);
+
+                return params;
+            }
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(jsonObjReq);
     }
 
     class AttemptRegistration extends AsyncTask<String, String, String> {

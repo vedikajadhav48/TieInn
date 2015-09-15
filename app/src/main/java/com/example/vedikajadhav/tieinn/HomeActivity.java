@@ -26,17 +26,17 @@ import java.util.HashMap;
 
 public class HomeActivity extends ActionBarActivity {
     private static final String TAG= "HomeActivity";
-    private ProfilePictureView profilePictureView;
-    private String fbUserId;
-    public static final String Intent_fb_user_id = "com.example.vedikajadhav.tieinn.Intent_fb_user_id";
-    private String profileName;
-    public static final String Intent_profile_name = "com.example.vedikajadhav.tieinn.Intent_profile_name";
-    private Bitmap fbProfilePicBitmap;
-    private ImageView imageProfileView;
-    private TextView profileNameTextView;
+    private ProfilePictureView mProfilePictureView;
+    private String mFacebookUserID;
+    private String mUserID;
+    private String mProfileName;
+    private String mUsername;
+    private ImageView mProfileImageView;
+    private TextView mProfileNameTextView;
     ListView listView;
-    // Session Manager Class
-    SessionManager session;
+    SessionManager mSession;
+    public static final String Intent_fb_user_id = "com.example.vedikajadhav.tieinn.Intent_fb_user_id";
+    public static final String Intent_profile_name = "com.example.vedikajadhav.tieinn.Intent_profile_name";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,38 +44,25 @@ public class HomeActivity extends ActionBarActivity {
         setContentView(R.layout.activity_home);
 
         // Session class instance
-        session = SessionManager.getInstance(getApplicationContext());
+        mSession = SessionManager.getInstance(getApplicationContext());
 
         // Check user login (this is the important point)
         // If User is not logged in , This will redirect user to LoginActivity
         // and finish current activity from activity stack.
-        if(session.checkLogin()) {
+        if(mSession.checkLogin()) {
             finish();
         }
 
         // get user data from session
-        HashMap<String, String> user = session.getUserDetails();
+        HashMap<String, String> user = mSession.getUserDetails();
+        mUserID = user.get(SessionManager.KEY_USERID);
+        mUsername = user.get(SessionManager.KEY_NAME);
 
-        // id
-        String userID = user.get(SessionManager.KEY_USERID);
-        //convert string userIDPref to int userID
-
-        // name
-        String name = user.get(SessionManager.KEY_NAME);
-
-        // email
-        String email = user.get(SessionManager.KEY_EMAIL);
-
-        //Get LisMenuItemView object from xml
-        listView = (ListView)findViewById(R.id.listView);
-
-        //Define a new Adapter
+        listView = (ListView)findViewById(R.id.main_list_view);
         ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1,
                 android.R.id.text1,
                 getResources().getStringArray(R.array.list_menu_items));
-
-        //Assign adapter to listView
         listView.setAdapter(listViewAdapter);
 
         //listView Item click listener
@@ -105,46 +92,24 @@ public class HomeActivity extends ActionBarActivity {
                         // Clear the session data
                         // This will clear all session data and
                         // redirect user to LoginActivity
-                        session.logoutUser();
+                        mSession.logoutUser();
                         break;
                     default:
                 }
             }
         });
 
-        profileName = getIntent().getStringExtra(Intent_profile_name);
-        fbUserId = getIntent().getStringExtra(Intent_fb_user_id);
+        mProfileName = getIntent().getStringExtra(Intent_profile_name);
+        mFacebookUserID = getIntent().getStringExtra(Intent_fb_user_id);
 
-        imageProfileView = (ImageView) findViewById(R.id.image_profile_view);
-        profileNameTextView = (TextView) findViewById(R.id.profile_name_text);
+        mProfileImageView = (ImageView) findViewById(R.id.image_profile_view);
+        mProfileNameTextView = (TextView) findViewById(R.id.profile_name_text);
 
-        profileNameTextView.setText("Welcome, " + profileName + "!");
-        Picasso.with(getApplicationContext()).load("https://graph.facebook.com/" + fbUserId+ "/picture?type=large").into(imageProfileView);
+        mProfileNameTextView.setText("Welcome, " + mProfileName + "!");
+        Picasso.with(getApplicationContext()).load("https://graph.facebook.com/" + mFacebookUserID + "/picture?type=large").into(mProfileImageView);
     }
 
     public void close(View view){
         finish();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_home, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }
