@@ -1,6 +1,9 @@
 package com.example.vedikajadhav.tieinn;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.provider.SyncStateContract;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -11,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RatingBar;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -21,9 +25,11 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.example.vedikajadhav.tieinnLibrary.AnswerListAdapter;
 import com.example.vedikajadhav.tieinnLibrary.AppController;
+import com.example.vedikajadhav.tieinnLibrary.CustomAlertDialog;
 import com.example.vedikajadhav.tieinnLibrary.CustomRequest;
 import com.example.vedikajadhav.tieinnLibrary.DiscussionListAdapter;
 import com.example.vedikajadhav.tieinnLibrary.SessionManager;
+import com.example.vedikajadhav.tieinnLibrary.Util;
 import com.example.vedikajadhav.tieinnModel.AnswerItem;
 import com.example.vedikajadhav.tieinnModel.DiscussionItem;
 
@@ -36,7 +42,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class HousingCategoryActivity extends ActionBarActivity {
+public class HousingCategoryActivity extends ActionBarActivity implements View.OnClickListener{
     private static final String TAG = "HousingCategoryACtivity";
     private EditText mQuestionEditText;
     private Button mQuestionPostButton;
@@ -86,9 +92,11 @@ public class HousingCategoryActivity extends ActionBarActivity {
         mDiscussionListAdapter = new DiscussionListAdapter(mHousingDiscussionList, this);
         mDiscussionListView.setAdapter(mDiscussionListAdapter);
 
+        mQuestionPostButton.setOnClickListener(this);
+
     }
 
-    public void postQuestion(View postQuestionButton){
+    public void postQuestion(){
         mQuestionToPost = mQuestionEditText.getText().toString();
 
 /*        pDialog = new ProgressDialog(this);
@@ -168,5 +176,48 @@ public class HousingCategoryActivity extends ActionBarActivity {
 
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(jsonObjReq);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (Util.isNetworkAvailable(getApplicationContext())) {
+            if (v.getId() == R.id.question_post_button) {
+                postQuestion();
+                /*final Dialog ratingDialog = new Dialog(this, R.style.FullHeightDialog);
+                ratingDialog.setContentView(R.layout.rating_dialog);
+                ratingDialog.setCancelable(true);
+                ratingDialog.show();
+
+                Button submitButton = (Button) ratingDialog.findViewById(R.id.dialogRatingSubmitButton);
+                submitButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        RatingBar ratingBar = (RatingBar) ratingDialog.findViewById(R.id.dialogRatingBar);
+                        float rating = ratingBar.getRating();
+                        postInstructorRating(rating);
+                        ratingDialog.dismiss();
+                    }
+                });*/
+            } else { //comment button
+                /*final Dialog commentDialog = new Dialog(this, R.style.FullHeightDialog);
+                commentDialog.setContentView(R.layout.comment_dialog);
+                commentDialog.setCancelable(true);
+                commentDialog.show();
+
+                Button submitButton = (Button) commentDialog.findViewById(R.id.dialogCommentSubmitButton);
+                submitButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        EditText editText = (EditText) commentDialog.findViewById(R.id.editTextComment);
+                        String comment = editText.getText().toString();
+                        postInstructorComment(comment);
+                        commentDialog.dismiss();
+                    }
+                });*/
+            }
+        } else {
+            CustomAlertDialog customAlertDialog = new CustomAlertDialog();
+            customAlertDialog.showAlertDialog(this, "Network Unavailable", "Please check network connection and try again.");
+        }
     }
 }

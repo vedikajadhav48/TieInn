@@ -54,11 +54,11 @@ public class DiscussionListAdapter extends ArrayAdapter<DiscussionItem> {
         }
 
         DiscussionItem discussionItem = getItem(position);
-        ImageView thumbImage=(ImageView)convertView.findViewById(R.id.discussionBoardQuestionImage);
-        TextView categoryTextView = (TextView)convertView.findViewById(R.id.discussionBoardQuestionCategory);
-        TextView questionTextView=(TextView)convertView.findViewById(R.id.discussionBoardQuestionText);
-        ListView answerListView = (ListView)convertView.findViewById(R.id.answerItemList);
-        Button answerButton=(Button)convertView.findViewById(R.id.discussionBoardAnswerButton);
+        ImageView thumbImage=(ImageView)convertView.findViewById(R.id.discussion_board_question_image);
+        TextView categoryTextView = (TextView)convertView.findViewById(R.id.discussion_board_question_category);
+        TextView questionTextView=(TextView)convertView.findViewById(R.id.discussion_board_question_text);
+        ListView answerListView = (ListView)convertView.findViewById(R.id.answer_item_list);
+        Button answerButton=(Button)convertView.findViewById(R.id.discussion_board_write_answer);
 
         categoryTextView.setText(discussionItem.getDiscussionCategory());
         questionTextView.setText(discussionItem.getDiscussionItemText());

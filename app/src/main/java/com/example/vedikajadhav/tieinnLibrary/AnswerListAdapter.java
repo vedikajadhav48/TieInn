@@ -49,10 +49,9 @@ public class AnswerListAdapter extends ArrayAdapter<AnswerItem>{
 
         AnswerItem answerItem = getItem(position);
         ImageView thumbImage=(ImageView)convertView.findViewById(R.id.answer_thumbnail_image);
-       // TextView categoryTextView = (TextView)convertView.findViewById(R.id.discussionBoardQuestionCategory);
-        TextView answerTextView=(TextView)convertView.findViewById(R.id.answerText);
-        Button recommendAnswerButton=(Button)convertView.findViewById(R.id.recommendAnswerButton);
-        Button editAnswerButton=(Button)convertView.findViewById(R.id.editAnswerButton);
+        TextView answerTextView=(TextView)convertView.findViewById(R.id.answer_text);
+        Button recommendAnswerButton=(Button)convertView.findViewById(R.id.recommend_answer_button);
+        Button editAnswerButton=(Button)convertView.findViewById(R.id.edit_answer_button);
         answerTextView.setText(answerItem.getAnswerItemText());
         return convertView;
     }

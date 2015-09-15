@@ -1,7 +1,9 @@
 package com.example.vedikajadhav.tieinn;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -27,6 +29,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.vedikajadhav.tieinnLibrary.AppController;
+import com.example.vedikajadhav.tieinnLibrary.CustomAlertDialog;
 import com.example.vedikajadhav.tieinnLibrary.JSONParser;
 import com.example.vedikajadhav.tieinnLibrary.SessionManager;
 import com.example.vedikajadhav.tieinnModel.DiscussionItem;
@@ -158,20 +161,10 @@ public class LoginActivity extends ActionBarActivity{
     public void login(View button){
         mUsername = mUserNameEditText.getText().toString();
         mPassword = mPasswordEditText.getText().toString();
-        //if((!userNameEditText.getText().toString().equals("")) && (!passwordEditText.getText().toString().equals(""))){
-         /* if(true){
-           // NetAsync(button);
-            mLoginHandler.post(new LoginThread());
-        }else if(mUserNameEditText.getText().toString().equals("")){
-            Toast.makeText(getApplicationContext(),
-                    "Username field empty", Toast.LENGTH_SHORT).show();
-        }else if(mPasswordEditText.getText().toString().equals("")){
-            Toast.makeText(getApplicationContext(),
-                    "Password field empty", Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(getApplicationContext(),
-                    "Username and Password field empty", Toast.LENGTH_SHORT).show();
-        }*/
+        if((mUsername.equals("")) || (mPassword.equals(""))){
+            CustomAlertDialog customAlertDialog = new CustomAlertDialog();
+            customAlertDialog.showAlertDialog(this, "Username and/or Password field empty", "Enter Username and Password");
+        }
 
         // here we have used, switch case, because on login activity you may
         // also want to show registration button, so if the user is new ! we can go the

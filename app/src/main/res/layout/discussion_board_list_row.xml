@@ -30,7 +30,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/discussion_board_question_textview"
+        android:id="@+id/discussion_board_question_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/thumbnail"
@@ -44,12 +44,12 @@
         android:id="@+id/answer_item_list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/discussion_board_question_textview"
+        android:layout_below="@id/discussion_board_question_text"
         android:divider="#b5b5b5"
         android:dividerHeight="1dp"/>
     
     <Button
-        android:id="@+id/discussion_board_write_answer_button"
+        android:id="@+id/discussion_board_write_answer"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/answer_item_list"
