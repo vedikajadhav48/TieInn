@@ -31,6 +31,7 @@ import com.example.vedikajadhav.tieinnLibrary.DiscussionListAdapter;
 import com.example.vedikajadhav.tieinnLibrary.SessionManager;
 import com.example.vedikajadhav.tieinnLibrary.Util;
 import com.example.vedikajadhav.tieinnModel.AnswerItem;
+import com.example.vedikajadhav.tieinnModel.Constants;
 import com.example.vedikajadhav.tieinnModel.DiscussionItem;
 
 import org.json.JSONArray;
@@ -43,7 +44,7 @@ import java.util.Map;
 
 
 public class HousingCategoryActivity extends ActionBarActivity implements View.OnClickListener{
-    private static final String TAG = "HousingCategoryACtivity";
+    private static final String TAG = "HousingCategoryActivity";
     private EditText mQuestionEditText;
     private Button mQuestionPostButton;
     ListView mDiscussionListView;
@@ -60,7 +61,6 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
     private String mCategory;
     private JSONArray mQuestionsJSONArray;
     ProgressDialog pDialog;
-    private static final String POST_QUESTION_URL = "http://tieinn.comuv.com/postQuestion.php?";
 
     SessionManager mSession;
     String mUserID;
@@ -122,7 +122,7 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
         params.put("question", questionToPost);
         params.put("category", "Housing");*/
 
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, POST_QUESTION_URL, params,
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, Constants.POST_QUESTION_URL, params,
                 new Response.Listener<JSONObject>() {
 
                     @Override

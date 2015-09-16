@@ -24,7 +24,7 @@ import com.squareup.picasso.Picasso;
 import java.util.HashMap;
 
 
-public class HomeActivity extends ActionBarActivity {
+public class HomeActivity extends ActionBarActivity implements AdapterView.OnItemClickListener{
     private static final String TAG= "HomeActivity";
     private ProfilePictureView mProfilePictureView;
     private String mFacebookUserID;
@@ -33,7 +33,7 @@ public class HomeActivity extends ActionBarActivity {
     private String mUsername;
     private ImageView mProfileImageView;
     private TextView mProfileNameTextView;
-    ListView listView;
+    ListView mainListView;
     SessionManager mSession;
     public static final String Intent_fb_user_id = "com.example.vedikajadhav.tieinn.Intent_fb_user_id";
     public static final String Intent_profile_name = "com.example.vedikajadhav.tieinn.Intent_profile_name";
@@ -58,46 +58,15 @@ public class HomeActivity extends ActionBarActivity {
         mUserID = user.get(SessionManager.KEY_USERID);
         mUsername = user.get(SessionManager.KEY_NAME);
 
-        listView = (ListView)findViewById(R.id.main_list_view);
+        mainListView = (ListView)findViewById(R.id.main_list_view);
         ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1,
                 android.R.id.text1,
                 getResources().getStringArray(R.array.list_menu_items));
-        listView.setAdapter(listViewAdapter);
+        mainListView.setAdapter(listViewAdapter);
 
         //listView Item click listener
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //listView clicked item index
-                int itemPosition = position;
-
-                //ListView clicked item value
-                String itemValue = (String)listView.getItemAtPosition(position);
-
-                switch(position){
-                    case 0:
-                        Intent intent0 = new Intent(getApplicationContext(), CategoryActivity.class);
-                        startActivity(intent0);
-                        break;
-                    case 1:
-                        Intent intent1 = new Intent(getApplicationContext(), AccountActivity.class);
-                        startActivity(intent1);
-                        break;
-                    case 2:
-                        Intent intent2 = new Intent(getApplicationContext(), ContactUsActivity.class);
-                        startActivity(intent2);
-                        break;
-                    case 3:
-                        // Clear the session data
-                        // This will clear all session data and
-                        // redirect user to LoginActivity
-                        mSession.logoutUser();
-                        break;
-                    default:
-                }
-            }
-        });
+        mainListView.setOnItemClickListener(this);
 
         mProfileName = getIntent().getStringExtra(Intent_profile_name);
         mFacebookUserID = getIntent().getStringExtra(Intent_fb_user_id);
@@ -107,6 +76,37 @@ public class HomeActivity extends ActionBarActivity {
 
         mProfileNameTextView.setText("Welcome, " + mProfileName + "!");
         Picasso.with(getApplicationContext()).load("https://graph.facebook.com/" + mFacebookUserID + "/picture?type=large").into(mProfileImageView);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        //listView clicked item index
+        int itemPosition = position;
+
+        //ListView clicked item value
+        String itemValue = (String)mainListView.getItemAtPosition(position);
+
+        switch(position){
+            case 0:
+                Intent intent0 = new Intent(getApplicationContext(), CategoryActivity.class);
+                startActivity(intent0);
+                break;
+            case 1:
+                Intent intent1 = new Intent(getApplicationContext(), AccountActivity.class);
+                startActivity(intent1);
+                break;
+            case 2:
+                Intent intent2 = new Intent(getApplicationContext(), ContactUsActivity.class);
+                startActivity(intent2);
+                break;
+            case 3:
+                // Clear the session data
+                // This will clear all session data and
+                // redirect user to LoginActivity
+                mSession.logoutUser();
+                break;
+            default:
+        }
     }
 
     public void close(View view){

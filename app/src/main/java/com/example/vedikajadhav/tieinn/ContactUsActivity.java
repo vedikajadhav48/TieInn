@@ -10,6 +10,7 @@ import android.widget.Button;
 
 
 public class ContactUsActivity extends ActionBarActivity {
+    private static final String TAG= "ContactUsActivity";
     private Button sendFeedbackButton;
 
     @Override

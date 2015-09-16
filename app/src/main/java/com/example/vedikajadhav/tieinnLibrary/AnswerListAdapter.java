@@ -19,6 +19,7 @@ import java.util.ArrayList;
  * Created by Vedika Jadhav on 9/14/2015.
  */
 public class AnswerListAdapter extends ArrayAdapter<AnswerItem>{
+    private static final String TAG= "AnswerListAdapter";
     private Context mContext;
 
     public AnswerListAdapter(ArrayList<AnswerItem> answerItemList, Context context) {

@@ -13,7 +13,7 @@ import java.util.HashMap;
  * Created by Vedika Jadhav on 9/10/2015.
  */
 public class SessionManager{
-
+    private static final String TAG= "SessionManager";
     private static SessionManager mSessionInstance;
 
     // Shared Preferences

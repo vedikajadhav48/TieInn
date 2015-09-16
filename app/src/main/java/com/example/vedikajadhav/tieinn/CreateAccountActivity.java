@@ -19,7 +19,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.vedikajadhav.tieinnLibrary.AppController;
+import com.example.vedikajadhav.tieinnLibrary.CustomAlertDialog;
 import com.example.vedikajadhav.tieinnLibrary.JSONParser;
+import com.example.vedikajadhav.tieinnModel.Constants;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -47,10 +49,6 @@ public class CreateAccountActivity extends ActionBarActivity {
 
     private ProgressDialog pDialog;
     JSONParser jsonParser = new JSONParser();
-    private static final String REGISTRATION_URL = "http://tieinn.comuv.com/registration.php?";
-    private static final String TAG_SUCCESS = "success";
-    private static final String TAG_MESSAGE = "message";
-    private static final String TAG_PROFILE_NAME = "profileName";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +71,7 @@ public class CreateAccountActivity extends ActionBarActivity {
             new AttemptRegistration().execute();
             //registerUserOnNetwork();
         }else{
-            Toast.makeText(CreateAccountActivity.this, "password and confirmPassword values do not match", Toast.LENGTH_LONG).show();
+            CustomAlertDialog.showAlertDialog(this, "Password  and/or ConfirmPassword field empty", "Password and ConfirmPassword values do not match");
         }
     }
 
@@ -81,7 +79,7 @@ public class CreateAccountActivity extends ActionBarActivity {
 /*        pDialog = new ProgressDialog(this);
         pDialog.setMessage("Loading...");
         pDialog.show();*/
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET, REGISTRATION_URL, null,
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET, Constants.REGISTRATION_URL, null,
                 new Response.Listener<JSONObject>() {
                     // here Check for success tag
                     int success;
@@ -92,8 +90,8 @@ public class CreateAccountActivity extends ActionBarActivity {
                         Log.i(TAG, response.toString());
                         try {
                             // success tag for json
-                            success = response.getInt(TAG_SUCCESS);
-                            message = response.getString(TAG_MESSAGE);
+                            success = response.getInt(Constants.TAG_SUCCESS);
+                            message = response.getString(Constants.TAG_MESSAGE);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -159,11 +157,11 @@ public class CreateAccountActivity extends ActionBarActivity {
                 params.add(new BasicNameValuePair("password", password));
                 params.add(new BasicNameValuePair("profileName", profileName));
                 Log.d("request!", "starting");
-                JSONObject json = jsonParser.makeHttpRequest( REGISTRATION_URL, "POST", params);
+                JSONObject json = jsonParser.makeHttpRequest( Constants.REGISTRATION_URL, "POST", params);
                 // checking log for json response
                 Log.d("Registration attempt", json.toString());
                 // success tag for json
-                success = json.getInt(TAG_SUCCESS);
+                success = json.getInt(Constants.TAG_SUCCESS);
                 if (success == 1) {
                     Log.d("Successfully Login!", json.toString());
                     Intent ii = new Intent(CreateAccountActivity.this,LoginActivity.class);
@@ -171,9 +169,9 @@ public class CreateAccountActivity extends ActionBarActivity {
                     // this finish() method is used to tell android os that we are done with current
                     // activity now! Moving to other activity
                     startActivity(ii);
-                    return json.getString(TAG_MESSAGE);
+                    return json.getString(Constants.TAG_MESSAGE);
                 }else{
-                    return json.getString(TAG_MESSAGE);
+                    return json.getString(Constants.TAG_MESSAGE);
                 }
             }
             catch (JSONException e) {

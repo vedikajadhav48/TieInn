@@ -23,6 +23,7 @@ import java.util.ArrayList;
  * Created by Vedika Jadhav on 9/5/2015.
  */
 public class DiscussionListAdapter extends ArrayAdapter<DiscussionItem> {
+    private static final String TAG= "DiscussionListAdapter";
     private Context mContext;
     AnswerListAdapter answerListAdapter;
     private ArrayList<AnswerItem> mHousingAnswerList = new ArrayList<>();

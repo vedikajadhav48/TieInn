@@ -31,7 +31,10 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.vedikajadhav.tieinnLibrary.AppController;
 import com.example.vedikajadhav.tieinnLibrary.CustomAlertDialog;
 import com.example.vedikajadhav.tieinnLibrary.JSONParser;
+import com.example.vedikajadhav.tieinnLibrary.NetworkRequest;
 import com.example.vedikajadhav.tieinnLibrary.SessionManager;
+import com.example.vedikajadhav.tieinnLibrary.Util;
+import com.example.vedikajadhav.tieinnModel.Constants;
 import com.example.vedikajadhav.tieinnModel.DiscussionItem;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -82,11 +85,6 @@ public class LoginActivity extends ActionBarActivity{
     private ProgressDialog pDialog;
     // JSON parser class
     JSONParser jsonParser = new JSONParser();
-    private static final String LOGIN_URL = "http://tieinn.comuv.com/login.php?";
-    private static final String TAG_SUCCESS = "success";
-    private static final String TAG_MESSAGE = "message";
-    private static final String TAG_PROFILE_NAME = "ProfileName";
-    private static final String TAG_USERID = "UserID";
 
     // Session Manager Class
     SessionManager mSession;
@@ -162,8 +160,7 @@ public class LoginActivity extends ActionBarActivity{
         mUsername = mUserNameEditText.getText().toString();
         mPassword = mPasswordEditText.getText().toString();
         if((mUsername.equals("")) || (mPassword.equals(""))){
-            CustomAlertDialog customAlertDialog = new CustomAlertDialog();
-            customAlertDialog.showAlertDialog(this, "Username and/or Password field empty", "Enter Username and Password");
+            CustomAlertDialog.showAlertDialog(this, "Username and/or Password field empty", "Enter Username and Password");
         }
 
         // here we have used, switch case, because on login activity you may
@@ -171,18 +168,20 @@ public class LoginActivity extends ActionBarActivity{
         // registration activity , other than this we could also do this without switch case.
         switch (button.getId()) {
             case R.id.login_button:
+                //call async or volley
                  new AttemptLogin().execute();
-               // normalLogin();
+                //normalLogin();
             default: break;
         }
     }
 
-/*    public void normalLogin(){
+    public void normalLogin(){
 
-*//*        pDialog = new ProgressDialog(this);
+        pDialog = new ProgressDialog(this);
         pDialog.setMessage("Loading...");
-        pDialog.show();*//*
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET, LOGIN_URL, null,
+        pDialog.show();
+       // NetworkRequest networkRequest = NetworkRequest.getInstance(getApplicationContext());
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET, Constants.LOGIN_URL, null,
                 new Response.Listener<JSONObject>() {
                     // here Check for success tag
                     int success;
@@ -194,11 +193,11 @@ public class LoginActivity extends ActionBarActivity{
                         Log.i(TAG, response.toString());
                         // success tag for json
                         try {
-                            success = response.getInt(TAG_SUCCESS);
-                            message = response.getString(TAG_MESSAGE);
+                            success = response.getInt(Constants.TAG_SUCCESS);
+                            message = response.getString(Constants.TAG_MESSAGE);
                             userInfoResponse = new JSONObject(message);
-                            mUserID = Integer.parseInt(userInfoResponse.getString(TAG_USERID));
-                            mProfileName = userInfoResponse.getString(TAG_PROFILE_NAME);
+                            mUserID = Integer.parseInt(userInfoResponse.getString(Constants.TAG_USERID));
+                            mProfileName = userInfoResponse.getString(Constants.TAG_PROFILE_NAME);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -221,7 +220,7 @@ public class LoginActivity extends ActionBarActivity{
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
-                // pDialog.hide();
+                pDialog.hide();
             }
         }) {
 
@@ -236,8 +235,9 @@ public class LoginActivity extends ActionBarActivity{
         };
 
         // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(jsonObjReq);
-    }*/
+        //AppController.getInstance().addToRequestQueue(jsonObjReq);
+        NetworkRequest.getInstance(getApplicationContext()).addToRequestQueue(jsonObjReq);
+    }
 
     public void signUp(View button){
         Intent createAccountIntent = new Intent(this, CreateAccountActivity.class);
@@ -278,15 +278,15 @@ class AttemptLogin extends AsyncTask<String, String, String> {
             params.add(new BasicNameValuePair("username", mUsername));
             params.add(new BasicNameValuePair("password", mPassword));
             Log.d("request!", "starting");
-            JSONObject json = jsonParser.makeHttpRequest( LOGIN_URL, "POST", params);
+            JSONObject json = jsonParser.makeHttpRequest(Constants.LOGIN_URL, "POST", params);
             // checking log for json response
             Log.d("Login attempt", json.toString());
 
             // success tag for json
-            success = json.getInt(TAG_SUCCESS);
-            message = json.getString(TAG_MESSAGE);
+            success = json.getInt(Constants.TAG_SUCCESS);
+            message = json.getString(Constants.TAG_MESSAGE);
             JSONObject user = new JSONObject(message);
-            mUserID = Integer.parseInt(user.getString(TAG_USERID));
+            mUserID = Integer.parseInt(user.getString(Constants.TAG_USERID));
 
             //responseCode = json.getStatusLine().getStatusCode();
             if (success == 1) {
@@ -296,14 +296,14 @@ class AttemptLogin extends AsyncTask<String, String, String> {
 
                 // Add new Flag to start new Activity
                 ii.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                ii.putExtra(HomeActivity.Intent_profile_name, user.getString(TAG_PROFILE_NAME));
+                ii.putExtra(HomeActivity.Intent_profile_name, user.getString(Constants.TAG_PROFILE_NAME));
                 startActivity(ii);
                 finish();
                 // this finish() method is used to tell android os that we are done with current
                 // activity now! Moving to other activity
-                return user.getString(TAG_PROFILE_NAME);
+                return user.getString(Constants.TAG_PROFILE_NAME);
             }else{
-                return user.getString(TAG_PROFILE_NAME);
+                return user.getString(Constants.TAG_PROFILE_NAME);
             }
         }
         catch (JSONException e) {

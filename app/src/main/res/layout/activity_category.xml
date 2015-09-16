@@ -20,7 +20,7 @@
         android:textStyle="bold"/>
 
     <ListView
-    android:id="@+id/categoryListView"
+    android:id="@+id/category_list_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 

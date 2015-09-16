@@ -7,6 +7,7 @@ import android.view.MenuItem;
 
 
 public class AccountActivity extends ActionBarActivity {
+    private static final String TAG= "AccountActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

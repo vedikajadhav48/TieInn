@@ -17,7 +17,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.vedikajadhav.tieinnLibrary.JSONParser;
+import com.example.vedikajadhav.tieinnLibrary.NetworkRequest;
+import com.example.vedikajadhav.tieinnModel.Constants;
 import com.squareup.picasso.Picasso;
 
 import org.apache.http.NameValuePair;
@@ -33,16 +39,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class CategoryActivity extends ActionBarActivity {
+public class CategoryActivity extends ActionBarActivity implements AdapterView.OnItemClickListener{
+    private static final String TAG= "CategoryActivity";
     private ListView categoryListView;
 
     private ProgressDialog pDialog;
     JSONParser jsonParser = new JSONParser();
-    private static final String QUESTION_FEED_URL = "http://tieinn.comuv.com/getQuestion.php?";
-    private static final String TAG_SUCCESS = "success";
-    private static final String TAG_MESSAGE = "message";
-    private static final String TAG_QUESTION = "question";
-    private static final String TAG_CATEGORY = "category";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +52,7 @@ public class CategoryActivity extends ActionBarActivity {
         setContentView(R.layout.activity_category);
 
         //Get LisMenuItemView object from xml
-        categoryListView = (ListView)findViewById(R.id.categoryListView);
+        categoryListView = (ListView)findViewById(R.id.category_list_view);
 
         //Define a new Adapter
         ArrayAdapter<String> categoryListViewAdapter = new ArrayAdapter<String>(this,
@@ -62,7 +64,8 @@ public class CategoryActivity extends ActionBarActivity {
         categoryListView.setAdapter(categoryListViewAdapter);
 
         //listView Item click listener
-        categoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        categoryListView.setOnItemClickListener(this);
+/*        categoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //listView clicked item index
@@ -71,17 +74,15 @@ public class CategoryActivity extends ActionBarActivity {
                 //ListView clicked item value
                 String itemValue = (String)categoryListView.getItemAtPosition(position);
 
-                //show alert
-                //Toast.makeText(getApplicationContext(), "Position" + itemPosition + "ListItem" + itemValue, Toast.LENGTH_LONG).show();
                 switch(position){
                     case 0:
                         Intent intent0 = new Intent(getApplicationContext(), AcademicCategoryActivity.class);
                         startActivity(intent0);
                         break;
                     case 1:
-                        new FeedQuestions().execute();
-                        //Intent intent1 = new Intent(getApplicationContext(), HousingCategoryActivity.class);
-                        //startActivity(intent1);
+                        //async or volley
+                        //new FeedQuestions().execute();
+                        getQuestionsFromNetwork("Housing");
                         break;
                     case 2:
                         Intent intent2 = new Intent(getApplicationContext(), HousingCategoryActivity.class);
@@ -94,7 +95,73 @@ public class CategoryActivity extends ActionBarActivity {
                     default:
                 }
             }
+        });*/
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        //listView clicked item index
+        int itemPosition = position;
+
+        //ListView clicked item value
+        String itemValue = (String)categoryListView.getItemAtPosition(position);
+
+        switch(position){
+            case 0:
+                Intent intent0 = new Intent(getApplicationContext(), AcademicCategoryActivity.class);
+                startActivity(intent0);
+                break;
+            case 1:
+                //async or volley
+                //new FeedQuestions().execute();
+                getQuestionsFromNetwork("Housing");
+                break;
+            case 2:
+                Intent intent2 = new Intent(getApplicationContext(), HousingCategoryActivity.class);
+                startActivity(intent2);
+                break;
+            case 3:
+                Intent intent3 = new Intent(getApplicationContext(), HousingCategoryActivity.class);
+                startActivity(intent3);
+                break;
+            default:
+        }
+    }
+
+    public void getQuestionsFromNetwork(String category){
+        Log.i(TAG, "Network Request for details");
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Constants.GET_QUESTIONS_URL, null, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+               /* try {
+                    String email = response.getString(Constants.keyEmail);
+                    String phone = response.getString(Constants.keyPhone);
+                    String office = response.getString(Constants.keyOffice);
+                    JSONObject jsonRating = response.getJSONObject(Constants.keyRating);
+                    Double averageRating = jsonRating.getDouble(Constants.keyAverageRatings);
+                    int totalRatings = jsonRating.getInt(Constants.keyTotalRating);
+                    mInstructor.setRating(averageRating);
+                    mInstructor.setNumberOfRatings(totalRatings);
+                    mInstructor.setEmail(email);
+                    mInstructor.setOffice(office);
+                    mInstructor.setPhone(phone);
+                    mInstructor.updateInDB(getApplicationContext());
+                    updateViews();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }*/
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Error : " + TAG, Toast.LENGTH_SHORT).show();
+                Log.i(TAG, "Error Response");
+            }
         });
+
+        NetworkRequest.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
     }
 
     class FeedQuestions extends AsyncTask<String, String, String> {
@@ -120,22 +187,22 @@ public class CategoryActivity extends ActionBarActivity {
                 List<NameValuePair> params = new ArrayList<NameValuePair>();
                 params.add(new BasicNameValuePair("category", "Housing"));
                 Log.d("request!", "starting");
-                JSONObject json = jsonParser.makeHttpRequest( QUESTION_FEED_URL, "POST", params);
+                JSONObject json = jsonParser.makeHttpRequest(Constants.GET_QUESTIONS_URL, "POST", params);
                 // checking log for json response
                 Log.d("Registration attempt", json.toString());
                 // success tag for json
-                success = json.getInt(TAG_SUCCESS);
+                success = json.getInt(Constants.TAG_SUCCESS);
                 if (success == 1) {
                     Log.d("Successfully Login!", json.toString());
                     Intent ii = new Intent(CategoryActivity.this,HousingCategoryActivity.class);
                     finish();
                     // this finish() method is used to tell android os that we are done with current
                     // activity now! Moving to other activity
-                    ii.putExtra(HousingCategoryActivity.Intent_message, json.getString(TAG_MESSAGE));
+                    ii.putExtra(HousingCategoryActivity.Intent_message, json.getString(Constants.TAG_MESSAGE));
                     startActivity(ii);
-                    return json.getString(TAG_MESSAGE);
+                    return json.getString(Constants.TAG_MESSAGE);
                 }else{
-                    return json.getString(TAG_MESSAGE);
+                    return json.getString(Constants.TAG_MESSAGE);
                 }
             }
             catch (JSONException e) {

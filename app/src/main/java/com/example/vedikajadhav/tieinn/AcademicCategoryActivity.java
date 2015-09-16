@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 
 public class AcademicCategoryActivity extends ActionBarActivity {
-
+    private static final String TAG= "AcademicCategoryActivity";
     private EditText mQuestionEditText;
     private Button questionPostButton;
     ListView discussionListView;
