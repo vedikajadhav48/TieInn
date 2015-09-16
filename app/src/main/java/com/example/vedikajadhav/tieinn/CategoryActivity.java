@@ -114,7 +114,10 @@ public class CategoryActivity extends ActionBarActivity implements AdapterView.O
             case 1:
                 //async or volley
                 //new FeedQuestions().execute();
-                getQuestionsFromNetwork("Housing");
+                //getQuestionsFromNetwork("Housing");
+                Intent intent1 = new Intent(getApplicationContext(), HousingCategoryActivity.class);
+                intent1.putExtra(HousingCategoryActivity.Intent_category, Constants.TAG_CATEGORY);
+                startActivity(intent1);
                 break;
             case 2:
                 Intent intent2 = new Intent(getApplicationContext(), HousingCategoryActivity.class);

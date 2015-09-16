@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.provider.SyncStateContract;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RatingBar;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -28,6 +30,7 @@ import com.example.vedikajadhav.tieinnLibrary.AppController;
 import com.example.vedikajadhav.tieinnLibrary.CustomAlertDialog;
 import com.example.vedikajadhav.tieinnLibrary.CustomRequest;
 import com.example.vedikajadhav.tieinnLibrary.DiscussionListAdapter;
+import com.example.vedikajadhav.tieinnLibrary.NetworkRequest;
 import com.example.vedikajadhav.tieinnLibrary.SessionManager;
 import com.example.vedikajadhav.tieinnLibrary.Util;
 import com.example.vedikajadhav.tieinnModel.AnswerItem;
@@ -52,11 +55,11 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
     AnswerListAdapter mAnswerListAdapter;
     private ArrayList<DiscussionItem> mHousingDiscussionList = new ArrayList<>();
     private ArrayList<AnswerItem> mHousingAnswerList = new ArrayList<>();
-    DiscussionItem mDiscussionItem = new DiscussionItem();
     AnswerItem mAnswerItem = new AnswerItem();
     private String mQuestionToPost;
     public static final String Intent_message = "com.example.vedikajadhav.tieinn.Intent_message";
     public static final String Intent_category = "com.example.vedikajadhav.tieinn.Intent_category";
+    private int mSuccess;
     private String mMessage;
     private String mCategory;
     private JSONArray mQuestionsJSONArray;
@@ -72,9 +75,12 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
 
         mQuestionEditText = (EditText)findViewById(R.id.question_edit_text);
         mQuestionPostButton = (Button)findViewById(R.id.question_post_button);
-        mDiscussionListView = (ListView)findViewById(R.id.housing_discussion_board_item_list);
 
-        mMessage = getIntent().getStringExtra(Intent_message);
+        mCategory = getIntent().getStringExtra(Intent_category);
+        if (Util.isNetworkAvailable(getApplicationContext())) {
+            getQuestionsFromNetwork();
+        }
+        /*mMessage = getIntent().getStringExtra(Intent_message);
         try {
             mQuestionsJSONArray = new JSONArray(mMessage);
             for(int i=0; i<mQuestionsJSONArray.length(); i++){
@@ -88,12 +94,70 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
             //instructorAdapter.notifyDataSetChanged();
         } catch (JSONException e) {
             e.printStackTrace();
-        }
-        mDiscussionListAdapter = new DiscussionListAdapter(mHousingDiscussionList, this);
-        mDiscussionListView.setAdapter(mDiscussionListAdapter);
+        }*/
 
         mQuestionPostButton.setOnClickListener(this);
 
+    }
+
+    public void getQuestionsFromNetwork(){
+        Log.i(TAG, "Network Request for details");
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Constants.GET_QUESTIONS_URL, null, new Response.Listener<JSONObject>() {
+            int success;
+            String message;
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    success = response.getInt(Constants.TAG_SUCCESS);
+                    message = response.getString(Constants.TAG_MESSAGE);
+
+                    if (success == 1) {
+                        Log.d("questions fetched!", message);
+                        mQuestionsJSONArray = new JSONArray(message);
+                        for (int i = 0; i < mQuestionsJSONArray.length(); i++) {
+                            JSONObject question = (JSONObject) mQuestionsJSONArray.get(i);
+                            DiscussionItem mDiscussionItem = new DiscussionItem();
+                            mDiscussionItem.setDiscussionItemText(question.getString("Question"));
+                            mDiscussionItem.setDiscussionCategory(question.getString("Category"));
+                            mHousingDiscussionList.add(0, mDiscussionItem);
+                        }
+                        updateDiscussionListView();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Error : " + TAG, Toast.LENGTH_SHORT).show();
+                Log.i(TAG, "Error Response");
+            }
+        })
+        {
+            @Override
+            protected Map<String, String> getParams() {
+                // get user data from session
+                mSession = SessionManager.getInstance(getApplicationContext());
+                HashMap<String, String> user = mSession.getUserDetails();
+                mUserID = user.get(SessionManager.KEY_USERID);
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("userID", mUserID);
+                params.put("category", Constants.TAG_CATEGORY);
+
+                return params;
+            }
+        };
+
+        //NetworkRequest.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
+        AppController.getInstance().addToRequestQueue(jsonObjectRequest);
+    }
+
+    public void updateDiscussionListView(){
+        mDiscussionListView = (ListView)findViewById(R.id.housing_discussion_board_item_list);
+        mDiscussionListAdapter = new DiscussionListAdapter(mHousingDiscussionList, this);
+        mDiscussionListView.setAdapter(mDiscussionListAdapter);
     }
 
     public void postQuestion(){

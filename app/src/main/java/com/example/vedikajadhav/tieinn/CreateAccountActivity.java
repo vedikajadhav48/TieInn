@@ -145,7 +145,6 @@ public class CreateAccountActivity extends ActionBarActivity {
 
         @Override
         protected String doInBackground(String... args) {
-            // TODO Auto-generated method stub
             // here Check for success tag
             int success;
             String profileName = mProfileNameEditText.getText().toString();

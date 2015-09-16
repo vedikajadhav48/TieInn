@@ -58,7 +58,7 @@ public class DiscussionListAdapter extends ArrayAdapter<DiscussionItem> {
         ImageView thumbImage=(ImageView)convertView.findViewById(R.id.discussion_board_question_image);
         TextView categoryTextView = (TextView)convertView.findViewById(R.id.discussion_board_question_category);
         TextView questionTextView=(TextView)convertView.findViewById(R.id.discussion_board_question_text);
-        ListView answerListView = (ListView)convertView.findViewById(R.id.answer_item_list);
+       // ListView answerListView = (ListView)convertView.findViewById(R.id.answer_item_list);
         Button answerButton=(Button)convertView.findViewById(R.id.discussion_board_write_answer);
 
         categoryTextView.setText(discussionItem.getDiscussionCategory());
@@ -68,8 +68,8 @@ public class DiscussionListAdapter extends ArrayAdapter<DiscussionItem> {
             newAnswerItem.setAnswerItemText("Starbucks is the favourite coffee place");
             mHousingAnswerList.add(0, newAnswerItem);
         }
-        answerListAdapter = new AnswerListAdapter(mHousingAnswerList, getContext());
-        answerListView.setAdapter(answerListAdapter);
+       // answerListAdapter = new AnswerListAdapter(mHousingAnswerList, getContext());
+        //answerListView.setAdapter(answerListAdapter);
         return convertView;
     }
 }

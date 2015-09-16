@@ -14,5 +14,5 @@ public class Constants {
     public static final String TAG_PROFILE_NAME = "ProfileName";
     public static final String TAG_USERID = "UserID";
     public static final String TAG_QUESTION = "question";
-    public static final String TAG_CATEGORY = "category";
+    public static final String TAG_CATEGORY = "Housing";
 }
