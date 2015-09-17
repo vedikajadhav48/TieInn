@@ -102,7 +102,12 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
 
     public void getQuestionsFromNetwork(){
         Log.i(TAG, "Network Request for details");
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Constants.GET_QUESTIONS_URL, null, new Response.Listener<JSONObject>() {
+        // get user data from session
+        mSession = SessionManager.getInstance(getApplicationContext());
+        HashMap<String, String> user = mSession.getUserDetails();
+        mUserID = user.get(SessionManager.KEY_USERID);
+        String url = Constants.GET_QUESTIONS_URL + "userID=mUserID&category=Housing";
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             int success;
             String message;
             @Override
@@ -134,24 +139,15 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
                 Toast.makeText(getApplicationContext(), "Error : " + TAG, Toast.LENGTH_SHORT).show();
                 Log.i(TAG, "Error Response");
             }
-        })
-        {
-            @Override
-            protected Map<String, String> getParams() {
-                // get user data from session
-                mSession = SessionManager.getInstance(getApplicationContext());
-                HashMap<String, String> user = mSession.getUserDetails();
-                mUserID = user.get(SessionManager.KEY_USERID);
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("userID", mUserID);
-                params.put("category", Constants.TAG_CATEGORY);
-
-                return params;
-            }
-        };
+        });
 
         //NetworkRequest.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
         AppController.getInstance().addToRequestQueue(jsonObjectRequest);
+        getAnswersFromNetwork();
+    }
+
+    private void getAnswersFromNetwork(){
+
     }
 
     public void updateDiscussionListView(){
@@ -262,22 +258,22 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
                         ratingDialog.dismiss();
                     }
                 });*/
-            } else { //comment button
-                /*final Dialog commentDialog = new Dialog(this, R.style.FullHeightDialog);
-                commentDialog.setContentView(R.layout.comment_dialog);
-                commentDialog.setCancelable(true);
-                commentDialog.show();
+            } else if(v.getId() == R.id.discussion_board_write_answer_button){ //write answer button
+                final Dialog writeAnswerDialog = new Dialog(this, R.style.FullHeightDialog);
+                writeAnswerDialog.setContentView(R.layout.write_answer_dialog);
+                writeAnswerDialog.setCancelable(true);
+                writeAnswerDialog.show();
 
-                Button submitButton = (Button) commentDialog.findViewById(R.id.dialogCommentSubmitButton);
+                Button submitButton = (Button) writeAnswerDialog.findViewById(R.id.dialog_answer_submit_button);
                 submitButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        EditText editText = (EditText) commentDialog.findViewById(R.id.editTextComment);
-                        String comment = editText.getText().toString();
-                        postInstructorComment(comment);
-                        commentDialog.dismiss();
+                        EditText editText = (EditText) writeAnswerDialog.findViewById(R.id.edit_text_answer);
+                        String answer = editText.getText().toString();
+                        //postInstructorComment(comment);
+                        writeAnswerDialog.dismiss();
                     }
-                });*/
+                });
             }
         } else {
             CustomAlertDialog customAlertDialog = new CustomAlertDialog();

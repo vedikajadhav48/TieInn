@@ -1,12 +1,14 @@
 package com.example.vedikajadhav.tieinnLibrary;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,7 +24,7 @@ import java.util.ArrayList;
 /**
  * Created by Vedika Jadhav on 9/5/2015.
  */
-public class DiscussionListAdapter extends ArrayAdapter<DiscussionItem> {
+public class DiscussionListAdapter extends ArrayAdapter<DiscussionItem> implements View.OnClickListener{
     private static final String TAG= "DiscussionListAdapter";
     private Context mContext;
     AnswerListAdapter answerListAdapter;
@@ -59,7 +61,7 @@ public class DiscussionListAdapter extends ArrayAdapter<DiscussionItem> {
         TextView categoryTextView = (TextView)convertView.findViewById(R.id.discussion_board_question_category);
         TextView questionTextView=(TextView)convertView.findViewById(R.id.discussion_board_question_text);
        // ListView answerListView = (ListView)convertView.findViewById(R.id.answer_item_list);
-        Button answerButton=(Button)convertView.findViewById(R.id.discussion_board_write_answer);
+        Button answerButton=(Button)convertView.findViewById(R.id.discussion_board_write_answer_button);
 
         categoryTextView.setText(discussionItem.getDiscussionCategory());
         questionTextView.setText(discussionItem.getDiscussionItemText());
@@ -71,5 +73,26 @@ public class DiscussionListAdapter extends ArrayAdapter<DiscussionItem> {
        // answerListAdapter = new AnswerListAdapter(mHousingAnswerList, getContext());
         //answerListView.setAdapter(answerListAdapter);
         return convertView;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.discussion_board_write_answer_button){ //write answer button
+            final Dialog writeAnswerDialog = new Dialog(getContext(), R.style.FullHeightDialog);
+            writeAnswerDialog.setContentView(R.layout.write_answer_dialog);
+            writeAnswerDialog.setCancelable(true);
+            writeAnswerDialog.show();
+
+            Button submitButton = (Button) writeAnswerDialog.findViewById(R.id.dialog_answer_submit_button);
+            submitButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    EditText editText = (EditText) writeAnswerDialog.findViewById(R.id.edit_text_answer);
+                    String answer = editText.getText().toString();
+                    //postInstructorComment(comment);
+                    writeAnswerDialog.dismiss();
+                }
+            });
+        }
     }
 }

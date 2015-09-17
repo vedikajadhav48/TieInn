@@ -6,7 +6,7 @@ package com.example.vedikajadhav.tieinnModel;
 public class Constants {
     public static final String LOGIN_URL = "http://tieinn.comuv.com/login.php?";
     public static final String REGISTRATION_URL = "http://tieinn.comuv.com/registration.php?";
-    public static final String GET_QUESTIONS_URL = "http://tieinn.comuv.com/getQuestion.php?";
+    public static final String GET_QUESTIONS_URL = "http://tieinn.comuv.com/getQuestions.php?";
     public static final String POST_QUESTION_URL = "http://tieinn.comuv.com/postQuestion.php?";
 
     public static final String TAG_SUCCESS = "success";

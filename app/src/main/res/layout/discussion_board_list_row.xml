@@ -49,7 +49,7 @@
         android:dividerHeight="1dp"/>
     
     <Button
-        android:id="@+id/discussion_board_write_answer"
+        android:id="@+id/discussion_board_write_answer_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/answer_item_list"
