@@ -1,8 +1,10 @@
 package com.example.vedikajadhav.tieinn;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.provider.SyncStateContract;
@@ -27,6 +29,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.example.vedikajadhav.tieinnLibrary.AnswerListAdapter;
 import com.example.vedikajadhav.tieinnLibrary.AppController;
+import com.example.vedikajadhav.tieinnLibrary.ButtonClickListener;
 import com.example.vedikajadhav.tieinnLibrary.CustomAlertDialog;
 import com.example.vedikajadhav.tieinnLibrary.CustomRequest;
 import com.example.vedikajadhav.tieinnLibrary.DiscussionListAdapter;
@@ -80,21 +83,6 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
         if (Util.isNetworkAvailable(getApplicationContext())) {
             getQuestionsFromNetwork();
         }
-        /*mMessage = getIntent().getStringExtra(Intent_message);
-        try {
-            mQuestionsJSONArray = new JSONArray(mMessage);
-            for(int i=0; i<mQuestionsJSONArray.length(); i++){
-                JSONObject question = (JSONObject) mQuestionsJSONArray.get(i);
-                mDiscussionItem = new DiscussionItem();
-                mDiscussionItem.setDiscussionItemText(question.getString("Question"));
-                mDiscussionItem.setDiscussionCategory(question.getString("Category"));
-                mHousingDiscussionList.add(0, mDiscussionItem);
-                //mHousingAnswerList.add(0, newAnswerItem);
-            }
-            //instructorAdapter.notifyDataSetChanged();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }*/
 
         mQuestionPostButton.setOnClickListener(this);
 
@@ -258,7 +246,7 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
                         ratingDialog.dismiss();
                     }
                 });*/
-            } else if(v.getId() == R.id.discussion_board_write_answer_button){ //write answer button
+            } /*else if(v.getId() == R.id.discussion_board_write_answer_button){ //write answer button
                 final Dialog writeAnswerDialog = new Dialog(this, R.style.FullHeightDialog);
                 writeAnswerDialog.setContentView(R.layout.write_answer_dialog);
                 writeAnswerDialog.setCancelable(true);
@@ -274,7 +262,7 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
                         writeAnswerDialog.dismiss();
                     }
                 });
-            }
+            }*/
         } else {
             CustomAlertDialog customAlertDialog = new CustomAlertDialog();
             customAlertDialog.showAlertDialog(this, "Network Unavailable", "Please check network connection and try again.");
