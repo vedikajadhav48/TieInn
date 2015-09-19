@@ -28,7 +28,6 @@ import java.util.zip.Inflater;
 public class DiscussionListAdapter extends ArrayAdapter<DiscussionItem>{
     private static final String TAG= "DiscussionListAdapter";
     private final Activity mContext;
-    private final ArrayList<DiscussionItem> mDiscussionItemList;
     private Button answerButton = null;
     AnswerListAdapter answerListAdapter;
     private ArrayList<AnswerItem> mHousingAnswerList = new ArrayList<>();
@@ -36,7 +35,6 @@ public class DiscussionListAdapter extends ArrayAdapter<DiscussionItem>{
     public DiscussionListAdapter(ArrayList<DiscussionItem> discussionItemList, Activity context) {
         super(context, 0, discussionItemList);
         this.mContext = context;
-        this.mDiscussionItemList = discussionItemList;
     }
 
 /*    @Override

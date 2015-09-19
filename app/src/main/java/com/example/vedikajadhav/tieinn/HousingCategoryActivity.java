@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.Toast;
@@ -32,6 +33,7 @@ import com.example.vedikajadhav.tieinnLibrary.AppController;
 import com.example.vedikajadhav.tieinnLibrary.ButtonClickListener;
 import com.example.vedikajadhav.tieinnLibrary.CustomAlertDialog;
 import com.example.vedikajadhav.tieinnLibrary.CustomRequest;
+import com.example.vedikajadhav.tieinnLibrary.DiscussionExpandableListAdapter;
 import com.example.vedikajadhav.tieinnLibrary.DiscussionListAdapter;
 import com.example.vedikajadhav.tieinnLibrary.NetworkRequest;
 import com.example.vedikajadhav.tieinnLibrary.SessionManager;
@@ -46,6 +48,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -54,10 +57,14 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
     private EditText mQuestionEditText;
     private Button mQuestionPostButton;
     ListView mDiscussionListView;
+    ExpandableListView mDiscussionExpandableListView;
     DiscussionListAdapter mDiscussionListAdapter;
+    DiscussionExpandableListAdapter mDiscussionExpandableListAdapter;
     AnswerListAdapter mAnswerListAdapter;
-    private ArrayList<DiscussionItem> mHousingDiscussionList = new ArrayList<>();
-    private ArrayList<AnswerItem> mHousingAnswerList = new ArrayList<>();
+   // private ArrayList<DiscussionItem> mHousingDiscussionList = new ArrayList<>();
+   // private ArrayList<AnswerItem> mHousingAnswerList = new ArrayList<>();
+    List<DiscussionItem> mHousingDiscussionList = new ArrayList<DiscussionItem>();;
+    HashMap<DiscussionItem, List<String>> mHousingAnswerList = new HashMap<DiscussionItem, List<String>>();;
     AnswerItem mAnswerItem = new AnswerItem();
     private String mQuestionToPost;
     public static final String Intent_message = "com.example.vedikajadhav.tieinn.Intent_message";
@@ -85,7 +92,6 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
         }
 
         mQuestionPostButton.setOnClickListener(this);
-
     }
 
     public void getQuestionsFromNetwork(){
@@ -139,9 +145,99 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
     }
 
     public void updateDiscussionListView(){
-        mDiscussionListView = (ListView)findViewById(R.id.housing_discussion_board_item_list);
+        /*mDiscussionListView = (ListView)findViewById(R.id.discussion_expandable_list_view);
         mDiscussionListAdapter = new DiscussionListAdapter(mHousingDiscussionList, this);
-        mDiscussionListView.setAdapter(mDiscussionListAdapter);
+        mDiscussionListView.setAdapter(mDiscussionListAdapter);*/
+        mDiscussionExpandableListView = (ExpandableListView)findViewById(R.id.discussion_expandable_list_view);
+        // preparing list data
+        prepareListData();
+        mDiscussionExpandableListAdapter = new DiscussionExpandableListAdapter(this, mHousingDiscussionList, mHousingAnswerList);
+        mDiscussionExpandableListView.setAdapter(mDiscussionExpandableListAdapter);
+
+        // Listview Group click listener
+        mDiscussionExpandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v,
+                                        int groupPosition, long id) {
+                 Toast.makeText(getApplicationContext(),
+                 "Group Clicked " + mHousingDiscussionList.get(groupPosition),
+                 Toast.LENGTH_SHORT).show();
+                //parent.expandGroup(groupPosition);
+                return false;
+            }
+        });
+
+        // Listview on child click listener
+        mDiscussionExpandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v,
+                                        int groupPosition, int childPosition, long id) {
+                Toast.makeText(
+                        getApplicationContext(),
+                        mHousingDiscussionList.get(groupPosition)
+                                + " : "
+                                + mHousingAnswerList.get(
+                                mHousingDiscussionList.get(groupPosition)).get(
+                                childPosition), Toast.LENGTH_SHORT)
+                        .show();
+                return false;
+            }
+        });
+
+        // Listview Group expanded listener
+        mDiscussionExpandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                Toast.makeText(getApplicationContext(),
+                        mHousingDiscussionList.get(groupPosition) + " Expanded",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Listview Group collasped listener
+        mDiscussionExpandableListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+
+            @Override
+            public void onGroupCollapse(int groupPosition) {
+                Toast.makeText(getApplicationContext(),
+                        mHousingDiscussionList.get(groupPosition) + " Collapsed",
+                        Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
+
+    /*
+ * Preparing the list data
+ */
+    private void prepareListData() {
+/*        listDataHeader = new ArrayList<String>();
+        listDataChild = new HashMap<String, List<String>>();*/
+
+/*        // Adding child data
+        listDataHeader.add("Top 250");
+        listDataHeader.add("Now Showing");
+        listDataHeader.add("Coming Soon..");*/
+
+        // Adding child data
+        List<String> top250 = new ArrayList<String>();
+        top250.add("The Shawshank Redemption");
+        top250.add("The Godfather");
+        top250.add("The Godfather: Part II");
+        top250.add("Pulp Fiction");
+        top250.add("The Good, the Bad and the Ugly");
+        top250.add("The Dark Knight");
+        top250.add("12 Angry Men");
+
+        for(int i=0; i<mHousingDiscussionList.size(); i++){
+            mHousingAnswerList.put(mHousingDiscussionList.get(i), top250); // Header, Child data
+        }
+
+/*        listDataChild.put(listDataHeader.get(1), nowShowing);
+        listDataChild.put(listDataHeader.get(2), comingSoon);*/
     }
 
     public void postQuestion(){

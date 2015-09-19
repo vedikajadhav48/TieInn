@@ -40,19 +40,16 @@
         android:textSize="15dip"
         android:textStyle="bold"/>
 
-    <ListView
-        android:id="@+id/answer_item_list"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/discussion_board_question_text"
-        android:divider="#b5b5b5"
-        android:dividerHeight="1dp"/>
+    <ExpandableListView
+        android:id="@+id/answer_expandable_list_view"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"/>
     
     <Button
         android:id="@+id/discussion_board_write_answer_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/answer_item_list"
+        android:layout_below="@id/answer_expandable_list_view"
         android:textColor="#343434"
         android:textSize="10dip"
         android:layout_marginTop="1dip"
