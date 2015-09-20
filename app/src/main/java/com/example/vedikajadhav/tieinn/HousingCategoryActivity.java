@@ -50,7 +50,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class HousingCategoryActivity extends ActionBarActivity implements View.OnClickListener{
+public class HousingCategoryActivity extends ActionBarActivity implements View.OnClickListener {
     private static final String TAG = "HousingCategoryActivity";
     private EditText mQuestionEditText;
     private Button mQuestionPostButton;
@@ -61,7 +61,7 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
    // private ArrayList<DiscussionItem> mHousingDiscussionList = new ArrayList<>();
    // private ArrayList<AnswerItem> mHousingAnswerList = new ArrayList<>();
     List<DiscussionItem> mHousingDiscussionList = new ArrayList<DiscussionItem>();;
-    HashMap<Integer, List<AnswerItem>> mHousingAnswerList = new HashMap<Integer, List<AnswerItem>>();;
+    HashMap<String, List<AnswerItem>> mHousingAnswerList = new HashMap<String, List<AnswerItem>>();;
     AnswerItem mAnswerItem = new AnswerItem();
     private String mQuestionToPost;
     public static final String Intent_message = "com.example.vedikajadhav.tieinn.Intent_message";
@@ -75,6 +75,8 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
 
     SessionManager mSession;
     String mUserID;
+    String mQuestionID;
+    List<AnswerItem> answers = new ArrayList<AnswerItem>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +128,7 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
                             mHousingDiscussionList.add(0, mDiscussionItem);
                         }
                         updateDiscussionListView();
+                        Toast.makeText(getApplicationContext(), "Success Questions: " + TAG, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -149,13 +152,18 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
        // getAnswersFromNetwork();
     }
 
-    private void getAnswersFromNetwork(final int questionID){
+    public void getAnswersFromNetwork(int questionID){
         Log.i(TAG, "Network Request for answers");
-        String url = Constants.GET_ANSWERS_URL + "questionID=questionID";
+        mQuestionID = String.valueOf(questionID);
+        // get user data from session
+/*        mSession = SessionManager.getInstance(getApplicationContext());
+        HashMap<String, String> user = mSession.getUserDetails();
+        mUserID = user.get(SessionManager.KEY_USERID);*/
+        String url = Constants.GET_ANSWERS_URL + "userID=mUserID&questionID=mQuestionID";
         JsonObjectRequest answerJsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             int success;
             String message;
-            List<AnswerItem> answers = new ArrayList<AnswerItem>();
+           // List<AnswerItem> answers = new ArrayList<AnswerItem>();
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -172,7 +180,8 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
                             //mAnswerItem.set(question.getString("Category"));
                             answers.add(mAnswerItem);
                         }
-                        mHousingAnswerList.put(questionID, answers); // Header, Child data
+                        mHousingAnswerList.put(mQuestionID, answers); // Header, Child data
+                        Toast.makeText(getApplicationContext(), "Success Answers: " + TAG, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -183,7 +192,7 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(getApplicationContext(), "Error Answers: " + TAG, Toast.LENGTH_SHORT).show();
-                Log.i(TAG, "Error Response");
+                Log.i(TAG, "Error Response", error);
             }
         });
 
@@ -207,9 +216,9 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v,
                                         int groupPosition, long id) {
-                 Toast.makeText(getApplicationContext(),
+                 /*Toast.makeText(getApplicationContext(),
                  "Group Clicked " + mHousingDiscussionList.get(groupPosition),
-                 Toast.LENGTH_SHORT).show();
+                 Toast.LENGTH_SHORT).show();*/
                 //parent.expandGroup(groupPosition);
                 return false;
             }

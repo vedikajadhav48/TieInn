@@ -75,7 +75,7 @@ public class LoginActivity extends ActionBarActivity{
     private Button mLoginButton;
     private LoginButton mFacebookLoginButton;
     private TextView mForgotPasswordTextView;
-    private int mUserID;
+    private String mUserID;
     private String mProfileName;
     private String mFacebookUserID;
     private String mAccessToken;
@@ -177,66 +177,57 @@ public class LoginActivity extends ActionBarActivity{
 
     public void normalLogin(){
 
-        pDialog = new ProgressDialog(this);
+        /*pDialog = new ProgressDialog(this);
         pDialog.setMessage("Loading...");
-        pDialog.show();
+        pDialog.show();*/
+        String url = Constants.LOGIN_URL + "username=mUsername&password=mPassword";
        // NetworkRequest networkRequest = NetworkRequest.getInstance(getApplicationContext());
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET, Constants.LOGIN_URL, null,
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     // here Check for success tag
                     int success;
                     String message;
-                    JSONObject userInfoResponse;
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.i(TAG, response.toString());
                         // success tag for json
                         try {
                             success = response.getInt(Constants.TAG_SUCCESS);
                             message = response.getString(Constants.TAG_MESSAGE);
-                            userInfoResponse = new JSONObject(message);
-                            mUserID = Integer.parseInt(userInfoResponse.getString(Constants.TAG_USERID));
-                            mProfileName = userInfoResponse.getString(Constants.TAG_PROFILE_NAME);
-
+                            if (success == 1) {
+                                JSONObject userInfoResponse = new JSONObject(message);
+                                //mUserID = Integer.parseInt(userInfoResponse.getString(Constants.TAG_USERID));
+                                mUserID = userInfoResponse.getString(Constants.TAG_USERID);
+                                mProfileName = userInfoResponse.getString(Constants.TAG_PROFILE_NAME);
+                                mSession = SessionManager.getInstance(getApplicationContext());
+                                mSession.createLoginSession(Integer.parseInt(mUserID), mUsername, "anroidhive@gmail.com");
+                                Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
+                           /* intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            // Add new Flag to start new Activity
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);*/
+                                intent.putExtra(HomeActivity.Intent_profile_name, mProfileName);
+                                startActivity(intent);
+                                // this finish() method is used to tell android os that we are done with current
+                                // activity now! Moving to other activity
+                                // finish();
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                         //responseCode = json.getStatusLine().getStatusCode();
-                        if (success == 1) {
-                            Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            // Add new Flag to start new Activity
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent.putExtra(HomeActivity.Intent_profile_name, mProfileName);
-                            startActivity(intent);
-                            // this finish() method is used to tell android os that we are done with current
-                            // activity now! Moving to other activity
-                            finish();
-                        }
                     }
                 }, new Response.ErrorListener() {
 
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
-                pDialog.hide();
+               // pDialog.hide();
             }
-        }) {
-
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("username", mUsername);
-                params.put("password", mPassword);
-
-                return params;
-            }
-        };
+        }) ;
 
         // Adding request to request queue
-        //AppController.getInstance().addToRequestQueue(jsonObjReq);
-        NetworkRequest.getInstance(getApplicationContext()).addToRequestQueue(jsonObjReq);
+        AppController.getInstance().addToRequestQueue(jsonObjectRequest);
+        //NetworkRequest.getInstance(getApplicationContext()).addToRequestQueue(jsonObjReq);
     }
 
     public void signUp(View button){
@@ -286,24 +277,27 @@ class AttemptLogin extends AsyncTask<String, String, String> {
             success = json.getInt(Constants.TAG_SUCCESS);
             message = json.getString(Constants.TAG_MESSAGE);
             JSONObject user = new JSONObject(message);
-            mUserID = Integer.parseInt(user.getString(Constants.TAG_USERID));
+            mUserID = user.getString(Constants.TAG_USERID);
+            mProfileName = user.getString(Constants.TAG_PROFILE_NAME);
 
             //responseCode = json.getStatusLine().getStatusCode();
             if (success == 1) {
                 Log.d("Successfully Login!", json.toString());
+                mSession = SessionManager.getInstance(getApplicationContext());
+                mSession.createLoginSession(Integer.parseInt(mUserID), mUsername, "anroidhive@gmail.com");
                 Intent ii = new Intent(LoginActivity.this,HomeActivity.class);
-                ii.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+/*                ii.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
                 // Add new Flag to start new Activity
-                ii.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                ii.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);*/
                 ii.putExtra(HomeActivity.Intent_profile_name, user.getString(Constants.TAG_PROFILE_NAME));
                 startActivity(ii);
-                finish();
+               // finish();
                 // this finish() method is used to tell android os that we are done with current
                 // activity now! Moving to other activity
-                return user.getString(Constants.TAG_PROFILE_NAME);
+                return mProfileName;
             }else{
-                return user.getString(Constants.TAG_PROFILE_NAME);
+                return mProfileName;
             }
         }
         catch (JSONException e) {
@@ -315,8 +309,8 @@ class AttemptLogin extends AsyncTask<String, String, String> {
     /** * Once the background process is done we need to Dismiss the progress dialog asap * **/
     protected void onPostExecute(String message) {
         pDialog.dismiss();
-        mSession = SessionManager.getInstance(getApplicationContext());
-        mSession.createLoginSession(mUserID, mUsername, "anroidhive@gmail.com");
+/*        mSession = SessionManager.getInstance(getApplicationContext());
+        mSession.createLoginSession(Integer.parseInt(mUserID), mUsername, "anroidhive@gmail.com");*/
         if (message != null){
             //Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
         }

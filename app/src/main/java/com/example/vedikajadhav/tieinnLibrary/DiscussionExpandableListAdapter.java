@@ -24,10 +24,10 @@ import java.util.List;
 public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
     private Context mContext;
     private List<DiscussionItem> mListDataHeader;
-    private HashMap<Integer, List<AnswerItem>> mListDataChild;
+    private HashMap<String, List<AnswerItem>> mListDataChild;
 
     public DiscussionExpandableListAdapter(Context context, List<DiscussionItem> listDataHeader,
-                                       HashMap<Integer, List<AnswerItem>> listChildData) {
+                                       HashMap<String, List<AnswerItem>> listChildData) {
         this.mContext = context;
         this.mListDataHeader = listDataHeader;
         this.mListDataChild = listChildData;
