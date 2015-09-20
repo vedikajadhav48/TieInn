@@ -9,12 +9,21 @@ import android.widget.ListView;
  * Created by Vedika Jadhav on 9/5/2015.
  */
 public class DiscussionItem {
+    private int mDiscussionItemID;
     private ImageView mDiscussionItemImage;
     private String mDiscussionCategory;
     private String mDiscussionItemText;
     private String mDiscussionItemPostDate;
     private Button mDiscussionItemAnswerButton;
     private ListView mDiscussionItemAnswerList;
+
+    public int getDiscussionItemID() {
+        return mDiscussionItemID;
+    }
+
+    public void setDiscussionItemID(int discussionItemID) {
+        mDiscussionItemID = discussionItemID;
+    }
 
     public ImageView getDiscussionItemImage() {
         return mDiscussionItemImage;

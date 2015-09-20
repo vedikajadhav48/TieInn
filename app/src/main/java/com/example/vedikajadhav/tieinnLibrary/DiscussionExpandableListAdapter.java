@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.vedikajadhav.tieinn.R;
+import com.example.vedikajadhav.tieinnModel.AnswerItem;
 import com.example.vedikajadhav.tieinnModel.DiscussionItem;
 
 import java.util.HashMap;
@@ -23,10 +24,10 @@ import java.util.List;
 public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
     private Context mContext;
     private List<DiscussionItem> mListDataHeader;
-    private HashMap<DiscussionItem, List<String>> mListDataChild;
+    private HashMap<Integer, List<AnswerItem>> mListDataChild;
 
     public DiscussionExpandableListAdapter(Context context, List<DiscussionItem> listDataHeader,
-                                       HashMap<DiscussionItem, List<String>> listChildData) {
+                                       HashMap<Integer, List<AnswerItem>> listChildData) {
         this.mContext = context;
         this.mListDataHeader = listDataHeader;
         this.mListDataChild = listChildData;
@@ -79,13 +80,13 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
 
         TextView lblListHeader = (TextView) convertView
                 .findViewById(R.id.discussion_board_question_text);
-        Button answerButton=(Button)convertView.findViewById(R.id.discussion_board_write_answer_button);
+        Button writeAnswerButton=(Button)convertView.findViewById(R.id.discussion_board_write_answer_button);
 
         lblListHeader.setTypeface(null, Typeface.BOLD);
         lblListHeader.setText(headerTitle.getDiscussionItemText());
 
-        answerButton.setTag(groupPosition);//For passing the list item index
-        answerButton.setOnClickListener(new View.OnClickListener(){
+        writeAnswerButton.setTag(groupPosition);//For passing the list item index
+        writeAnswerButton.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
@@ -113,6 +114,7 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         final String childText = (String) getChild(groupPosition, childPosition);
+        int recommendCount = 0;
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this.mContext
@@ -122,8 +124,18 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
 
         TextView txtListChild = (TextView) convertView
                 .findViewById(R.id.discussion_board_answer_text);
+        final Button recommendAnswerButton=(Button)convertView.findViewById(R.id.discussion_board_recommend_answer);
 
         txtListChild.setText(childText);
+        recommendAnswerButton.setTag(groupPosition);//For passing the list item index
+        recommendAnswerButton.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                //increment recommend counter
+                //recommendAnswerButton.setText(recommendCount);
+            }
+        });
         return convertView;
     }
 

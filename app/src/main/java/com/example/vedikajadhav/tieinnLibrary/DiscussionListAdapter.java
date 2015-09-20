@@ -29,7 +29,6 @@ public class DiscussionListAdapter extends ArrayAdapter<DiscussionItem>{
     private static final String TAG= "DiscussionListAdapter";
     private final Activity mContext;
     private Button answerButton = null;
-    AnswerListAdapter answerListAdapter;
     private ArrayList<AnswerItem> mHousingAnswerList = new ArrayList<>();
 
     public DiscussionListAdapter(ArrayList<DiscussionItem> discussionItemList, Activity context) {

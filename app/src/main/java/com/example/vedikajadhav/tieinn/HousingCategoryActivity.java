@@ -28,9 +28,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.example.vedikajadhav.tieinnLibrary.AnswerListAdapter;
 import com.example.vedikajadhav.tieinnLibrary.AppController;
-import com.example.vedikajadhav.tieinnLibrary.ButtonClickListener;
 import com.example.vedikajadhav.tieinnLibrary.CustomAlertDialog;
 import com.example.vedikajadhav.tieinnLibrary.CustomRequest;
 import com.example.vedikajadhav.tieinnLibrary.DiscussionExpandableListAdapter;
@@ -60,11 +58,10 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
     ExpandableListView mDiscussionExpandableListView;
     DiscussionListAdapter mDiscussionListAdapter;
     DiscussionExpandableListAdapter mDiscussionExpandableListAdapter;
-    AnswerListAdapter mAnswerListAdapter;
    // private ArrayList<DiscussionItem> mHousingDiscussionList = new ArrayList<>();
    // private ArrayList<AnswerItem> mHousingAnswerList = new ArrayList<>();
     List<DiscussionItem> mHousingDiscussionList = new ArrayList<DiscussionItem>();;
-    HashMap<DiscussionItem, List<String>> mHousingAnswerList = new HashMap<DiscussionItem, List<String>>();;
+    HashMap<Integer, List<AnswerItem>> mHousingAnswerList = new HashMap<Integer, List<AnswerItem>>();;
     AnswerItem mAnswerItem = new AnswerItem();
     private String mQuestionToPost;
     public static final String Intent_message = "com.example.vedikajadhav.tieinn.Intent_message";
@@ -73,6 +70,7 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
     private String mMessage;
     private String mCategory;
     private JSONArray mQuestionsJSONArray;
+    private JSONArray mAnswersJSONArray;
     ProgressDialog pDialog;
 
     SessionManager mSession;
@@ -89,13 +87,18 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
         mCategory = getIntent().getStringExtra(Intent_category);
         if (Util.isNetworkAvailable(getApplicationContext())) {
             getQuestionsFromNetwork();
+        /*for(int i=0; i<mHousingDiscussionList.size(); i++){
+              //mHousingAnswerList.put(mHousingDiscussionList.get(i), top250); // Header, Child data
+            getAnswersFromNetwork(mHousingDiscussionList.get(i).getDiscussionItemID());
+            }*/
         }
 
+       // updateDiscussionListView();
         mQuestionPostButton.setOnClickListener(this);
     }
 
     public void getQuestionsFromNetwork(){
-        Log.i(TAG, "Network Request for details");
+        Log.i(TAG, "Network Request for questions");
         // get user data from session
         mSession = SessionManager.getInstance(getApplicationContext());
         HashMap<String, String> user = mSession.getUserDetails();
@@ -118,6 +121,8 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
                             DiscussionItem mDiscussionItem = new DiscussionItem();
                             mDiscussionItem.setDiscussionItemText(question.getString("Question"));
                             mDiscussionItem.setDiscussionCategory(question.getString("Category"));
+                            mDiscussionItem.setDiscussionItemID(question.getInt("QuestionID"));
+                            //getAnswersFromNetwork(question.getInt("QuestionID"));
                             mHousingDiscussionList.add(0, mDiscussionItem);
                         }
                         updateDiscussionListView();
@@ -130,18 +135,60 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Error : " + TAG, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Error Question: " + TAG, Toast.LENGTH_SHORT).show();
                 Log.i(TAG, "Error Response");
             }
         });
 
         //NetworkRequest.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
         AppController.getInstance().addToRequestQueue(jsonObjectRequest);
-        getAnswersFromNetwork();
+        /*for(int i=0; i<mHousingDiscussionList.size(); i++){
+              //mHousingAnswerList.put(mHousingDiscussionList.get(i), top250); // Header, Child data
+            getAnswersFromNetwork(mHousingDiscussionList.get(i).getDiscussionItemID());
+        }*/
+       // getAnswersFromNetwork();
     }
 
-    private void getAnswersFromNetwork(){
+    private void getAnswersFromNetwork(final int questionID){
+        Log.i(TAG, "Network Request for answers");
+        String url = Constants.GET_ANSWERS_URL + "questionID=questionID";
+        JsonObjectRequest answerJsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            int success;
+            String message;
+            List<AnswerItem> answers = new ArrayList<AnswerItem>();
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    success = response.getInt(Constants.TAG_SUCCESS);
+                    message = response.getString(Constants.TAG_MESSAGE);
 
+                    if (success == 1) {
+                        Log.d("answers fetched!", message);
+                        mAnswersJSONArray = new JSONArray(message);
+                        for (int i = 0; i < mAnswersJSONArray.length(); i++) {
+                            JSONObject answer = (JSONObject) mAnswersJSONArray.get(i);
+                            AnswerItem mAnswerItem = new AnswerItem();
+                            mAnswerItem.setAnswerItemText(answer.getString("Answer"));
+                            //mAnswerItem.set(question.getString("Category"));
+                            answers.add(mAnswerItem);
+                        }
+                        mHousingAnswerList.put(questionID, answers); // Header, Child data
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Error Answers: " + TAG, Toast.LENGTH_SHORT).show();
+                Log.i(TAG, "Error Response");
+            }
+        });
+
+        //NetworkRequest.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
+        AppController.getInstance().addToRequestQueue(answerJsonObjectRequest);
     }
 
     public void updateDiscussionListView(){
@@ -222,7 +269,12 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
         listDataHeader.add("Now Showing");
         listDataHeader.add("Coming Soon..");*/
 
-        // Adding child data
+        for(int i=0; i<mHousingDiscussionList.size(); i++){
+              //mHousingAnswerList.put(mHousingDiscussionList.get(i), top250); // Header, Child data
+            //mHousingAnswerList.put(questionID, answers);
+            getAnswersFromNetwork(mHousingDiscussionList.get(i).getDiscussionItemID());
+        }
+      /*  // Adding child data
         List<String> top250 = new ArrayList<String>();
         top250.add("The Shawshank Redemption");
         top250.add("The Godfather");
@@ -233,8 +285,8 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
         top250.add("12 Angry Men");
 
         for(int i=0; i<mHousingDiscussionList.size(); i++){
-            mHousingAnswerList.put(mHousingDiscussionList.get(i), top250); // Header, Child data
-        }
+          //  mHousingAnswerList.put(mHousingDiscussionList.get(i), top250); // Header, Child data
+        }*/
 
 /*        listDataChild.put(listDataHeader.get(1), nowShowing);
         listDataChild.put(listDataHeader.get(2), comingSoon);*/
