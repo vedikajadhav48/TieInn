@@ -1,28 +1,14 @@
 package com.example.vedikajadhav.tieinn;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.AsyncTask;
-import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -30,39 +16,16 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.vedikajadhav.tieinnLibrary.AppController;
 import com.example.vedikajadhav.tieinnLibrary.CustomAlertDialog;
-import com.example.vedikajadhav.tieinnLibrary.JSONParser;
-import com.example.vedikajadhav.tieinnLibrary.NetworkRequest;
 import com.example.vedikajadhav.tieinnLibrary.SessionManager;
-import com.example.vedikajadhav.tieinnLibrary.Util;
 import com.example.vedikajadhav.tieinnModel.Constants;
-import com.example.vedikajadhav.tieinnModel.DiscussionItem;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.facebook.login.widget.ProfilePictureView;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 
 public class LoginActivity extends ActionBarActivity{
@@ -83,8 +46,6 @@ public class LoginActivity extends ActionBarActivity{
 
     // Progress Dialog
     private ProgressDialog pDialog;
-    // JSON parser class
-    JSONParser jsonParser = new JSONParser();
 
     // Session Manager Class
     SessionManager mSession;
@@ -168,9 +129,7 @@ public class LoginActivity extends ActionBarActivity{
         // registration activity , other than this we could also do this without switch case.
         switch (button.getId()) {
             case R.id.login_button:
-                //call async or volley
-                 new AttemptLogin().execute();
-                //normalLogin();
+                normalLogin();
             default: break;
         }
     }
@@ -180,8 +139,7 @@ public class LoginActivity extends ActionBarActivity{
         /*pDialog = new ProgressDialog(this);
         pDialog.setMessage("Loading...");
         pDialog.show();*/
-        String url = Constants.LOGIN_URL + "username=mUsername&password=mPassword";
-       // NetworkRequest networkRequest = NetworkRequest.getInstance(getApplicationContext());
+        String url = Constants.LOGIN_URL + "username=" + mUsername + "&password=" + mPassword;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     // here Check for success tag
@@ -227,7 +185,6 @@ public class LoginActivity extends ActionBarActivity{
 
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(jsonObjectRequest);
-        //NetworkRequest.getInstance(getApplicationContext()).addToRequestQueue(jsonObjReq);
     }
 
     public void signUp(View button){
@@ -243,77 +200,4 @@ public class LoginActivity extends ActionBarActivity{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
-
-class AttemptLogin extends AsyncTask<String, String, String> {
-    /** * Before starting background thread Show Progress Dialog * */
-    boolean failure = false;
-
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        pDialog = new ProgressDialog(LoginActivity.this);
-        pDialog.setMessage("Attempting for login...");
-        pDialog.setIndeterminate(false);
-        pDialog.setCancelable(true);
-        pDialog.show();
-    }
-
-    @Override
-    protected String doInBackground(String... args) {
-    // TODO Auto-generated method stub
-    // here Check for success tag
-        int success;
-        String message;
-        try {
-            List<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("username", mUsername));
-            params.add(new BasicNameValuePair("password", mPassword));
-            Log.d("request!", "starting");
-            JSONObject json = jsonParser.makeHttpRequest(Constants.LOGIN_URL, "POST", params);
-            // checking log for json response
-            Log.d("Login attempt", json.toString());
-
-            // success tag for json
-            success = json.getInt(Constants.TAG_SUCCESS);
-            message = json.getString(Constants.TAG_MESSAGE);
-            JSONObject user = new JSONObject(message);
-            mUserID = user.getString(Constants.TAG_USERID);
-            mProfileName = user.getString(Constants.TAG_PROFILE_NAME);
-
-            //responseCode = json.getStatusLine().getStatusCode();
-            if (success == 1) {
-                Log.d("Successfully Login!", json.toString());
-                mSession = SessionManager.getInstance(getApplicationContext());
-                mSession.createLoginSession(Integer.parseInt(mUserID), mUsername, "anroidhive@gmail.com");
-                Intent ii = new Intent(LoginActivity.this,HomeActivity.class);
-/*                ii.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-                // Add new Flag to start new Activity
-                ii.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);*/
-                ii.putExtra(HomeActivity.Intent_profile_name, user.getString(Constants.TAG_PROFILE_NAME));
-                startActivity(ii);
-               // finish();
-                // this finish() method is used to tell android os that we are done with current
-                // activity now! Moving to other activity
-                return mProfileName;
-            }else{
-                return mProfileName;
-            }
-        }
-        catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /** * Once the background process is done we need to Dismiss the progress dialog asap * **/
-    protected void onPostExecute(String message) {
-        pDialog.dismiss();
-/*        mSession = SessionManager.getInstance(getApplicationContext());
-        mSession.createLoginSession(Integer.parseInt(mUserID), mUsername, "anroidhive@gmail.com");*/
-        if (message != null){
-            //Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
-        }
-    }
-}
 }

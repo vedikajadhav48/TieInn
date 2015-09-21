@@ -1,6 +1,7 @@
 package com.example.vedikajadhav.tieinn;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
@@ -13,14 +14,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.vedikajadhav.tieinnLibrary.AppController;
 import com.example.vedikajadhav.tieinnLibrary.CustomAlertDialog;
 import com.example.vedikajadhav.tieinnLibrary.JSONParser;
+import com.example.vedikajadhav.tieinnLibrary.PostCreateAccountResponseListener;
 import com.example.vedikajadhav.tieinnModel.Constants;
 
 import org.apache.http.NameValuePair;
@@ -34,7 +40,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class CreateAccountActivity extends ActionBarActivity {
+public class CreateAccountActivity extends ActionBarActivity{
     private static final String TAG= "CreateAccountActivity";
     private Button mCreateAccountButton;
     private static final int Intent_User_Index = 123;
@@ -46,6 +52,7 @@ public class CreateAccountActivity extends ActionBarActivity {
     private String mUsername;
     private String mPassword;
     private String mConfirmPassword;
+    private static PostCreateAccountResponseListener mPostCreateAccountListener;
 
     private ProgressDialog pDialog;
     JSONParser jsonParser = new JSONParser();
@@ -59,6 +66,28 @@ public class CreateAccountActivity extends ActionBarActivity {
         mPasswordEditText = (EditText) findViewById(R.id.edit_text_password);
         mConfirmPasswordEditText = (EditText) findViewById(R.id.edit_text_confirm_password);
         mCreateAccountButton = (Button)findViewById(R.id.create_account_button);
+
+        mPostCreateAccountListener = new PostCreateAccountResponseListener() {
+            @Override
+            public void requestStarted() {
+
+            }
+
+            @Override
+            public void requestCompleted() {
+
+                 Intent intent = new Intent(CreateAccountActivity.this,LoginActivity.class);
+                            // this finish() method is used to tell android os that we are done with current
+                            // activity now! Moving to other activity
+                            finish();
+                            startActivity(intent);
+            }
+
+            @Override
+            public void requestEndedWithError(VolleyError error) {
+
+            }
+        };
     }
 
     public void createAccount(View button){
@@ -68,41 +97,47 @@ public class CreateAccountActivity extends ActionBarActivity {
         mConfirmPassword = mConfirmPasswordEditText.getText().toString();
 
         if(mPassword.equals(mConfirmPassword)){
-            new AttemptRegistration().execute();
-            //registerUserOnNetwork();
+            //new AttemptRegistration().execute();
+            registerUserOnNetwork(this, mProfileName, mUsername, mPassword);
         }else{
             CustomAlertDialog.showAlertDialog(this, "Password  and/or ConfirmPassword field empty", "Password and ConfirmPassword values do not match");
         }
     }
 
-    public void registerUserOnNetwork(){
+    public static void registerUserOnNetwork(Context context, final String profileName, final String username, final String password){
 /*        pDialog = new ProgressDialog(this);
         pDialog.setMessage("Loading...");
         pDialog.show();*/
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET, Constants.REGISTRATION_URL, null,
-                new Response.Listener<JSONObject>() {
+
+        mPostCreateAccountListener.requestStarted();
+        RequestQueue queue = Volley.newRequestQueue(context);
+        StringRequest jsonObjReq = new StringRequest(Request.Method.POST, Constants.REGISTRATION_URL,
+                new Response.Listener<String>() {
                     // here Check for success tag
                     int success;
                     String message;
 
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(String response) {
                         Log.i(TAG, response.toString());
-                        try {
+
+                        /*try {
                             // success tag for json
                             success = response.getInt(Constants.TAG_SUCCESS);
                             message = response.getString(Constants.TAG_MESSAGE);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                        }
+                        }*/
                         //responseCode = json.getStatusLine().getStatusCode();
                         if (success == 1) {
-                            Intent intent = new Intent(CreateAccountActivity.this,LoginActivity.class);
+                            mPostCreateAccountListener.requestCompleted();
+
+                            /*Intent intent = new Intent(CreateAccountActivity.this,LoginActivity.class);
                             // this finish() method is used to tell android os that we are done with current
                             // activity now! Moving to other activity
                             finish();
-                            startActivity(intent);
+                            startActivity(intent);*/
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -110,6 +145,7 @@ public class CreateAccountActivity extends ActionBarActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
+                mPostCreateAccountListener.requestEndedWithError(error);
                 // pDialog.hide();
             }
         }) {
@@ -117,16 +153,24 @@ public class CreateAccountActivity extends ActionBarActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("profileName", mProfileName);
-                params.put("username", mUsername);
-                params.put("password", mPassword);
+                params.put("profileName", profileName);
+                params.put("username", username);
+                params.put("password", password);
 
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("Content-Type","application/x-www-form-urlencoded");
                 return params;
             }
         };
 
         // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(jsonObjReq);
+        //AppController.getInstance().addToRequestQueue(jsonObjReq);
+        queue.add(jsonObjReq);
     }
 
     class AttemptRegistration extends AsyncTask<String, String, String> {

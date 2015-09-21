@@ -70,13 +70,11 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
     private String mMessage;
     private String mCategory;
     private JSONArray mQuestionsJSONArray;
-    private JSONArray mAnswersJSONArray;
     ProgressDialog pDialog;
 
     SessionManager mSession;
     String mUserID;
     String mQuestionID;
-    List<AnswerItem> answers = new ArrayList<AnswerItem>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +125,7 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
                             //getAnswersFromNetwork(question.getInt("QuestionID"));
                             mHousingDiscussionList.add(0, mDiscussionItem);
                         }
-                        updateDiscussionListView();
+                        //updateDiscussionListView();
                         Toast.makeText(getApplicationContext(), "Success Questions: " + TAG, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
@@ -145,10 +143,11 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
 
         //NetworkRequest.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
         AppController.getInstance().addToRequestQueue(jsonObjectRequest);
-        /*for(int i=0; i<mHousingDiscussionList.size(); i++){
-              //mHousingAnswerList.put(mHousingDiscussionList.get(i), top250); // Header, Child data
+        for(int i=0; i<mHousingDiscussionList.size(); i++){
+            //mHousingAnswerList.put(mHousingDiscussionList.get(i), top250); // Header, Child data
+            //mHousingAnswerList.put(questionID, answers);
             getAnswersFromNetwork(mHousingDiscussionList.get(i).getDiscussionItemID());
-        }*/
+        }
        // getAnswersFromNetwork();
     }
 
@@ -159,11 +158,14 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
 /*        mSession = SessionManager.getInstance(getApplicationContext());
         HashMap<String, String> user = mSession.getUserDetails();
         mUserID = user.get(SessionManager.KEY_USERID);*/
-        String url = Constants.GET_ANSWERS_URL + "userID=mUserID&questionID=mQuestionID";
+       // String url = Constants.GET_ANSWERS_URL + "userID=mUserID&questionID=mQuestionID";
+        String url = Constants.GET_ANSWERS_URL + "userID=" + mUserID + "&questionID=" + mQuestionID;
         JsonObjectRequest answerJsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             int success;
             String message;
-           // List<AnswerItem> answers = new ArrayList<AnswerItem>();
+            JSONArray mAnswersJSONArray;
+            List<AnswerItem> answers = new ArrayList<AnswerItem>();
+
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -198,6 +200,7 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
 
         //NetworkRequest.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
         AppController.getInstance().addToRequestQueue(answerJsonObjectRequest);
+        updateDiscussionListView();
     }
 
     public void updateDiscussionListView(){
@@ -206,7 +209,7 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
         mDiscussionListView.setAdapter(mDiscussionListAdapter);*/
         mDiscussionExpandableListView = (ExpandableListView)findViewById(R.id.discussion_expandable_list_view);
         // preparing list data
-        prepareListData();
+       // prepareListData();
         mDiscussionExpandableListAdapter = new DiscussionExpandableListAdapter(this, mHousingDiscussionList, mHousingAnswerList);
         mDiscussionExpandableListView.setAdapter(mDiscussionExpandableListAdapter);
 
