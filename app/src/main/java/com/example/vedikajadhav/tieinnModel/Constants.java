@@ -9,6 +9,7 @@ public class Constants {
     public static final String GET_QUESTIONS_URL = "http://tieinn.comuv.com/getQuestions.php?";
     public static final String GET_ANSWERS_URL = "http://tieinn.comuv.com/getAnswers.php?";
     public static final String POST_QUESTION_URL = "http://tieinn.comuv.com/postQuestion.php?";
+    public static final String POST_ANSWER_URL = "http://tieinn.comuv.com/postAnswer.php?";
 
     public static final String TAG_SUCCESS = "success";
     public static final String TAG_MESSAGE = "message";
@@ -16,4 +17,6 @@ public class Constants {
     public static final String TAG_USERID = "UserID";
     public static final String TAG_QUESTION = "question";
     public static final String TAG_CATEGORY = "Housing";
+
+    public int QUESTION_ID_GROUP_CLICKED = 0;
 }

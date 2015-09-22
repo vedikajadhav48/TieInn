@@ -53,8 +53,6 @@ public class CreateAccountActivity extends ActionBarActivity{
     private String mPassword;
     private String mConfirmPassword;
     private static PostCreateAccountResponseListener mPostCreateAccountListener;
-
-    private ProgressDialog pDialog;
     JSONParser jsonParser = new JSONParser();
 
     @Override
@@ -104,9 +102,12 @@ public class CreateAccountActivity extends ActionBarActivity{
         }
     }
 
-    public static void registerUserOnNetwork(Context context, final String profileName, final String username, final String password){
-/*        pDialog = new ProgressDialog(this);
-        pDialog.setMessage("Loading...");
+    public void registerUserOnNetwork(Context context, final String profileName, final String username, final String password){
+        /*ProgressDialog pDialog;
+        pDialog = new ProgressDialog(this);
+        pDialog.setMessage("Registering...");
+        pDialog.setIndeterminate(false);
+        pDialog.setCancelable(true);
         pDialog.show();*/
 
         mPostCreateAccountListener.requestStarted();
@@ -120,7 +121,13 @@ public class CreateAccountActivity extends ActionBarActivity{
                     @Override
                     public void onResponse(String response) {
                         Log.i(TAG, response.toString());
+                        mPostCreateAccountListener.requestCompleted();
 
+                        /*JSONObject json = jsonParser.makeHttpRequest( Constants.REGISTRATION_URL, "POST", params);
+                        // checking log for json response
+                        Log.d("Registration attempt", json.toString());
+                        // success tag for json
+                        success = json.getInt(Constants.TAG_SUCCESS);*/
                         /*try {
                             // success tag for json
                             success = response.getInt(Constants.TAG_SUCCESS);
@@ -146,7 +153,7 @@ public class CreateAccountActivity extends ActionBarActivity{
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
                 mPostCreateAccountListener.requestEndedWithError(error);
-                // pDialog.hide();
+                //pDialog.hide();
             }
         }) {
 
@@ -171,64 +178,5 @@ public class CreateAccountActivity extends ActionBarActivity{
         // Adding request to request queue
         //AppController.getInstance().addToRequestQueue(jsonObjReq);
         queue.add(jsonObjReq);
-    }
-
-    class AttemptRegistration extends AsyncTask<String, String, String> {
-        /** * Before starting background thread Show Progress Dialog * */
-        boolean failure = false;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pDialog = new ProgressDialog(CreateAccountActivity.this);
-            pDialog.setMessage("Registering...");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(true);
-            pDialog.show();
-        }
-
-        @Override
-        protected String doInBackground(String... args) {
-            // here Check for success tag
-            int success;
-            String profileName = mProfileNameEditText.getText().toString();
-            String username = mUsernameEditText.getText().toString();
-            String password = mPasswordEditText.getText().toString();
-            try {
-                List<NameValuePair> params = new ArrayList<NameValuePair>();
-                params.add(new BasicNameValuePair("username", username));
-                params.add(new BasicNameValuePair("password", password));
-                params.add(new BasicNameValuePair("profileName", profileName));
-                Log.d("request!", "starting");
-                JSONObject json = jsonParser.makeHttpRequest( Constants.REGISTRATION_URL, "POST", params);
-                // checking log for json response
-                Log.d("Registration attempt", json.toString());
-                // success tag for json
-                success = json.getInt(Constants.TAG_SUCCESS);
-                if (success == 1) {
-                    Log.d("Successfully Login!", json.toString());
-                    Intent ii = new Intent(CreateAccountActivity.this,LoginActivity.class);
-                    finish();
-                    // this finish() method is used to tell android os that we are done with current
-                    // activity now! Moving to other activity
-                    startActivity(ii);
-                    return json.getString(Constants.TAG_MESSAGE);
-                }else{
-                    return json.getString(Constants.TAG_MESSAGE);
-                }
-            }
-            catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        /** * Once the background process is done we need to Dismiss the progress dialog asap * **/
-        protected void onPostExecute(String message) {
-            pDialog.dismiss();
-            if (message != null){
-                Toast.makeText(CreateAccountActivity.this, message, Toast.LENGTH_LONG).show();
-            }
-        }
     }
 }
