@@ -11,6 +11,7 @@ public class AnswerItem {
     private ImageView mAnswerItemImage;
     private String mAnswerItemText;
     private String mAnswerItemPostDate;
+    private int mQuestionID;
     private Button mAnswerItemRecommendButton;
     private Button mAnswerItemEditButton;
 
@@ -36,6 +37,14 @@ public class AnswerItem {
 
     public void setAnswerItemPostDate(String AnswerItemPostDate) {
         mAnswerItemPostDate = AnswerItemPostDate;
+    }
+
+    public int getQuestionID() {
+        return mQuestionID;
+    }
+
+    public void setQuestionID(int questionID) {
+        mQuestionID = questionID;
     }
 
     public Button getAnswerItemRecommendButton() {

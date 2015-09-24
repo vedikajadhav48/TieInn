@@ -1,24 +1,15 @@
 package com.example.vedikajadhav.tieinn;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.provider.SyncStateContract;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
-import android.widget.RatingBar;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -32,10 +23,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.vedikajadhav.tieinnLibrary.AppController;
 import com.example.vedikajadhav.tieinnLibrary.CustomAlertDialog;
-import com.example.vedikajadhav.tieinnLibrary.CustomRequest;
 import com.example.vedikajadhav.tieinnLibrary.DiscussionExpandableListAdapter;
 import com.example.vedikajadhav.tieinnLibrary.DiscussionListAdapter;
-import com.example.vedikajadhav.tieinnLibrary.NetworkRequest;
 import com.example.vedikajadhav.tieinnLibrary.PostCreateAccountResponseListener;
 import com.example.vedikajadhav.tieinnLibrary.SessionManager;
 import com.example.vedikajadhav.tieinnLibrary.Util;
@@ -64,8 +53,7 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
    // private ArrayList<DiscussionItem> mHousingDiscussionList = new ArrayList<>();
    // private ArrayList<AnswerItem> mHousingAnswerList = new ArrayList<>();
     List<DiscussionItem> mHousingDiscussionList = new ArrayList<DiscussionItem>();;
-    HashMap<String, List<AnswerItem>> mHousingAnswerList = new HashMap<String, List<AnswerItem>>();;
-    AnswerItem mAnswerItem = new AnswerItem();
+    HashMap<String, List<AnswerItem>> mHousingAnswerList = new HashMap<>();;
     private String mQuestionToPost;
     public static final String Intent_message = "com.example.vedikajadhav.tieinn.Intent_message";
     public static final String Intent_category = "com.example.vedikajadhav.tieinn.Intent_category";
@@ -78,7 +66,10 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
     SessionManager mSession;
     String mUserID;
     String mQuestionID;
-    private static PostCreateAccountResponseListener mPostCreateAccountListener;
+    private PostCreateAccountResponseListener mPostCreateAccountListener;
+    private PostCreateAccountResponseListener mGetAnswersCompletedListener;
+    private PostCreateAccountResponseListener mGetQuestionsCompletedListener;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +78,7 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
 
         mQuestionEditText = (EditText)findViewById(R.id.question_edit_text);
         mQuestionPostButton = (Button)findViewById(R.id.question_post_button);
-
+        mQuestionPostButton.setOnClickListener(this);
         mCategory = getIntent().getStringExtra(Intent_category);
         if (Util.isNetworkAvailable(getApplicationContext())) {
             getQuestionsFromNetwork();
@@ -95,10 +86,10 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
               //mHousingAnswerList.put(mHousingDiscussionList.get(i), top250); // Header, Child data
             getAnswersFromNetwork(mHousingDiscussionList.get(i).getDiscussionItemID());
             }*/
+           // updateDiscussionListView();
         }
 
        // updateDiscussionListView();
-        mQuestionPostButton.setOnClickListener(this);
         mPostCreateAccountListener = new PostCreateAccountResponseListener() {
             @Override
             public void requestStarted() {
@@ -107,10 +98,47 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
 
             @Override
             public void requestCompleted() {
-                DiscussionItem newDiscussionItem = new DiscussionItem();
+                /*DiscussionItem newDiscussionItem = new DiscussionItem();
                 newDiscussionItem.setDiscussionItemText(mQuestionToPost);
                 mHousingDiscussionList.add(0, newDiscussionItem);
-                mDiscussionListAdapter.notifyDataSetChanged();
+                mDiscussionListAdapter.notifyDataSetChanged();*/
+            }
+
+            @Override
+            public void requestEndedWithError(VolleyError error) {
+
+            }
+        };
+        mGetAnswersCompletedListener = new PostCreateAccountResponseListener() {
+            @Override
+            public void requestStarted() {
+
+            }
+
+            @Override
+            public void requestCompleted() {
+               // updateDiscussionListView();
+            }
+
+            @Override
+            public void requestEndedWithError(VolleyError error) {
+
+            }
+        };
+        mGetQuestionsCompletedListener = new PostCreateAccountResponseListener() {
+            @Override
+            public void requestStarted() {
+
+            }
+
+            @Override
+            public void requestCompleted() {
+                for(int i=0; i<mHousingDiscussionList.size(); i++){
+                    //mHousingAnswerList.put(mHousingDiscussionList.get(i), top250); // Header, Child data
+                    //mHousingAnswerList.put(questionID, answers);
+                    getAnswersFromNetwork(mHousingDiscussionList.get(i).getDiscussionItemID());
+                }
+                //updateDiscussionListView();
             }
 
             @Override
@@ -126,7 +154,7 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
         mSession = SessionManager.getInstance(getApplicationContext());
         HashMap<String, String> user = mSession.getUserDetails();
         mUserID = user.get(SessionManager.KEY_USERID);
-        String url = Constants.GET_QUESTIONS_URL + "userID=mUserID&category=Housing";
+        String url = Constants.GET_QUESTIONS_URL + "userID=" + mUserID + "&category=Housing";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             int success;
             String message;
@@ -148,12 +176,13 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
                             //getAnswersFromNetwork(question.getInt("QuestionID"));
                             mHousingDiscussionList.add(0, mDiscussionItem);
                         }
-                        updateDiscussionListView();
+                        //updateDiscussionListView();
                         Toast.makeText(getApplicationContext(), "Success Questions: " + TAG, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                mGetQuestionsCompletedListener.requestCompleted();
             }
         }, new Response.ErrorListener() {
 
@@ -166,21 +195,16 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
 
         //NetworkRequest.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
         AppController.getInstance().addToRequestQueue(jsonObjectRequest);
-        /*for(int i=0; i<mHousingDiscussionList.size(); i++){
-            //mHousingAnswerList.put(mHousingDiscussionList.get(i), top250); // Header, Child data
-            //mHousingAnswerList.put(questionID, answers);
-            getAnswersFromNetwork(mHousingDiscussionList.get(i).getDiscussionItemID());
-        }*/
-       // getAnswersFromNetwork();
+        // getAnswersFromNetwork();
     }
 
-/*    public void getAnswersFromNetwork(int questionID){
+    public void getAnswersFromNetwork(int questionID){
         Log.i(TAG, "Network Request for answers");
         mQuestionID = String.valueOf(questionID);
         // get user data from session
-*//*        mSession = SessionManager.getInstance(getApplicationContext());
+        mSession = SessionManager.getInstance(getApplicationContext());
         HashMap<String, String> user = mSession.getUserDetails();
-        mUserID = user.get(SessionManager.KEY_USERID);*//*
+        mUserID = user.get(SessionManager.KEY_USERID);
        // String url = Constants.GET_ANSWERS_URL + "userID=mUserID&questionID=mQuestionID";
         String url = Constants.GET_ANSWERS_URL + "userID=" + mUserID + "&questionID=" + mQuestionID;
         JsonObjectRequest answerJsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -202,15 +226,17 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
                             JSONObject answer = (JSONObject) mAnswersJSONArray.get(i);
                             AnswerItem mAnswerItem = new AnswerItem();
                             mAnswerItem.setAnswerItemText(answer.getString("Answer"));
-                            //mAnswerItem.set(question.getString("Category"));
+                            mAnswerItem.setQuestionID(Integer.parseInt(answer.getString("QuestionID")));
                             answers.add(mAnswerItem);
                         }
                         mHousingAnswerList.put(mQuestionID, answers); // Header, Child data
+                     //   mHousingAnswerList.put(mAnswerItem.getQuestionID(), answers); // Header, Child data
                         Toast.makeText(getApplicationContext(), "Success Answers: " + TAG, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+               // mGetAnswersCompletedListener.requestCompleted();
             }
         }, new Response.ErrorListener() {
 
@@ -223,8 +249,8 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
 
         //NetworkRequest.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
         AppController.getInstance().addToRequestQueue(answerJsonObjectRequest);
-        updateDiscussionListView();
-    }*/
+       // updateDiscussionListView();
+    }
 
     public void updateDiscussionListView(){
         /*mDiscussionListView = (ListView)findViewById(R.id.discussion_expandable_list_view);
@@ -495,7 +521,7 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
         if (Util.isNetworkAvailable(getApplicationContext())) {
             if (v.getId() == R.id.question_post_button) {
                // postQuestion();
-                postQuestionVolley(this);
+               // postQuestionVolley(this);
                 /*final Dialog ratingDialog = new Dialog(this, R.style.FullHeightDialog);
                 ratingDialog.setContentView(R.layout.rating_dialog);
                 ratingDialog.setCancelable(true);
