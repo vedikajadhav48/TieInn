@@ -109,43 +109,6 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
 
             }
         };
-        mGetAnswersCompletedListener = new PostCreateAccountResponseListener() {
-            @Override
-            public void requestStarted() {
-
-            }
-
-            @Override
-            public void requestCompleted() {
-               // updateDiscussionListView();
-            }
-
-            @Override
-            public void requestEndedWithError(VolleyError error) {
-
-            }
-        };
-        mGetQuestionsCompletedListener = new PostCreateAccountResponseListener() {
-            @Override
-            public void requestStarted() {
-
-            }
-
-            @Override
-            public void requestCompleted() {
-                for(int i=0; i<mHousingDiscussionList.size(); i++){
-                    //mHousingAnswerList.put(mHousingDiscussionList.get(i), top250); // Header, Child data
-                    //mHousingAnswerList.put(questionID, answers);
-                    getAnswersFromNetwork(mHousingDiscussionList.get(i).getDiscussionItemID());
-                }
-                //updateDiscussionListView();
-            }
-
-            @Override
-            public void requestEndedWithError(VolleyError error) {
-
-            }
-        };
     }
 
     public void getQuestionsFromNetwork(){
@@ -176,13 +139,18 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
                             //getAnswersFromNetwork(question.getInt("QuestionID"));
                             mHousingDiscussionList.add(0, mDiscussionItem);
                         }
-                        //updateDiscussionListView();
                         Toast.makeText(getApplicationContext(), "Success Questions: " + TAG, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                mGetQuestionsCompletedListener.requestCompleted();
+                //mGetQuestionsCompletedListener.requestCompleted();
+                for(int i=0; i<mHousingDiscussionList.size(); i++){
+                    //mHousingAnswerList.put(mHousingDiscussionList.get(i), top250); // Header, Child data
+                    //mHousingAnswerList.put(questionID, answers);
+                    getAnswersFromNetwork(mHousingDiscussionList.get(i).getDiscussionItemID());
+                }
+                updateDiscussionListView();
             }
         }, new Response.ErrorListener() {
 
@@ -237,6 +205,7 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
                     e.printStackTrace();
                 }
                // mGetAnswersCompletedListener.requestCompleted();
+                //updateDiscussionListView();
             }
         }, new Response.ErrorListener() {
 

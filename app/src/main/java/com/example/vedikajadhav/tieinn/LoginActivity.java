@@ -73,6 +73,10 @@ public class LoginActivity extends ActionBarActivity{
                 mFacebookUserID = loginResult.getAccessToken().getUserId();
                 mAccessToken = loginResult.getAccessToken().getToken();
 
+                mUsername = "vedikajadhav";
+                mPassword = "vedika";
+                normalLogin();
+
                 /*info.setText(
                         "User ID: "
                                 + loginResult.getAccessToken().getUserId()
@@ -96,11 +100,10 @@ public class LoginActivity extends ActionBarActivity{
                 request.setParameters(parameters);
                 request.executeAsync();*/
 
-                Intent home = new Intent(getApplicationContext(), HomeActivity.class);
+                /*Intent home = new Intent(LoginActivity.this, HomeActivity.class);
                 home.putExtra(HomeActivity.Intent_fb_user_id, mFacebookUserID);
-                startActivity(home);
-
-
+                home.putExtra(HomeActivity.Intent_profile_name, "FacebookUser");
+                startActivity(home);*/
             }
 
             @Override

@@ -31,7 +31,7 @@ public class HomeActivity extends ActionBarActivity implements AdapterView.OnIte
     private String mUserID;
     private String mProfileName;
     private String mUsername;
-    private ImageView mProfileImageView;
+   // private ImageView mProfileImageView;
     private TextView mProfileNameTextView;
     ListView mainListView;
     SessionManager mSession;
@@ -71,11 +71,14 @@ public class HomeActivity extends ActionBarActivity implements AdapterView.OnIte
         mProfileName = getIntent().getStringExtra(Intent_profile_name);
         mFacebookUserID = getIntent().getStringExtra(Intent_fb_user_id);
 
-        mProfileImageView = (ImageView) findViewById(R.id.image_profile_view);
+       // mProfileImageView = (ImageView) findViewById(R.id.image_profile_view);
         mProfileNameTextView = (TextView) findViewById(R.id.profile_name_text);
 
         mProfileNameTextView.setText("Welcome, " + mProfileName + "!");
-        Picasso.with(getApplicationContext()).load("https://graph.facebook.com/" + mFacebookUserID + "/picture?type=large").into(mProfileImageView);
+      //  Picasso.with(getApplicationContext()).load("https://graph.facebook.com/" + mFacebookUserID + "/picture?type=large").into(mProfileImageView);
+
+       /* mSession = SessionManager.getInstance(getApplicationContext());
+        mSession.createLoginSession(Integer.parseInt(mFacebookUserID), mProfileName, "anroidhive@gmail.com");*/
     }
 
     @Override
