@@ -52,8 +52,8 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
     DiscussionExpandableListAdapter mDiscussionExpandableListAdapter;
    // private ArrayList<DiscussionItem> mHousingDiscussionList = new ArrayList<>();
    // private ArrayList<AnswerItem> mHousingAnswerList = new ArrayList<>();
-    List<DiscussionItem> mHousingDiscussionList = new ArrayList<DiscussionItem>();;
-    HashMap<String, List<AnswerItem>> mHousingAnswerList = new HashMap<>();;
+    List<DiscussionItem> mHousingDiscussionList = new ArrayList<DiscussionItem>();
+    HashMap<String, List<AnswerItem>> mHousingAnswerList = new HashMap<>();
     private String mQuestionToPost;
     public static final String Intent_message = "com.example.vedikajadhav.tieinn.Intent_message";
     public static final String Intent_category = "com.example.vedikajadhav.tieinn.Intent_category";
@@ -145,12 +145,12 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
                     e.printStackTrace();
                 }
                 //mGetQuestionsCompletedListener.requestCompleted();
-                for(int i=0; i<mHousingDiscussionList.size(); i++){
+                /*for(int i=0; i<mHousingDiscussionList.size(); i++){
                     //mHousingAnswerList.put(mHousingDiscussionList.get(i), top250); // Header, Child data
                     //mHousingAnswerList.put(questionID, answers);
                     getAnswersFromNetwork(mHousingDiscussionList.get(i).getDiscussionItemID());
-                }
-                updateDiscussionListView();
+                }*/
+               getAnswersFromNetwork();
             }
         }, new Response.ErrorListener() {
 
@@ -166,16 +166,28 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
         // getAnswersFromNetwork();
     }
 
-    public void getAnswersFromNetwork(int questionID){
+    public void getAnswersFromNetwork(){
         Log.i(TAG, "Network Request for answers");
-        mQuestionID = String.valueOf(questionID);
+        Log.i(TAG, "mHousingDiscussionList" + mHousingDiscussionList.toString());
+        JSONArray jsonQuestionsArray = new JSONArray();
+        for (int i=0; i < mHousingDiscussionList.size(); i++) {
+            jsonQuestionsArray.put(mHousingDiscussionList.get(i).getJSONObject());
+        }
+        JSONObject params = new JSONObject();
+        try {
+            params.put("userID", mUserID);
+            params.put("jsonQuestionsArray", jsonQuestionsArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.i(TAG, "params" + params);
         // get user data from session
         mSession = SessionManager.getInstance(getApplicationContext());
         HashMap<String, String> user = mSession.getUserDetails();
         mUserID = user.get(SessionManager.KEY_USERID);
-       // String url = Constants.GET_ANSWERS_URL + "userID=mUserID&questionID=mQuestionID";
-        String url = Constants.GET_ANSWERS_URL + "userID=" + mUserID + "&questionID=" + mQuestionID;
-        JsonObjectRequest answerJsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+        String url = Constants.GET_ALL_ANSWERS_URL;
+        //String url = Constants.GET_ANSWERS_URL + "userID=" + mUserID + "&questionID=" + questionID;
+        JsonObjectRequest answerJsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
             int success;
             String message;
             JSONArray mAnswersJSONArray;
@@ -197,7 +209,7 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
                             mAnswerItem.setQuestionID(Integer.parseInt(answer.getString("QuestionID")));
                             answers.add(mAnswerItem);
                         }
-                        mHousingAnswerList.put(mQuestionID, answers); // Header, Child data
+                        //mHousingAnswerList.put(String.valueOf(questionID), answers); // Header, Child data
                      //   mHousingAnswerList.put(mAnswerItem.getQuestionID(), answers); // Header, Child data
                         Toast.makeText(getApplicationContext(), "Success Answers: " + TAG, Toast.LENGTH_SHORT).show();
                     }
@@ -205,7 +217,7 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
                     e.printStackTrace();
                 }
                // mGetAnswersCompletedListener.requestCompleted();
-                //updateDiscussionListView();
+                updateDiscussionListView();
             }
         }, new Response.ErrorListener() {
 
