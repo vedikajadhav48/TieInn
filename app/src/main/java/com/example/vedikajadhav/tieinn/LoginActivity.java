@@ -2,6 +2,8 @@ package com.example.vedikajadhav.tieinn;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.media.tv.TvInputService;
+import android.service.textservice.SpellCheckerService;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +24,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import org.json.JSONException;
@@ -85,7 +88,7 @@ public class LoginActivity extends ActionBarActivity{
                                 + loginResult.getAccessToken().getToken()
                 );
                 profilePictureView.setProfileId(loginResult.getAccessToken().getUserId());*/
-                /*GraphRequest request = GraphRequest.newMeRequest(
+               /* GraphRequest request = GraphRequest.newMeRequest(
                         access_Token,
                         new GraphRequest.GraphJSONObjectCallback() {
                             @Override
@@ -95,6 +98,8 @@ public class LoginActivity extends ActionBarActivity{
                                 // Application code
                             }
                         });
+
+
                 Bundle parameters = new Bundle();
                 parameters.putString("fields", "id,name,link");
                 request.setParameters(parameters);
@@ -104,6 +109,21 @@ public class LoginActivity extends ActionBarActivity{
                 home.putExtra(HomeActivity.Intent_fb_user_id, mFacebookUserID);
                 home.putExtra(HomeActivity.Intent_profile_name, "FacebookUser");
                 startActivity(home);*/
+                // make request to get facebook user info
+                /*GraphRequest.executeMeRequestAsync(session, new GraphRequest.GraphUserCallback() {
+                    @Override
+                    public void onCompleted(GraphUser user, Response response) {
+                        Log.i("fb", "fb user: "+ user.toString());
+
+                        String fbId = user.getId();
+                        String fbAccessToken = fbAccessToken;
+                        String fbName = user.getName();
+                        String gender = user.asMap().get("gender").toString();
+                        String email = user.asMap().get("email").toString();
+
+                        Log.i("fb", userProfile.getEmail());
+                    }
+                });*/
             }
 
             @Override
@@ -136,6 +156,33 @@ public class LoginActivity extends ActionBarActivity{
             default: break;
         }
     }
+
+/*    private class SessionStatusCallback implements Session.StatusCallback {
+        private String fbAccessToken;
+
+        @Override
+        public void call(Session session, SessionState state, Exception exception) {
+            updateView();
+            if (session.isOpened()) {
+                fbAccessToken = session.getAccessToken();
+                // make request to get facebook user info
+                Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
+                    @Override
+                    public void onCompleted(GraphUser user, Response response) {
+                        Log.i("fb", "fb user: "+ user.toString());
+
+                        String fbId = user.getId();
+                        String fbAccessToken = fbAccessToken;
+                        String fbName = user.getName();
+                        String gender = user.asMap().get("gender").toString();
+                        String email = user.asMap().get("email").toString();
+
+                        Log.i("fb", userProfile.getEmail());
+                    }
+                });
+            }
+        }
+    }*/
 
     public void normalLogin(){
 

@@ -173,13 +173,18 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
         for (int i=0; i < mHousingDiscussionList.size(); i++) {
             jsonQuestionsArray.put(mHousingDiscussionList.get(i).getJSONObject());
         }
-        JSONObject params = new JSONObject();
-        try {
+        // the parameters for the php
+        Map<String, String> map = new HashMap<String, String>();
+        //map.put(KEY, VALUE);
+        map.put("userID", mUserID);
+        map.put("jsonQuestionsArray", String.valueOf(jsonQuestionsArray));
+        JSONObject params = new JSONObject(map);
+        /*try {
             params.put("userID", mUserID);
             params.put("jsonQuestionsArray", jsonQuestionsArray);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
         Log.i(TAG, "params" + params);
         // get user data from session
         mSession = SessionManager.getInstance(getApplicationContext());
@@ -187,11 +192,11 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
         mUserID = user.get(SessionManager.KEY_USERID);
         String url = Constants.GET_ALL_ANSWERS_URL;
         //String url = Constants.GET_ANSWERS_URL + "userID=" + mUserID + "&questionID=" + questionID;
+       // Log.i(TAG, "["+response+"]");
         JsonObjectRequest answerJsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
             int success;
             String message;
             JSONArray mAnswersJSONArray;
-            List<AnswerItem> answers = new ArrayList<AnswerItem>();
 
             @Override
             public void onResponse(JSONObject response) {
@@ -203,26 +208,34 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
                         Log.d("answers fetched!", message);
                         mAnswersJSONArray = new JSONArray(message);
                         for (int i = 0; i < mAnswersJSONArray.length(); i++) {
-                            JSONObject answer = (JSONObject) mAnswersJSONArray.get(i);
-                            AnswerItem mAnswerItem = new AnswerItem();
-                            mAnswerItem.setAnswerItemText(answer.getString("Answer"));
-                            mAnswerItem.setQuestionID(Integer.parseInt(answer.getString("QuestionID")));
-                            answers.add(mAnswerItem);
+                            JSONArray answerArrayPerQuestionID = (JSONArray) mAnswersJSONArray.get(i);
+                            JSONObject answerJSONObject = new JSONObject();
+                            List<AnswerItem> answers = new ArrayList<AnswerItem>();
+                            for(int j = 0; j < answerArrayPerQuestionID.length(); j++) {
+                                answerJSONObject = (JSONObject) answerArrayPerQuestionID.get(j);
+                                AnswerItem mAnswerItem = new AnswerItem();
+                                mAnswerItem.setAnswerItemText(answerJSONObject.getString("Answer"));
+                                //mAnswerItem.setQuestionID(Integer.parseInt(answer.getString("QuestionID")));
+                                answers.add(mAnswerItem);
+                            }
+                            mHousingAnswerList.put(answerJSONObject.getString("QuestionID"), answers);
                         }
                         //mHousingAnswerList.put(String.valueOf(questionID), answers); // Header, Child data
-                     //   mHousingAnswerList.put(mAnswerItem.getQuestionID(), answers); // Header, Child data
+                        //mHousingAnswerList.put(mAnswerItem.getQuestionID(), answers); // Header, Child data
                         Toast.makeText(getApplicationContext(), "Success Answers: " + TAG, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-               // mGetAnswersCompletedListener.requestCompleted();
                 updateDiscussionListView();
             }
         }, new Response.ErrorListener() {
 
             @Override
             public void onErrorResponse(VolleyError error) {
+                /* here you can warn the user that there
+                      was an error while trying to get the json
+                      information from the php  */
                 Toast.makeText(getApplicationContext(), "Error Answers: " + TAG, Toast.LENGTH_SHORT).show();
                 Log.i(TAG, "Error Response", error);
             }
@@ -255,7 +268,7 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
                 //parent.expandGroup(groupPosition);
                 //Constants.QUESTION_GROUP_CLICKED = groupPosition;
              //   Constants.QUESTION_ID_GROUP_CLICKED = mHousingDiscussionList.get(groupPosition).getDiscussionItemID();
-                return false;
+                return true;
             }
         });
 
