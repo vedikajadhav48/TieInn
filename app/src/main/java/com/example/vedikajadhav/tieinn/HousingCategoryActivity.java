@@ -53,7 +53,7 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
    // private ArrayList<DiscussionItem> mHousingDiscussionList = new ArrayList<>();
    // private ArrayList<AnswerItem> mHousingAnswerList = new ArrayList<>();
     List<DiscussionItem> mHousingDiscussionList = new ArrayList<DiscussionItem>();
-    HashMap<String, List<AnswerItem>> mHousingAnswerList = new HashMap<>();
+    HashMap<Integer, List<AnswerItem>> mHousingAnswerList = new HashMap<>();
     private String mQuestionToPost;
     public static final String Intent_message = "com.example.vedikajadhav.tieinn.Intent_message";
     public static final String Intent_category = "com.example.vedikajadhav.tieinn.Intent_category";
@@ -215,10 +215,11 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
                                 answerJSONObject = (JSONObject) answerArrayPerQuestionID.get(j);
                                 AnswerItem mAnswerItem = new AnswerItem();
                                 mAnswerItem.setAnswerItemText(answerJSONObject.getString("Answer"));
-                                //mAnswerItem.setQuestionID(Integer.parseInt(answer.getString("QuestionID")));
+                                mAnswerItem.setRecommendCount(answerJSONObject.getInt("NumberOfRecommendations"));
+                                mAnswerItem.setAnswerItemID(answerJSONObject.getInt("AnswerID"));
                                 answers.add(mAnswerItem);
                             }
-                            mHousingAnswerList.put(answerJSONObject.getString("QuestionID"), answers);
+                            mHousingAnswerList.put(answerJSONObject.getInt("QuestionID"), answers);
                         }
                         //mHousingAnswerList.put(String.valueOf(questionID), answers); // Header, Child data
                         //mHousingAnswerList.put(mAnswerItem.getQuestionID(), answers); // Header, Child data
@@ -257,18 +258,18 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
         mDiscussionExpandableListView.setAdapter(mDiscussionExpandableListAdapter);
 
         // Listview Group click listener
-        mDiscussionExpandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+       /* mDiscussionExpandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
 
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v,
                                         int groupPosition, long id) {
-                 /*Toast.makeText(getApplicationContext(),
+                 Toast.makeText(getApplicationContext(),
                  "Group Clicked " + mHousingDiscussionList.get(groupPosition),
-                 Toast.LENGTH_SHORT).show();*/
-                //parent.expandGroup(groupPosition);
-                //Constants.QUESTION_GROUP_CLICKED = groupPosition;
-             //   Constants.QUESTION_ID_GROUP_CLICKED = mHousingDiscussionList.get(groupPosition).getDiscussionItemID();
-                return true;
+                 Toast.LENGTH_SHORT).show();
+               // parent.expandGroup(groupPosition);
+                Constants.QUESTION_GROUP_CLICKED = groupPosition;
+                Constants.QUESTION_ID_GROUP_CLICKED = mHousingDiscussionList.get(groupPosition).getDiscussionItemID();
+                return false;
             }
         });
 
@@ -311,7 +312,7 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
                         Toast.LENGTH_SHORT).show();
 
             }
-        });
+        });*/
     }
 
     /*

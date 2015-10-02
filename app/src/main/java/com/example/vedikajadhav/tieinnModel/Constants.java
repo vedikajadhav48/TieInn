@@ -11,6 +11,7 @@ public class Constants {
     public static final String GET_ALL_ANSWERS_URL = "http://tieinn.comuv.com/getAllAnswers.php?";
     public static final String POST_QUESTION_URL = "http://tieinn.comuv.com/postQuestion.php?";
     public static final String POST_ANSWER_URL = "http://tieinn.comuv.com/postAnswer.php?";
+    public static final String UPDATE_RECOMMENDATIONS_URL = "http://tieinn.comuv.com/updateRecommendations.php?";
 
     public static final String TAG_SUCCESS = "success";
     public static final String TAG_MESSAGE = "message";
@@ -19,5 +20,6 @@ public class Constants {
     public static final String TAG_QUESTION = "question";
     public static final String TAG_CATEGORY = "Housing";
 
-    public int QUESTION_ID_GROUP_CLICKED = 0;
+    public static int QUESTION_GROUP_CLICKED;
+    public static int QUESTION_ID_GROUP_CLICKED;
 }

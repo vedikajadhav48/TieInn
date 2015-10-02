@@ -13,6 +13,11 @@
         android:paddingBottom="5dp"
         android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
     <Button
         android:id="@+id/discussion_board_recommend_answer"
         android:layout_width="100dp"
@@ -23,6 +28,14 @@
         android:textSize="10dip"
         android:layout_marginTop="1dip"
         android:focusable="false"
-        android:text="@string/recommend_answer_button_text" />
+        android:text="@string/recommend_answer_button_text"/>
+
+        <EditText
+            android:id="@+id/dicussion_board_recommend_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17dp" />
+
+        </LinearLayout>
 
 </LinearLayout>

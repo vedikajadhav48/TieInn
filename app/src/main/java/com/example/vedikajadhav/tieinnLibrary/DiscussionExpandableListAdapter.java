@@ -11,6 +11,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -18,12 +19,18 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.vedikajadhav.tieinn.R;
 import com.example.vedikajadhav.tieinnModel.AnswerItem;
 import com.example.vedikajadhav.tieinnModel.Constants;
 import com.example.vedikajadhav.tieinnModel.DiscussionItem;
+import com.facebook.share.widget.LikeView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,14 +43,15 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
     private static final String TAG = "DiscussionExpandableListAdapter";
     private Context mContext;
     private List<DiscussionItem> mListDataHeader;
-    private HashMap<String, List<AnswerItem>> mListDataChild;
+    private HashMap<Integer, List<AnswerItem>> mListDataChild;
     private String answer;
     private static PostCreateAccountResponseListener mPostCreateAccountListener;
     private String mUserID;
     private int mQuestionID;
+    SessionManager mSession;
 
     public DiscussionExpandableListAdapter(Context context, List<DiscussionItem> listDataHeader,
-                                       HashMap<String, List<AnswerItem>> listChildData, String userID) {
+                                       HashMap<Integer, List<AnswerItem>> listChildData, String userID) {
         this.mContext = context;
         this.mListDataHeader = listDataHeader;
         this.mListDataChild = listChildData;
@@ -72,8 +80,12 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return this.mListDataChild.get(this.mListDataHeader.get(groupPosition))
-                .size();
+        Log.i(TAG,"groupPOsition" + groupPosition);
+        Log.i(TAG,"this.mListDataHeader" + this.mListDataHeader);
+        Log.i(TAG,"size" + this.mListDataChild.get(3));
+        Log.i(TAG,"size" + this.mListDataChild.get(3).size());
+        //return this.mListDataChild.get(this.mListDataHeader.get(groupPosition)).size();
+        return (this.mListDataChild.get(this.mListDataHeader.get(groupPosition).getDiscussionItemID())).size();
     }
 
     @Override
@@ -83,7 +95,7 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return this.mListDataChild.get(this.mListDataHeader.get(groupPosition))
+        return this.mListDataChild.get(this.mListDataHeader.get(groupPosition).getDiscussionItemID())
                 .get(childPosition);
     }
 
@@ -147,8 +159,10 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        final String childText = (String) getChild(groupPosition, childPosition);
-        int recommendCount = 0;
+        //Log.i(TAG, "getChild returns" + getChild(groupPosition, childPosition));
+        final AnswerItem childItem = (AnswerItem)getChild(groupPosition, childPosition);
+        final String childText = childItem.getAnswerItemText();
+        final int recommendCount = childItem.getRecommendCount();
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this.mContext
@@ -159,18 +173,59 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
         TextView txtListChild = (TextView) convertView
                 .findViewById(R.id.discussion_board_answer_text);
         final Button recommendAnswerButton=(Button)convertView.findViewById(R.id.discussion_board_recommend_answer);
+        final EditText recommendAnswerEditText=(EditText)convertView.findViewById(R.id.dicussion_board_recommend_count);
 
         txtListChild.setText(childText);
-        recommendAnswerButton.setTag(groupPosition);//For passing the list item index
+        recommendAnswerButton.setTag(recommendCount);//For passing the list item index
+        recommendAnswerEditText.setText(String.valueOf(recommendCount));
         recommendAnswerButton.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
                 //increment recommend counter
-                //recommendAnswerButton.setText(recommendCount);
+                final int recommendCount = childItem.getRecommendCount();
+                int count = recommendCount;
+                updateRecommendationOnNetwork(childItem, ++count);
+                recommendAnswerEditText.setText(String.valueOf(count));
             }
         });
         return convertView;
+    }
+
+    public void updateRecommendationOnNetwork(final AnswerItem childItem, final int count){
+        Log.i(TAG, "Network Request for questions");
+        // get user data from session
+        mSession = SessionManager.getInstance(mContext);
+        HashMap<String, String> user = mSession.getUserDetails();
+        mUserID = user.get(SessionManager.KEY_USERID);
+        String url = Constants.UPDATE_RECOMMENDATIONS_URL + "userID=" + mUserID + "&answerID=" + childItem.getAnswerItemID() + "&numberOfRecommendation=" + count;
+        RequestQueue queue = Volley.newRequestQueue(mContext);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            int success;
+            String message;
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    success = response.getInt(Constants.TAG_SUCCESS);
+                    message = response.getString(Constants.TAG_MESSAGE);
+
+                    if (success == 1) {
+                        Log.d("Recommendation updated", message);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i(TAG, "Error Response");
+            }
+        });
+
+        //NetworkRequest.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
+        AppController.getInstance().addToRequestQueue(jsonObjectRequest);
     }
 
     @Override

@@ -8,12 +8,22 @@ import android.widget.ListView;
  * Created by Vedika Jadhav on 9/14/2015.
  */
 public class AnswerItem {
+    private int mAnswerItemID;
     private ImageView mAnswerItemImage;
     private String mAnswerItemText;
     private String mAnswerItemPostDate;
     private int mQuestionID;
+    private int mRecommendCount;
     private Button mAnswerItemRecommendButton;
     private Button mAnswerItemEditButton;
+
+    public int getAnswerItemID() {
+        return mAnswerItemID;
+    }
+
+    public void setAnswerItemID(int answerItemID) {
+        mAnswerItemID = answerItemID;
+    }
 
     public ImageView getAnswerItemImage() {
         return mAnswerItemImage;
@@ -45,6 +55,14 @@ public class AnswerItem {
 
     public void setQuestionID(int questionID) {
         mQuestionID = questionID;
+    }
+
+    public int getRecommendCount() {
+        return mRecommendCount;
+    }
+
+    public void setRecommendCount(int recommendCount) {
+        mRecommendCount = recommendCount;
     }
 
     public Button getAnswerItemRecommendButton() {
