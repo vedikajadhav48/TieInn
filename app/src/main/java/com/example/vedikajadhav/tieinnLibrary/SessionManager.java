@@ -38,10 +38,10 @@ public class SessionManager{
     public static final String KEY_USERID = "userID";
 
     // User name (make variable public to access from outside)
-    public static final String KEY_NAME = "name";
+    public static final String KEY_USERNAME = "username";
 
-    // Email address (make variable public to access from outside)
-    public static final String KEY_EMAIL = "email";
+    // Profile name (make variable public to access from outside)
+    public static final String KEY_PROFILE_NAME = "profileName";
 
     // Constructor
     private SessionManager(Context context){
@@ -61,7 +61,7 @@ public class SessionManager{
     /**
      * Create login session
      * */
-    public void createLoginSession(int userID, String name, String email){
+    public void createLoginSession(int userID, String username, String profileName){
         // Storing login value as TRUE
         editor.putBoolean(IS_LOGIN, true);
 
@@ -69,10 +69,10 @@ public class SessionManager{
         editor.putInt(KEY_USERID, userID);
 
         // Storing name in pref
-        editor.putString(KEY_NAME, name);
+        editor.putString(KEY_USERNAME, username);
 
         // Storing email in pref
-        editor.putString(KEY_EMAIL, email);
+        editor.putString(KEY_PROFILE_NAME, profileName);
 
         // commit changes
         editor.commit();
@@ -112,10 +112,10 @@ public class SessionManager{
         user.put(KEY_USERID, String.valueOf(pref.getInt(KEY_USERID, 0)));
 
         // user name
-        user.put(KEY_NAME, pref.getString(KEY_NAME, null));
+        user.put(KEY_USERNAME, pref.getString(KEY_USERNAME, null));
 
-        // user email id
-        user.put(KEY_EMAIL, pref.getString(KEY_EMAIL, null));
+        // profile name
+        user.put(KEY_PROFILE_NAME, pref.getString(KEY_PROFILE_NAME, null));
 
         // return user
         return user;

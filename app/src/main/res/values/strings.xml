@@ -86,5 +86,8 @@
     <string name="edit_answer_button_text">Edit</string>
     <string name="answer">Answer</string>
     <string name="submit">Submit</string>
+    <string name="account_information_text">Account Information:</string>
+    <string name="account_username">Username: </string>
+    <string name="account_profile_name">Profile Name: </string>
 
 </resources>

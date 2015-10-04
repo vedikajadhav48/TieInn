@@ -72,7 +72,7 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_housing_category);
+        setContentView(R.layout.activity_discussion_board);
 
         mQuestionEditText = (EditText)findViewById(R.id.question_edit_text);
         mQuestionPostButton = (Button)findViewById(R.id.question_post_button);

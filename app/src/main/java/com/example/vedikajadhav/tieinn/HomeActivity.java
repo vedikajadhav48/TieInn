@@ -56,7 +56,7 @@ public class HomeActivity extends ActionBarActivity implements AdapterView.OnIte
         // get user data from session
         HashMap<String, String> user = mSession.getUserDetails();
         mUserID = user.get(SessionManager.KEY_USERID);
-        mUsername = user.get(SessionManager.KEY_NAME);
+        mUsername = user.get(SessionManager.KEY_USERNAME);
 
         mainListView = (ListView)findViewById(R.id.main_list_view);
         ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(this,

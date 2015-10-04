@@ -101,7 +101,7 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
         Log.i(TAG,"groupPOsition" + groupPosition);
         Log.i(TAG,"childPosition" + childPosition);
         Log.i(TAG,"DataHEader discussionID" + this.mListDataHeader.get(groupPosition).getDiscussionItemID());
-        Log.i(TAG,"getChild" + this.mListDataChild.get(this.mListDataHeader.get(groupPosition).getDiscussionItemID()).get(childPosition));
+        Log.i(TAG,"groupPOsition" + this.mListDataChild.get(this.mListDataHeader.get(groupPosition).getDiscussionItemID()).get(childPosition));
         return this.mListDataChild.get(this.mListDataHeader.get(groupPosition).getDiscussionItemID()).get(childPosition);
     }
 
