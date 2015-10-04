@@ -1,5 +1,4 @@
 package com.example.vedikajadhav.tieinnLibrary;
-import com.example.vedikajadhav.tieinnLibrary.LruBitmapCache;
 import android.app.Application;
 import android.text.TextUtils;
 
@@ -37,14 +36,14 @@ public class AppController extends Application {
         return mRequestQueue;
     }
 
-    public ImageLoader getImageLoader() {
+   /* public ImageLoader getImageLoader() {
         getRequestQueue();
         if (mImageLoader == null) {
             mImageLoader = new ImageLoader(this.mRequestQueue,
                     new LruBitmapCache());
         }
         return this.mImageLoader;
-    }
+    }*/
 
     public <T> void addToRequestQueue(Request<T> req, String tag) {
         // set the default tag if tag is empty

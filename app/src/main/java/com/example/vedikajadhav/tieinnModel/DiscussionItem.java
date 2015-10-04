@@ -17,12 +17,12 @@ import static android.view.ViewDebug.trace;
 public class DiscussionItem {
     private static final String TAG = "DiscussionItem";
     private int mDiscussionItemID;
-    private ImageView mDiscussionItemImage;
-    private String mDiscussionItemCategory;
+    private int mDiscussionUserID;
     private String mDiscussionItemText;
-    private String mDiscussionItemPostDate;
+    private String mDiscussionItemCategory;
     private Button mDiscussionItemAnswerButton;
-    private ListView mDiscussionItemAnswerList;
+    private Button mDiscussionItemEditButton;
+    //private ListView mDiscussionItemAnswerList;
 
     public int getDiscussionItemID() {
         return mDiscussionItemID;
@@ -32,12 +32,12 @@ public class DiscussionItem {
         mDiscussionItemID = discussionItemID;
     }
 
-    public ImageView getDiscussionItemImage() {
-        return mDiscussionItemImage;
+    public int getDiscussionUserID() {
+        return mDiscussionUserID;
     }
 
-    public void setDiscussionItemImage(ImageView discussionItemImage) {
-        mDiscussionItemImage = discussionItemImage;
+    public void setDiscussionUserID(int discussionUserID) {
+        mDiscussionUserID = discussionUserID;
     }
 
     public String getDiscussionCategory() {
@@ -64,18 +64,19 @@ public class DiscussionItem {
         mDiscussionItemText = discussionItemText;
     }
 
-    public String getDiscussionItemPostDate() {
-        return mDiscussionItemPostDate;
+    public String getDiscussionItemCategory() {
+        return mDiscussionItemCategory;
     }
 
-    public void setDiscussionItemPostDate(String discussionItemPostDate) {
-        mDiscussionItemPostDate = discussionItemPostDate;
+    public void setDiscussionItemCategory(String discussionItemCategory) {
+        mDiscussionItemCategory = discussionItemCategory;
     }
 
     public JSONObject getJSONObject() {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("questionID", mDiscussionItemID);
+            jsonObject.put("questionUserID", mDiscussionUserID);
             jsonObject.put("questionText", mDiscussionItemText);
             jsonObject.put("questionCategory", mDiscussionItemCategory);
             //jsonObject.put("questionText", _category);

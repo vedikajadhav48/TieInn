@@ -58,9 +58,8 @@
     <string name="title_activity_main_host">MainHostActivity</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_detail">DetailActivity</string>
-    <string name="title_activity_discussion_board">DiscussionBoard</string>
-    <string name="title_activity_account">AccountActivity</string>
-    <string name="title_activity_contact_us">ContactUsActivity</string>
+    <string name="title_activity_account">Account</string>
+    <string name="title_activity_contact_us">ContactUs</string>
     <string name="title_activity_logout">LogoutActivity</string>
     <string name="contact_us_text">Contact information:</string>
     <string name="contact_us_info">veds1988@yahoo.com</string>
@@ -70,7 +69,7 @@
     <string name="discussion_item_question">What is the procedure of registering for classes?</string>
     <string name="answer_list_item">Starbucks is the favourite coffee place</string>
     <string name="answer_button_text">Write Answer</string>
-    <string name="title_activity_category">CategoryActivity</string>
+    <string name="title_activity_category">Category</string>
     <string name="choose_category_text">Select a Category for discussion:</string>
 
     <string-array name="category_list_menu_items">
@@ -81,8 +80,8 @@
         <item>OTHER</item>
     </string-array>
 
-    <string name="title_activity_housing_category">HousingCategoryActivity</string>
-    <string name="title_activity_academic_category">AcademicCategoryActivity</string>
+    <string name="title_activity_discussion_board">DiscussionBoard</string>
+    <string name="title_activity_academic_category">Academic</string>
     <string name="recommend_answer_button_text">Recommend</string>
     <string name="edit_answer_button_text">Edit</string>
     <string name="answer">Answer</string>

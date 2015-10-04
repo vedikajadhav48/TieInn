@@ -9,11 +9,10 @@ import android.widget.ListView;
  */
 public class AnswerItem {
     private int mAnswerItemID;
-    private ImageView mAnswerItemImage;
-    private String mAnswerItemText;
-    private String mAnswerItemPostDate;
+    private int mAnswerUserID;
     private int mQuestionID;
-    private int mRecommendCount;
+    private String mAnswerItemText;
+    private int mAnswerRecommendCount;
     private Button mAnswerItemRecommendButton;
     private Button mAnswerItemEditButton;
 
@@ -25,12 +24,12 @@ public class AnswerItem {
         mAnswerItemID = answerItemID;
     }
 
-    public ImageView getAnswerItemImage() {
-        return mAnswerItemImage;
+    public int getAnswerUserID() {
+        return mAnswerUserID;
     }
 
-    public void setAnswerItemImage(ImageView AnswerItemImage) {
-        mAnswerItemImage = AnswerItemImage;
+    public void setAnswerUserID(int answerUserID) {
+        mAnswerUserID = answerUserID;
     }
 
     public String getAnswerItemText() {
@@ -41,14 +40,6 @@ public class AnswerItem {
         mAnswerItemText = AnswerItemText;
     }
 
-    public String getAnswerItemPostDate() {
-        return mAnswerItemPostDate;
-    }
-
-    public void setAnswerItemPostDate(String AnswerItemPostDate) {
-        mAnswerItemPostDate = AnswerItemPostDate;
-    }
-
     public int getQuestionID() {
         return mQuestionID;
     }
@@ -57,12 +48,12 @@ public class AnswerItem {
         mQuestionID = questionID;
     }
 
-    public int getRecommendCount() {
-        return mRecommendCount;
+    public int getAnswerRecommendCount() {
+        return mAnswerRecommendCount;
     }
 
-    public void setRecommendCount(int recommendCount) {
-        mRecommendCount = recommendCount;
+    public void setAnswerRecommendCount(int recommendCount) {
+        mAnswerRecommendCount = recommendCount;
     }
 
     public Button getAnswerItemRecommendButton() {

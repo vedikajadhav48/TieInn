@@ -3,6 +3,8 @@ package com.example.vedikajadhav.tieinnLibrary;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,6 +77,7 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
     }
     @Override
     public int getGroupCount() {
+        Log.i(TAG,"getGroupCount" + this.mListDataHeader.size());
         return this.mListDataHeader.size();
     }
 
@@ -95,8 +98,11 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return this.mListDataChild.get(this.mListDataHeader.get(groupPosition).getDiscussionItemID())
-                .get(childPosition);
+        Log.i(TAG,"groupPOsition" + groupPosition);
+        Log.i(TAG,"childPosition" + childPosition);
+        Log.i(TAG,"DataHEader discussionID" + this.mListDataHeader.get(groupPosition).getDiscussionItemID());
+        Log.i(TAG,"getChild" + this.mListDataChild.get(this.mListDataHeader.get(groupPosition).getDiscussionItemID()).get(childPosition));
+        return this.mListDataChild.get(this.mListDataHeader.get(groupPosition).getDiscussionItemID()).get(childPosition);
     }
 
     @Override
@@ -119,9 +125,9 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
     public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         DiscussionItem headerTitle = (DiscussionItem) getGroup(groupPosition);
         if (convertView == null) {
-            LayoutInflater infalInflater = (LayoutInflater) this.mContext
+            LayoutInflater inflater = (LayoutInflater) this.mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.discussion_list_group, null);
+            convertView = inflater.inflate(R.layout.discussion_list_group, null);
         }
 
         TextView lblListHeader = (TextView) convertView
@@ -162,44 +168,52 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
         //Log.i(TAG, "getChild returns" + getChild(groupPosition, childPosition));
         final AnswerItem childItem = (AnswerItem)getChild(groupPosition, childPosition);
         final String childText = childItem.getAnswerItemText();
-        final int recommendCount = childItem.getRecommendCount();
+        final int recommendCount = childItem.getAnswerRecommendCount();
 
         if (convertView == null) {
-            LayoutInflater infalInflater = (LayoutInflater) this.mContext
+            LayoutInflater inflater = (LayoutInflater) this.mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.discussion_list_item, null);
+            convertView = inflater.inflate(R.layout.discussion_list_item, null);
+
+            final TextView answerTextView = (TextView) convertView.findViewById(R.id.discussion_board_answer_text);
+            final Button recommendAnswerButton = (Button) convertView.findViewById(R.id.discussion_board_recommend_answer);
+            final EditText recommendAnswerCountEditText = (EditText) convertView.findViewById(R.id.dicussion_board_recommend_count);
+
+            answerTextView.setText(childText);
+            recommendAnswerCountEditText.setText(String.valueOf(childItem.getAnswerRecommendCount()));
+
+            recommendAnswerCountEditText.addTextChangedListener(new TextWatcher() {
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    // AnswerItem element=(AnswerItem)recommendAnswerEditText.getTag();
+
+                    //childItem.setAnswerRecommendCount(Integer.parseInt(s.toString()));
+                }
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    //recommendAnswerEditText.setText(String.valueOf(recommendCount));
+                }
+                public void afterTextChanged(Editable s) {
+                    //childItem.setRecommendCount(Integer.parseInt(s.toString()));
+                    //childItem.setRecommendCount(Integer.parseInt(recommendAnswerEditText.getText().toString()));
+                }
+            });
+
+            recommendAnswerButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //increment recommend counter
+                    // final int recommendCount = childItem.getRecommendCount();
+                    int count = childItem.getAnswerRecommendCount();
+                    updateRecommendationOnNetwork(recommendAnswerCountEditText, childItem, ++count);
+                    // recommendAnswerEditText.setText(String.valueOf(count));
+                }
+            });
         }
-
-        TextView txtListChild = (TextView) convertView
-                .findViewById(R.id.discussion_board_answer_text);
-        final Button recommendAnswerButton=(Button)convertView.findViewById(R.id.discussion_board_recommend_answer);
-        final EditText recommendAnswerEditText=(EditText)convertView.findViewById(R.id.dicussion_board_recommend_count);
-
-        txtListChild.setText(childText);
-        recommendAnswerButton.setTag(recommendCount);//For passing the list item index
-        recommendAnswerEditText.setText(String.valueOf(recommendCount));
-        recommendAnswerButton.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v) {
-                //increment recommend counter
-                final int recommendCount = childItem.getRecommendCount();
-                int count = recommendCount;
-                updateRecommendationOnNetwork(childItem, ++count);
-                recommendAnswerEditText.setText(String.valueOf(count));
-            }
-        });
         return convertView;
     }
 
-    public void updateRecommendationOnNetwork(final AnswerItem childItem, final int count){
+    public void updateRecommendationOnNetwork(final EditText recommendAnswerEditText, final AnswerItem childItem, final int count){
         Log.i(TAG, "Network Request for questions");
-        // get user data from session
-        mSession = SessionManager.getInstance(mContext);
-        HashMap<String, String> user = mSession.getUserDetails();
-        mUserID = user.get(SessionManager.KEY_USERID);
-        String url = Constants.UPDATE_RECOMMENDATIONS_URL + "userID=" + mUserID + "&answerID=" + childItem.getAnswerItemID() + "&numberOfRecommendation=" + count;
-        RequestQueue queue = Volley.newRequestQueue(mContext);
+        String url = Constants.UPDATE_RECOMMENDATIONS_URL + "userID=" + mUserID + "&answerID=" + childItem.getAnswerItemID() + "&numberOfRecommendations=" + count;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             int success;
             String message;
@@ -211,6 +225,7 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
 
                     if (success == 1) {
                         Log.d("Recommendation updated", message);
+                        recommendAnswerEditText.setText(String.valueOf(count));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -223,8 +238,6 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
                 Log.i(TAG, "Error Response");
             }
         });
-
-        //NetworkRequest.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
         AppController.getInstance().addToRequestQueue(jsonObjectRequest);
     }
 
@@ -234,14 +247,6 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
     }
 
     public void postAnswerVolley(Context context, final int groupPosition){
-       // mQuestionToPost = mQuestionEditText.getText().toString();
-        /*ProgressDialog pDialog;
-        pDialog = new ProgressDialog(this);
-        pDialog.setMessage("Registering...");
-        pDialog.setIndeterminate(false);
-        pDialog.setCancelable(true);
-        pDialog.show();*/
-
         mPostCreateAccountListener.requestStarted();
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest jsonObjReq = new StringRequest(Request.Method.POST, Constants.POST_ANSWER_URL,
@@ -285,7 +290,6 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
                 mPostCreateAccountListener.requestEndedWithError(error);
-                //pDialog.hide();
             }
         }) {
 

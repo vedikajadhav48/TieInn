@@ -24,7 +24,6 @@ import com.android.volley.toolbox.Volley;
 import com.example.vedikajadhav.tieinnLibrary.AppController;
 import com.example.vedikajadhav.tieinnLibrary.CustomAlertDialog;
 import com.example.vedikajadhav.tieinnLibrary.DiscussionExpandableListAdapter;
-import com.example.vedikajadhav.tieinnLibrary.DiscussionListAdapter;
 import com.example.vedikajadhav.tieinnLibrary.PostCreateAccountResponseListener;
 import com.example.vedikajadhav.tieinnLibrary.SessionManager;
 import com.example.vedikajadhav.tieinnLibrary.Util;
@@ -42,13 +41,12 @@ import java.util.List;
 import java.util.Map;
 
 
-public class HousingCategoryActivity extends ActionBarActivity implements View.OnClickListener {
-    private static final String TAG = "HousingCategoryActivity";
+public class DiscussionBoardActivity extends ActionBarActivity implements View.OnClickListener {
+    private static final String TAG = "DiscussionBoardActivity";
     private EditText mQuestionEditText;
     private Button mQuestionPostButton;
     ListView mDiscussionListView;
     ExpandableListView mDiscussionExpandableListView;
-    DiscussionListAdapter mDiscussionListAdapter;
     DiscussionExpandableListAdapter mDiscussionExpandableListAdapter;
    // private ArrayList<DiscussionItem> mHousingDiscussionList = new ArrayList<>();
    // private ArrayList<AnswerItem> mHousingAnswerList = new ArrayList<>();
@@ -117,7 +115,7 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
         mSession = SessionManager.getInstance(getApplicationContext());
         HashMap<String, String> user = mSession.getUserDetails();
         mUserID = user.get(SessionManager.KEY_USERID);
-        String url = Constants.GET_QUESTIONS_URL + "userID=" + mUserID + "&category=Housing";
+        String url = Constants.GET_QUESTIONS_URL + "userID=" + mUserID + "&category=" + mCategory;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             int success;
             String message;
@@ -133,10 +131,10 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
                         for (int i = 0; i < mQuestionsJSONArray.length(); i++) {
                             JSONObject question = (JSONObject) mQuestionsJSONArray.get(i);
                             DiscussionItem mDiscussionItem = new DiscussionItem();
+                            mDiscussionItem.setDiscussionItemID(question.getInt("QuestionID"));
+                            mDiscussionItem.setDiscussionUserID(question.getInt("QuestionUserID"));
                             mDiscussionItem.setDiscussionItemText(question.getString("Question"));
                             mDiscussionItem.setDiscussionCategory(question.getString("Category"));
-                            mDiscussionItem.setDiscussionItemID(question.getInt("QuestionID"));
-                            //getAnswersFromNetwork(question.getInt("QuestionID"));
                             mHousingDiscussionList.add(0, mDiscussionItem);
                         }
                         Toast.makeText(getApplicationContext(), "Success Questions: " + TAG, Toast.LENGTH_SHORT).show();
@@ -144,12 +142,6 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                //mGetQuestionsCompletedListener.requestCompleted();
-                /*for(int i=0; i<mHousingDiscussionList.size(); i++){
-                    //mHousingAnswerList.put(mHousingDiscussionList.get(i), top250); // Header, Child data
-                    //mHousingAnswerList.put(questionID, answers);
-                    getAnswersFromNetwork(mHousingDiscussionList.get(i).getDiscussionItemID());
-                }*/
                getAnswersFromNetwork();
             }
         }, new Response.ErrorListener() {
@@ -214,9 +206,11 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
                             for(int j = 0; j < answerArrayPerQuestionID.length(); j++) {
                                 answerJSONObject = (JSONObject) answerArrayPerQuestionID.get(j);
                                 AnswerItem mAnswerItem = new AnswerItem();
-                                mAnswerItem.setAnswerItemText(answerJSONObject.getString("Answer"));
-                                mAnswerItem.setRecommendCount(answerJSONObject.getInt("NumberOfRecommendations"));
                                 mAnswerItem.setAnswerItemID(answerJSONObject.getInt("AnswerID"));
+                                mAnswerItem.setAnswerUserID(answerJSONObject.getInt("AnswerUserID"));
+                                mAnswerItem.setQuestionID(answerJSONObject.getInt("QuestionID"));
+                                mAnswerItem.setAnswerItemText(answerJSONObject.getString("Answer"));
+                                mAnswerItem.setAnswerRecommendCount(answerJSONObject.getInt("NumberOfRecommendations"));
                                 answers.add(mAnswerItem);
                             }
                             mHousingAnswerList.put(answerJSONObject.getInt("QuestionID"), answers);
@@ -477,7 +471,7 @@ public class HousingCategoryActivity extends ActionBarActivity implements View.O
                             DiscussionItem newDiscussionItem = new DiscussionItem();
                             newDiscussionItem.setDiscussionItemText(mQuestionToPost);
                             mHousingDiscussionList.add(0, newDiscussionItem);
-                            mDiscussionListAdapter.notifyDataSetChanged();
+                           // mDiscussionListAdapter.notifyDataSetChanged();
                         }
                        // pDialog.hide();
                     }

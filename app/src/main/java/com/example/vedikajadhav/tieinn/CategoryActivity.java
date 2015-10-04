@@ -2,19 +2,14 @@ package com.example.vedikajadhav.tieinn;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -22,16 +17,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.vedikajadhav.tieinnLibrary.JSONParser;
-import com.example.vedikajadhav.tieinnLibrary.NetworkRequest;
 import com.example.vedikajadhav.tieinnModel.Constants;
-import com.squareup.picasso.Picasso;
 
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -85,11 +74,11 @@ public class CategoryActivity extends ActionBarActivity implements AdapterView.O
                         getQuestionsFromNetwork("Housing");
                         break;
                     case 2:
-                        Intent intent2 = new Intent(getApplicationContext(), HousingCategoryActivity.class);
+                        Intent intent2 = new Intent(getApplicationContext(), DiscussionBoardActivity.class);
                         startActivity(intent2);
                         break;
                     case 3:
-                        Intent intent3 = new Intent(getApplicationContext(), HousingCategoryActivity.class);
+                        Intent intent3 = new Intent(getApplicationContext(), DiscussionBoardActivity.class);
                         startActivity(intent3);
                         break;
                     default:
@@ -104,9 +93,12 @@ public class CategoryActivity extends ActionBarActivity implements AdapterView.O
         int itemPosition = position;
 
         //ListView clicked item value
-        String itemValue = (String)categoryListView.getItemAtPosition(position);
+        String category = (String)categoryListView.getItemAtPosition(position);
+        Intent intent1 = new Intent(getApplicationContext(), DiscussionBoardActivity.class);
+        intent1.putExtra(DiscussionBoardActivity.Intent_category, category);
+        startActivity(intent1);
 
-        switch(position){
+      /*  switch(position){
             case 0:
                 Intent intent0 = new Intent(getApplicationContext(), AcademicCategoryActivity.class);
                 startActivity(intent0);
@@ -115,20 +107,20 @@ public class CategoryActivity extends ActionBarActivity implements AdapterView.O
                 //async or volley
                 //new FeedQuestions().execute();
                 //getQuestionsFromNetwork("Housing");
-                Intent intent1 = new Intent(getApplicationContext(), HousingCategoryActivity.class);
-                intent1.putExtra(HousingCategoryActivity.Intent_category, Constants.TAG_CATEGORY);
+                Intent intent1 = new Intent(getApplicationContext(), DiscussionBoardActivity.class);
+                intent1.putExtra(DiscussionBoardActivity.Intent_category, category);
                 startActivity(intent1);
                 break;
             case 2:
-                Intent intent2 = new Intent(getApplicationContext(), HousingCategoryActivity.class);
+                Intent intent2 = new Intent(getApplicationContext(), DiscussionBoardActivity.class);
                 startActivity(intent2);
                 break;
             case 3:
-                Intent intent3 = new Intent(getApplicationContext(), HousingCategoryActivity.class);
+                Intent intent3 = new Intent(getApplicationContext(), DiscussionBoardActivity.class);
                 startActivity(intent3);
                 break;
             default:
-        }
+        }*/
     }
 
     public void getQuestionsFromNetwork(String category){
@@ -164,7 +156,7 @@ public class CategoryActivity extends ActionBarActivity implements AdapterView.O
             }
         });
 
-        NetworkRequest.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
+       // NetworkRequest.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
     }
 
     class FeedQuestions extends AsyncTask<String, String, String> {
@@ -197,11 +189,11 @@ public class CategoryActivity extends ActionBarActivity implements AdapterView.O
                 success = json.getInt(Constants.TAG_SUCCESS);
                 if (success == 1) {
                     Log.d("Successfully Login!", json.toString());
-                    Intent ii = new Intent(CategoryActivity.this,HousingCategoryActivity.class);
+                    Intent ii = new Intent(CategoryActivity.this,DiscussionBoardActivity.class);
                     finish();
                     // this finish() method is used to tell android os that we are done with current
                     // activity now! Moving to other activity
-                    ii.putExtra(HousingCategoryActivity.Intent_message, json.getString(Constants.TAG_MESSAGE));
+                    ii.putExtra(DiscussionBoardActivity.Intent_message, json.getString(Constants.TAG_MESSAGE));
                     startActivity(ii);
                     return json.getString(Constants.TAG_MESSAGE);
                 }else{
