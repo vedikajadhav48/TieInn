@@ -25,7 +25,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.vedikajadhav.tieinnLibrary.AppController;
 import com.example.vedikajadhav.tieinnLibrary.CustomAlertDialog;
-import com.example.vedikajadhav.tieinnLibrary.PostCreateAccountResponseListener;
 import com.example.vedikajadhav.tieinnModel.Constants;
 
 import org.apache.http.NameValuePair;
@@ -93,9 +92,9 @@ public class CreateAccountActivity extends ActionBarActivity{
                     @Override
                     public void onResponse(String response) {
                         try {
-                            JSONObject person = new JSONObject(response);
-                            success = person.getInt("success");
-                            message = person.getString("message");
+                            JSONObject jsonObjectResponse = new JSONObject(response);
+                            success = jsonObjectResponse.getInt("success");
+                            message = jsonObjectResponse.getString("message");
 
                             if (success == 1) {
                                 Intent intent = new Intent(CreateAccountActivity.this,LoginActivity.class);

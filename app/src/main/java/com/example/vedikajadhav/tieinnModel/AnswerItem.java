@@ -9,10 +9,10 @@ import android.widget.ListView;
  */
 public class AnswerItem {
     private int mAnswerItemID;
-    private int mAnswerUserID;
+    private String mAnswerUserID;
     private int mQuestionID;
     private String mAnswerItemText;
-    private int mAnswerRecommendCount;
+    private int mAnswerRecommendCount = 0;
     private Button mAnswerItemRecommendButton;
     private Button mAnswerItemEditButton;
 
@@ -24,11 +24,11 @@ public class AnswerItem {
         mAnswerItemID = answerItemID;
     }
 
-    public int getAnswerUserID() {
+    public String getAnswerUserID() {
         return mAnswerUserID;
     }
 
-    public void setAnswerUserID(int answerUserID) {
+    public void setAnswerUserID(String answerUserID) {
         mAnswerUserID = answerUserID;
     }
 

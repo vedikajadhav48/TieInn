@@ -43,34 +43,21 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
     private Context mContext;
     private List<QuestionItem> mListDataHeader;
     private HashMap<Integer, List<AnswerItem>> mListDataChild;
-    private String answer;
-    private static PostCreateAccountResponseListener mPostCreateAccountListener;
-    private String mUserID;
-    private int mQuestionID;
     SessionManager mSession;
+    private String mUserID;
+    private String answer;
+    private int mQuestionID;
+    private int mAnswerID;
 
     public DiscussionExpandableListAdapter(Context context, List<QuestionItem> listDataHeader,
-                                       HashMap<Integer, List<AnswerItem>> listChildData, String userID) {
+                                       HashMap<Integer, List<AnswerItem>> listChildData) {
         this.mContext = context;
         this.mListDataHeader = listDataHeader;
         this.mListDataChild = listChildData;
-        mUserID = userID;
-        mPostCreateAccountListener = new PostCreateAccountResponseListener() {
-            @Override
-            public void requestStarted() {
-
-            }
-
-            @Override
-            public void requestCompleted() {
-
-            }
-
-            @Override
-            public void requestEndedWithError(VolleyError error) {
-
-            }
-        };
+        // get user data from session
+        mSession = SessionManager.getInstance(mContext);
+        HashMap<String, String> user = mSession.getUserDetails();
+        this.mUserID = user.get(SessionManager.KEY_USERID);
     }
     @Override
     public int getGroupCount() {
@@ -81,36 +68,39 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public int getChildrenCount(int groupPosition) {
         Log.i(TAG,"groupPOsition" + groupPosition);
-        Log.i(TAG,"this.mListDataHeader" + this.mListDataHeader);
-        Log.i(TAG,"size" + this.mListDataChild.get(3));
+        Log.i(TAG,"getGroup(groupPosition).getQuestionItemID()" + getGroup(groupPosition).getQuestionItemID());
+        Log.i(TAG,"arrayList" + this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID()));
         Log.i(TAG,"size" + this.mListDataChild.get(3).size());
         //return this.mListDataChild.get(this.mListDataHeader.get(groupPosition)).size();
-        return (this.mListDataChild.get(this.mListDataHeader.get(groupPosition).getQuestionItemID())).size();
+        //return (this.mListDataChild.get(this.mListDataHeader.get(groupPosition).getQuestionItemID())).size();
+        return (this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID())).size();
     }
 
     @Override
-    public Object getGroup(int groupPosition) {
+    public QuestionItem getGroup(int groupPosition) {
         return this.mListDataHeader.get(groupPosition);
     }
 
     @Override
-    public Object getChild(int groupPosition, int childPosition) {
+    public AnswerItem getChild(int groupPosition, int childPosition) {
         Log.i(TAG,"groupPOsition" + groupPosition);
         Log.i(TAG,"childPosition" + childPosition);
         Log.i(TAG,"DataHEader discussionID" + this.mListDataHeader.get(groupPosition).getQuestionItemID());
         Log.i(TAG,"groupPOsition" + this.mListDataChild.get(this.mListDataHeader.get(groupPosition).getQuestionItemID()).get(childPosition));
-        return this.mListDataChild.get(this.mListDataHeader.get(groupPosition).getQuestionItemID()).get(childPosition);
+       // return this.mListDataChild.get(this.mListDataHeader.get(groupPosition).getQuestionItemID()).get(childPosition);
+        return (this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID())).get(childPosition);
     }
 
     @Override
     public long getGroupId(int groupPosition) {
-        mQuestionID = mListDataHeader.get(groupPosition).getQuestionItemID();
-        return groupPosition;
+        mQuestionID = getGroup(groupPosition).getQuestionItemID();
+        return mQuestionID;
     }
 
     @Override
     public long getChildId(int groupPosition, int childPosition) {
-        return childPosition;
+        mAnswerID = getChild(groupPosition, childPosition).getAnswerItemID();
+        return mAnswerID;
     }
 
     @Override
@@ -120,19 +110,19 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        QuestionItem headerTitle = (QuestionItem) getGroup(groupPosition);
+        QuestionItem questionGroupItem = getGroup(groupPosition);
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) this.mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.discussion_list_group, null);
         }
 
-        TextView lblListHeader = (TextView) convertView
+        TextView questionTextView = (TextView) convertView
                 .findViewById(R.id.discussion_board_question_text);
         Button writeAnswerButton=(Button)convertView.findViewById(R.id.discussion_board_write_answer_button);
 
-        lblListHeader.setTypeface(null, Typeface.BOLD);
-        lblListHeader.setText(headerTitle.getQuestionItemText());
+        questionTextView.setTypeface(null, Typeface.BOLD);
+        questionTextView.setText(questionGroupItem.getQuestionItemText());
 
         writeAnswerButton.setTag(groupPosition);//For passing the list item index
         writeAnswerButton.setOnClickListener(new View.OnClickListener(){
@@ -162,10 +152,9 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        //Log.i(TAG, "getChild returns" + getChild(groupPosition, childPosition));
-        final AnswerItem childItem = (AnswerItem)getChild(groupPosition, childPosition);
-        final String childText = childItem.getAnswerItemText();
-        final int recommendCount = childItem.getAnswerRecommendCount();
+        final AnswerItem AnswerChildItem = getChild(groupPosition, childPosition);
+        final String childText = AnswerChildItem.getAnswerItemText();
+        final int recommendCount = AnswerChildItem.getAnswerRecommendCount();
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) this.mContext
@@ -177,7 +166,7 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
             final EditText recommendAnswerCountEditText = (EditText) convertView.findViewById(R.id.dicussion_board_recommend_count);
 
             answerTextView.setText(childText);
-            recommendAnswerCountEditText.setText(String.valueOf(childItem.getAnswerRecommendCount()));
+            recommendAnswerCountEditText.setText(String.valueOf(AnswerChildItem.getAnswerRecommendCount()));
 
             recommendAnswerCountEditText.addTextChangedListener(new TextWatcher() {
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -199,8 +188,8 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
                 public void onClick(View v) {
                     //increment recommend counter
                     // final int recommendCount = childItem.getRecommendCount();
-                    int count = childItem.getAnswerRecommendCount();
-                    updateRecommendationOnNetwork(recommendAnswerCountEditText, childItem, ++count);
+                    int count = AnswerChildItem.getAnswerRecommendCount();
+                    updateRecommendationOnNetwork(recommendAnswerCountEditText, AnswerChildItem, ++count);
                     // recommendAnswerEditText.setText(String.valueOf(count));
                 }
             });
@@ -243,10 +232,9 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
-    public void postAnswerVolley(Context context, final int groupPosition){
-        mPostCreateAccountListener.requestStarted();
+    public void postAnswerVolley(final Context context, final int groupPosition){
         RequestQueue queue = Volley.newRequestQueue(context);
-        StringRequest jsonObjReq = new StringRequest(Request.Method.POST, Constants.POST_ANSWER_URL,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.POST_ANSWER_URL,
                 new Response.Listener<String>() {
                     // here Check for success tag
                     int success;
@@ -255,30 +243,26 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
                     @Override
                     public void onResponse(String response) {
                         Log.i(TAG, response.toString());
-                        mPostCreateAccountListener.requestCompleted();
 
-                        /*JSONObject json = jsonParser.makeHttpRequest( Constants.REGISTRATION_URL, "POST", params);
-                        // checking log for json response
-                        Log.d("Registration attempt", json.toString());
-                        // success tag for json
-                        success = json.getInt(Constants.TAG_SUCCESS);*/
-                        /*try {
-                            // success tag for json
-                            success = response.getInt(Constants.TAG_SUCCESS);
-                            message = response.getString(Constants.TAG_MESSAGE);
+                        try {
+                            JSONObject jsonObjectResponse = new JSONObject(response);
+                            success = jsonObjectResponse.getInt("success");
+                            message = jsonObjectResponse.getString("message");
 
+                            if (success == 1) {
+                                /*AnswerItem newAnswerItem = new AnswerItem();
+                                newAnswerItem.setAnswerItemID(Integer.parseInt(message));
+                                newAnswerItem.setAnswerUserID(userID);
+                                newAnswerItem.setQuestionID(mQuestionID);
+                                newAnswerItem.setAnswerItemText(questionToPost);
+                                mAnswerList.add(0, newAnswerItem);
+                                mDiscussionExpandableListAdapter.notifyDataSetChanged();*/
+                            }
+                            else{
+                                CustomAlertDialog.showAlertDialog(context, "Error Occurred", "Answer could not be posted!!");
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                        }*/
-                        //responseCode = json.getStatusLine().getStatusCode();
-                        if (success == 1) {
-                            mPostCreateAccountListener.requestCompleted();
-
-                            /*Intent intent = new Intent(CreateAccountActivity.this,LoginActivity.class);
-                            // this finish() method is used to tell android os that we are done with current
-                            // activity now! Moving to other activity
-                            finish();
-                            startActivity(intent);*/
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -286,7 +270,6 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
-                mPostCreateAccountListener.requestEndedWithError(error);
             }
         }) {
 
@@ -309,7 +292,7 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
         };
 
         // Adding request to request queue
-        queue.add(jsonObjReq);
+        queue.add(stringRequest);
     }
 
 }

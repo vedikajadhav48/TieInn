@@ -17,7 +17,7 @@ import static android.view.ViewDebug.trace;
 public class QuestionItem {
     private static final String TAG = "QuestionItem";
     private int mQuestionItemID;
-    private int mQuestionItemUserID;
+    private String mQuestionItemUserID;
     private String mQuestionItemText;
     private String mQuestionItemCategory;
     private Button mQuestionItemWriteAnswerButton;
@@ -32,11 +32,11 @@ public class QuestionItem {
         mQuestionItemID = QuestionItemID;
     }
 
-    public int getQuestionItemUserID() {
+    public String getQuestionItemUserID() {
         return mQuestionItemUserID;
     }
 
-    public void setQuestionItemUserID(int QuestionUserID) {
+    public void setQuestionItemUserID(String QuestionUserID) {
         mQuestionItemUserID = QuestionUserID;
     }
 

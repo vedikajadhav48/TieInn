@@ -165,7 +165,7 @@ public class LoginActivity extends ActionBarActivity{
                                 mUserID = userInfoResponse.getString(Constants.TAG_USERID);
                                 mProfileName = userInfoResponse.getString(Constants.TAG_PROFILE_NAME);
                                 mSession = SessionManager.getInstance(getApplicationContext());
-                                mSession.createLoginSession(Integer.parseInt(mUserID), mUsername, mProfileName);
+                                mSession.createLoginSession(mUserID, mUsername, mProfileName);
                                 Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
                            /* intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             // Add new Flag to start new Activity

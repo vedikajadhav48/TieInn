@@ -1,12 +1,9 @@
 package com.example.vedikajadhav.tieinnLibrary;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-
 import com.example.vedikajadhav.tieinn.LoginActivity;
-
 import java.util.HashMap;
 
 /**
@@ -28,7 +25,7 @@ public class SessionManager{
     // Shared pref mode
     int PRIVATE_MODE = 0;
 
-    // Sharedpref file name
+    // Shared pref file name
     private static final String PREF_NAME = "TieinnPref";
 
     // All Shared Preferences Keys
@@ -60,12 +57,12 @@ public class SessionManager{
 
 
     // Create login session
-    public void createLoginSession(int userID, String username, String profileName){
+    public void createLoginSession(String userID, String username, String profileName){
         // Storing login value as TRUE
         editor.putBoolean(IS_LOGIN, true);
 
         //Storing UserID in pref
-        editor.putInt(KEY_USERID, userID);
+        editor.putString(KEY_USERID, userID);
 
         // Storing name in pref
         editor.putString(KEY_USERNAME, username);
@@ -106,7 +103,7 @@ public class SessionManager{
         HashMap<String, String> user = new HashMap<String, String>();
 
         // user id
-        user.put(KEY_USERID, String.valueOf(pref.getInt(KEY_USERID, 0)));
+        user.put(KEY_USERID, pref.getString(KEY_USERID, null));
 
         // user name
         user.put(KEY_USERNAME, pref.getString(KEY_USERNAME, null));
