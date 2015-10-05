@@ -71,7 +71,7 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
     }
 
     public void getQuestionsFromNetwork(){
-        Log.i(TAG, "Network Request for questions");
+       // Log.i(TAG, "Network Request for questions");
         String url = Constants.GET_QUESTIONS_URL + "userID=" + mUserID + "&category=" + mCategory;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             int success;
@@ -96,7 +96,7 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
                             mQuestionItem.setQuestionItemCategory(question.getString("Category"));
                             mQuestionList.add(0, mQuestionItem);
                         }
-                        Toast.makeText(getApplicationContext(), "Success Questions: " + TAG, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "Success Questions: " + TAG, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -115,7 +115,7 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
     }
 
     public void getAnswersFromNetwork(){
-        Log.i(TAG, "Network Request for answers");
+       // Log.i(TAG, "Network Request for answers");
         JSONArray jsonQuestionsArray = new JSONArray();
         for (int i=0; i < mQuestionList.size(); i++) {
             jsonQuestionsArray.put(mQuestionList.get(i).getJSONObject());
@@ -156,7 +156,7 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
                             }
                             mAnswerList.put(answerJSONObject.getInt("QuestionID"), answers);
                         }
-                        Toast.makeText(getApplicationContext(), "Success Answers: " + TAG, Toast.LENGTH_SHORT).show();
+                     //   Toast.makeText(getApplicationContext(), "Success Answers: " + TAG, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

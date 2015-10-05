@@ -30,7 +30,7 @@
         android:focusable="false"
         android:text="@string/recommend_answer_button_text"/>
 
-        <EditText
+        <TextView
             android:id="@+id/dicussion_board_recommend_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

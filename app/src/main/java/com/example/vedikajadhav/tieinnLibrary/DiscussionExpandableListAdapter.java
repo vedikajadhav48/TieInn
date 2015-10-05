@@ -73,22 +73,8 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
         Log.i(TAG,"size" + this.mListDataChild.get(3).size());
         //return this.mListDataChild.get(this.mListDataHeader.get(groupPosition)).size();
         //return (this.mListDataChild.get(this.mListDataHeader.get(groupPosition).getQuestionItemID())).size();
-        return (this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID())).size();
-    }
-
-    @Override
-    public QuestionItem getGroup(int groupPosition) {
-        return this.mListDataHeader.get(groupPosition);
-    }
-
-    @Override
-    public AnswerItem getChild(int groupPosition, int childPosition) {
-        Log.i(TAG,"groupPOsition" + groupPosition);
-        Log.i(TAG,"childPosition" + childPosition);
-        Log.i(TAG,"DataHEader discussionID" + this.mListDataHeader.get(groupPosition).getQuestionItemID());
-        Log.i(TAG,"groupPOsition" + this.mListDataChild.get(this.mListDataHeader.get(groupPosition).getQuestionItemID()).get(childPosition));
-       // return this.mListDataChild.get(this.mListDataHeader.get(groupPosition).getQuestionItemID()).get(childPosition);
-        return (this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID())).get(childPosition);
+       // return (this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID())).size();
+        return (this.mListDataChild.get((int)getGroupId(groupPosition))).size();
     }
 
     @Override
@@ -101,6 +87,22 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
     public long getChildId(int groupPosition, int childPosition) {
         mAnswerID = getChild(groupPosition, childPosition).getAnswerItemID();
         return mAnswerID;
+    }
+
+    @Override
+    public QuestionItem getGroup(int groupPosition) {
+        return this.mListDataHeader.get(groupPosition);
+    }
+
+    @Override
+    public AnswerItem getChild(int groupPosition, int childPosition) {
+       // Log.i(TAG,"groupPOsition" + groupPosition);
+        //Log.i(TAG,"childPosition" + childPosition);
+        //Log.i(TAG,"DataHEader discussionID" + this.mListDataHeader.get(groupPosition).getQuestionItemID());
+        //Log.i(TAG,"groupPOsition" + this.mListDataChild.get(this.mListDataHeader.get(groupPosition).getQuestionItemID()).get(childPosition));
+       // return this.mListDataChild.get(this.mListDataHeader.get(groupPosition).getQuestionItemID()).get(childPosition);
+        //return (this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID())).get(childPosition);
+        return (this.mListDataChild.get((int)getGroupId(groupPosition))).get(childPosition);
     }
 
     @Override
@@ -153,17 +155,18 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         final AnswerItem AnswerChildItem = getChild(groupPosition, childPosition);
-        final String childText = AnswerChildItem.getAnswerItemText();
-        final int recommendCount = AnswerChildItem.getAnswerRecommendCount();
+        String childText = AnswerChildItem.getAnswerItemText();
+        int recommendCount = AnswerChildItem.getAnswerRecommendCount();
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) this.mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.discussion_list_item, null);
+        }
 
-            final TextView answerTextView = (TextView) convertView.findViewById(R.id.discussion_board_answer_text);
-            final Button recommendAnswerButton = (Button) convertView.findViewById(R.id.discussion_board_recommend_answer);
-            final EditText recommendAnswerCountEditText = (EditText) convertView.findViewById(R.id.dicussion_board_recommend_count);
+            TextView answerTextView = (TextView) convertView.findViewById(R.id.discussion_board_answer_text);
+            Button recommendAnswerButton = (Button) convertView.findViewById(R.id.discussion_board_recommend_answer);
+            final TextView recommendAnswerCountEditText = (TextView) convertView.findViewById(R.id.dicussion_board_recommend_count);
 
             answerTextView.setText(childText);
             recommendAnswerCountEditText.setText(String.valueOf(AnswerChildItem.getAnswerRecommendCount()));
@@ -193,11 +196,11 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
                     // recommendAnswerEditText.setText(String.valueOf(count));
                 }
             });
-        }
+
         return convertView;
     }
 
-    public void updateRecommendationOnNetwork(final EditText recommendAnswerEditText, final AnswerItem childItem, final int count){
+    public void updateRecommendationOnNetwork(final TextView recommendAnswerEditText, final AnswerItem childItem, final int count){
         Log.i(TAG, "Network Request for questions");
         String url = Constants.UPDATE_RECOMMENDATIONS_URL + "userID=" + mUserID + "&answerID=" + childItem.getAnswerItemID() + "&numberOfRecommendations=" + count;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -277,7 +280,7 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("answerUserID", mUserID);
-                params.put("questionID", String.valueOf(mListDataHeader.get(groupPosition).getQuestionItemID()));
+                params.put("questionID", String.valueOf(getGroup(groupPosition)));
                 params.put("answer", answer);
 
                 return params;
@@ -293,6 +296,16 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
 
         // Adding request to request queue
         queue.add(stringRequest);
+    }
+
+    @Override
+    public void onGroupCollapsed(int groupPosition) {
+        super.onGroupCollapsed(groupPosition);
+    }
+
+    @Override
+    public void onGroupExpanded(int groupPosition) {
+        super.onGroupExpanded(groupPosition);
     }
 
 }
