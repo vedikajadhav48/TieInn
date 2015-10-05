@@ -58,9 +58,8 @@ public class SessionManager{
         return mSessionInstance;
     }
 
-    /**
-     * Create login session
-     * */
+
+    // Create login session
     public void createLoginSession(int userID, String username, String profileName){
         // Storing login value as TRUE
         editor.putBoolean(IS_LOGIN, true);
@@ -102,9 +101,7 @@ public class SessionManager{
         return false;
     }
 
-    /**
-     * Get stored session data
-     * */
+    //Get stored session data
     public HashMap<String, String > getUserDetails(){
         HashMap<String, String> user = new HashMap<String, String>();
 
@@ -121,9 +118,8 @@ public class SessionManager{
         return user;
     }
 
-    /**
-     * Clear session details
-     * */
+
+    // Clear session details
     public void logoutUser(){
         // Clearing all data from Shared Preferences
         editor.clear();

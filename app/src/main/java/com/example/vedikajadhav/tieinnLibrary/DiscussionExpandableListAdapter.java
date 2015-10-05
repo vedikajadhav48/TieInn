@@ -13,7 +13,6 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -27,10 +26,8 @@ import com.android.volley.toolbox.Volley;
 import com.example.vedikajadhav.tieinn.R;
 import com.example.vedikajadhav.tieinnModel.AnswerItem;
 import com.example.vedikajadhav.tieinnModel.Constants;
-import com.example.vedikajadhav.tieinnModel.DiscussionItem;
-import com.facebook.share.widget.LikeView;
+import com.example.vedikajadhav.tieinnModel.QuestionItem;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,7 +41,7 @@ import java.util.Map;
 public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
     private static final String TAG = "DiscussionExpandableListAdapter";
     private Context mContext;
-    private List<DiscussionItem> mListDataHeader;
+    private List<QuestionItem> mListDataHeader;
     private HashMap<Integer, List<AnswerItem>> mListDataChild;
     private String answer;
     private static PostCreateAccountResponseListener mPostCreateAccountListener;
@@ -52,7 +49,7 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
     private int mQuestionID;
     SessionManager mSession;
 
-    public DiscussionExpandableListAdapter(Context context, List<DiscussionItem> listDataHeader,
+    public DiscussionExpandableListAdapter(Context context, List<QuestionItem> listDataHeader,
                                        HashMap<Integer, List<AnswerItem>> listChildData, String userID) {
         this.mContext = context;
         this.mListDataHeader = listDataHeader;
@@ -88,7 +85,7 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
         Log.i(TAG,"size" + this.mListDataChild.get(3));
         Log.i(TAG,"size" + this.mListDataChild.get(3).size());
         //return this.mListDataChild.get(this.mListDataHeader.get(groupPosition)).size();
-        return (this.mListDataChild.get(this.mListDataHeader.get(groupPosition).getDiscussionItemID())).size();
+        return (this.mListDataChild.get(this.mListDataHeader.get(groupPosition).getQuestionItemID())).size();
     }
 
     @Override
@@ -100,14 +97,14 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
     public Object getChild(int groupPosition, int childPosition) {
         Log.i(TAG,"groupPOsition" + groupPosition);
         Log.i(TAG,"childPosition" + childPosition);
-        Log.i(TAG,"DataHEader discussionID" + this.mListDataHeader.get(groupPosition).getDiscussionItemID());
-        Log.i(TAG,"groupPOsition" + this.mListDataChild.get(this.mListDataHeader.get(groupPosition).getDiscussionItemID()).get(childPosition));
-        return this.mListDataChild.get(this.mListDataHeader.get(groupPosition).getDiscussionItemID()).get(childPosition);
+        Log.i(TAG,"DataHEader discussionID" + this.mListDataHeader.get(groupPosition).getQuestionItemID());
+        Log.i(TAG,"groupPOsition" + this.mListDataChild.get(this.mListDataHeader.get(groupPosition).getQuestionItemID()).get(childPosition));
+        return this.mListDataChild.get(this.mListDataHeader.get(groupPosition).getQuestionItemID()).get(childPosition);
     }
 
     @Override
     public long getGroupId(int groupPosition) {
-        mQuestionID = mListDataHeader.get(groupPosition).getDiscussionItemID();
+        mQuestionID = mListDataHeader.get(groupPosition).getQuestionItemID();
         return groupPosition;
     }
 
@@ -123,7 +120,7 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        DiscussionItem headerTitle = (DiscussionItem) getGroup(groupPosition);
+        QuestionItem headerTitle = (QuestionItem) getGroup(groupPosition);
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) this.mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -135,7 +132,7 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
         Button writeAnswerButton=(Button)convertView.findViewById(R.id.discussion_board_write_answer_button);
 
         lblListHeader.setTypeface(null, Typeface.BOLD);
-        lblListHeader.setText(headerTitle.getDiscussionItemText());
+        lblListHeader.setText(headerTitle.getQuestionItemText());
 
         writeAnswerButton.setTag(groupPosition);//For passing the list item index
         writeAnswerButton.setOnClickListener(new View.OnClickListener(){
@@ -297,7 +294,7 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("answerUserID", mUserID);
-                params.put("questionID", String.valueOf(mListDataHeader.get(groupPosition).getDiscussionItemID()));
+                params.put("questionID", String.valueOf(mListDataHeader.get(groupPosition).getQuestionItemID()));
                 params.put("answer", answer);
 
                 return params;

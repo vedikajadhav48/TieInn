@@ -29,7 +29,7 @@ import com.example.vedikajadhav.tieinnLibrary.SessionManager;
 import com.example.vedikajadhav.tieinnLibrary.Util;
 import com.example.vedikajadhav.tieinnModel.AnswerItem;
 import com.example.vedikajadhav.tieinnModel.Constants;
-import com.example.vedikajadhav.tieinnModel.DiscussionItem;
+import com.example.vedikajadhav.tieinnModel.QuestionItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,15 +42,15 @@ import java.util.Map;
 
 
 public class DiscussionBoardActivity extends ActionBarActivity implements View.OnClickListener {
-    private static final String TAG = "DiscussionBoardActivity";
+    private static final String TAG = "QuestionBoardActivity";
     private EditText mQuestionEditText;
     private Button mQuestionPostButton;
-    ListView mDiscussionListView;
-    ExpandableListView mDiscussionExpandableListView;
+    ListView mQuestionListView;
+    ExpandableListView mQuestionExpandableListView;
     DiscussionExpandableListAdapter mDiscussionExpandableListAdapter;
-   // private ArrayList<DiscussionItem> mHousingDiscussionList = new ArrayList<>();
+   // private ArrayList<QuestionItem> mHousingQuestionList = new ArrayList<>();
    // private ArrayList<AnswerItem> mHousingAnswerList = new ArrayList<>();
-    List<DiscussionItem> mHousingDiscussionList = new ArrayList<DiscussionItem>();
+    List<QuestionItem> mHousingQuestionList = new ArrayList<QuestionItem>();
     HashMap<Integer, List<AnswerItem>> mHousingAnswerList = new HashMap<>();
     private String mQuestionToPost;
     public static final String Intent_message = "com.example.vedikajadhav.tieinn.Intent_message";
@@ -80,14 +80,14 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
         mCategory = getIntent().getStringExtra(Intent_category);
         if (Util.isNetworkAvailable(getApplicationContext())) {
             getQuestionsFromNetwork();
-        /*for(int i=0; i<mHousingDiscussionList.size(); i++){
-              //mHousingAnswerList.put(mHousingDiscussionList.get(i), top250); // Header, Child data
-            getAnswersFromNetwork(mHousingDiscussionList.get(i).getDiscussionItemID());
+        /*for(int i=0; i<mHousingQuestionList.size(); i++){
+              //mHousingAnswerList.put(mHousingQuestionList.get(i), top250); // Header, Child data
+            getAnswersFromNetwork(mHousingQuestionList.get(i).getQuestionItemID());
             }*/
-           // updateDiscussionListView();
+           // updateQuestionListView();
         }
 
-       // updateDiscussionListView();
+       // updateQuestionListView();
         mPostCreateAccountListener = new PostCreateAccountResponseListener() {
             @Override
             public void requestStarted() {
@@ -96,10 +96,10 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
 
             @Override
             public void requestCompleted() {
-                /*DiscussionItem newDiscussionItem = new DiscussionItem();
-                newDiscussionItem.setDiscussionItemText(mQuestionToPost);
-                mHousingDiscussionList.add(0, newDiscussionItem);
-                mDiscussionListAdapter.notifyDataSetChanged();*/
+                /*QuestionItem newQuestionItem = new QuestionItem();
+                newQuestionItem.setQuestionItemText(mQuestionToPost);
+                mHousingQuestionList.add(0, newQuestionItem);
+                mQuestionListAdapter.notifyDataSetChanged();*/
             }
 
             @Override
@@ -130,12 +130,12 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
                         mQuestionsJSONArray = new JSONArray(message);
                         for (int i = 0; i < mQuestionsJSONArray.length(); i++) {
                             JSONObject question = (JSONObject) mQuestionsJSONArray.get(i);
-                            DiscussionItem mDiscussionItem = new DiscussionItem();
-                            mDiscussionItem.setDiscussionItemID(question.getInt("QuestionID"));
-                            mDiscussionItem.setDiscussionUserID(question.getInt("QuestionUserID"));
-                            mDiscussionItem.setDiscussionItemText(question.getString("Question"));
-                            mDiscussionItem.setDiscussionCategory(question.getString("Category"));
-                            mHousingDiscussionList.add(0, mDiscussionItem);
+                            QuestionItem mQuestionItem = new QuestionItem();
+                            mQuestionItem.setQuestionItemID(question.getInt("QuestionID"));
+                            mQuestionItem.setQuestionItemUserID(question.getInt("QuestionUserID"));
+                            mQuestionItem.setQuestionItemText(question.getString("Question"));
+                            mQuestionItem.setQuestionItemCategory(question.getString("Category"));
+                            mHousingQuestionList.add(0, mQuestionItem);
                         }
                         Toast.makeText(getApplicationContext(), "Success Questions: " + TAG, Toast.LENGTH_SHORT).show();
                     }
@@ -160,10 +160,10 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
 
     public void getAnswersFromNetwork(){
         Log.i(TAG, "Network Request for answers");
-        Log.i(TAG, "mHousingDiscussionList" + mHousingDiscussionList.toString());
+        Log.i(TAG, "mHousingQuestionList" + mHousingQuestionList.toString());
         JSONArray jsonQuestionsArray = new JSONArray();
-        for (int i=0; i < mHousingDiscussionList.size(); i++) {
-            jsonQuestionsArray.put(mHousingDiscussionList.get(i).getJSONObject());
+        for (int i=0; i < mHousingQuestionList.size(); i++) {
+            jsonQuestionsArray.put(mHousingQuestionList.get(i).getJSONObject());
         }
         // the parameters for the php
         Map<String, String> map = new HashMap<String, String>();
@@ -222,7 +222,7 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                updateDiscussionListView();
+                updateQuestionListView();
             }
         }, new Response.ErrorListener() {
 
@@ -238,47 +238,47 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
 
         //NetworkRequest.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
         AppController.getInstance().addToRequestQueue(answerJsonObjectRequest);
-       // updateDiscussionListView();
+       // updateQuestionListView();
     }
 
-    public void updateDiscussionListView(){
-        /*mDiscussionListView = (ListView)findViewById(R.id.discussion_expandable_list_view);
-        mDiscussionListAdapter = new DiscussionListAdapter(mHousingDiscussionList, this);
-        mDiscussionListView.setAdapter(mDiscussionListAdapter);*/
-        mDiscussionExpandableListView = (ExpandableListView)findViewById(R.id.discussion_expandable_list_view);
+    public void updateQuestionListView(){
+        /*mQuestionListView = (ListView)findViewById(R.id.Question_expandable_list_view);
+        mQuestionListAdapter = new QuestionListAdapter(mHousingQuestionList, this);
+        mQuestionListView.setAdapter(mQuestionListAdapter);*/
+        mQuestionExpandableListView = (ExpandableListView)findViewById(R.id.discussion_expandable_list_view);
         // preparing list data
        // prepareListData();
-        mDiscussionExpandableListAdapter = new DiscussionExpandableListAdapter(this, mHousingDiscussionList, mHousingAnswerList, mUserID);
-        mDiscussionExpandableListView.setAdapter(mDiscussionExpandableListAdapter);
+        mDiscussionExpandableListAdapter = new DiscussionExpandableListAdapter(this, mHousingQuestionList, mHousingAnswerList, mUserID);
+        mQuestionExpandableListView.setAdapter(mDiscussionExpandableListAdapter);
 
         // Listview Group click listener
-       /* mDiscussionExpandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+       /* mQuestionExpandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
 
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v,
                                         int groupPosition, long id) {
                  Toast.makeText(getApplicationContext(),
-                 "Group Clicked " + mHousingDiscussionList.get(groupPosition),
+                 "Group Clicked " + mHousingQuestionList.get(groupPosition),
                  Toast.LENGTH_SHORT).show();
                // parent.expandGroup(groupPosition);
                 Constants.QUESTION_GROUP_CLICKED = groupPosition;
-                Constants.QUESTION_ID_GROUP_CLICKED = mHousingDiscussionList.get(groupPosition).getDiscussionItemID();
+                Constants.QUESTION_ID_GROUP_CLICKED = mHousingQuestionList.get(groupPosition).getQuestionItemID();
                 return false;
             }
         });
 
         // Listview on child click listener
-        mDiscussionExpandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+        mQuestionExpandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
 
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
                 Toast.makeText(
                         getApplicationContext(),
-                        mHousingDiscussionList.get(groupPosition)
+                        mHousingQuestionList.get(groupPosition)
                                 + " : "
                                 + mHousingAnswerList.get(
-                                mHousingDiscussionList.get(groupPosition)).get(
+                                mHousingQuestionList.get(groupPosition)).get(
                                 childPosition), Toast.LENGTH_SHORT)
                         .show();
                 return false;
@@ -286,23 +286,23 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
         });
 
         // Listview Group expanded listener
-        mDiscussionExpandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+        mQuestionExpandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
 
             @Override
             public void onGroupExpand(int groupPosition) {
                 Toast.makeText(getApplicationContext(),
-                        mHousingDiscussionList.get(groupPosition) + " Expanded",
+                        mHousingQuestionList.get(groupPosition) + " Expanded",
                         Toast.LENGTH_SHORT).show();
             }
         });
 
         // Listview Group collasped listener
-        mDiscussionExpandableListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+        mQuestionExpandableListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
 
             @Override
             public void onGroupCollapse(int groupPosition) {
                 Toast.makeText(getApplicationContext(),
-                        mHousingDiscussionList.get(groupPosition) + " Collapsed",
+                        mHousingQuestionList.get(groupPosition) + " Collapsed",
                         Toast.LENGTH_SHORT).show();
 
             }
@@ -321,10 +321,10 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
         listDataHeader.add("Now Showing");
         listDataHeader.add("Coming Soon..");*/
 
-        /*for(int i=0; i<mHousingDiscussionList.size(); i++){
-              //mHousingAnswerList.put(mHousingDiscussionList.get(i), top250); // Header, Child data
+        /*for(int i=0; i<mHousingQuestionList.size(); i++){
+              //mHousingAnswerList.put(mHousingQuestionList.get(i), top250); // Header, Child data
             //mHousingAnswerList.put(questionID, answers);
-            getAnswersFromNetwork(mHousingDiscussionList.get(i).getDiscussionItemID());
+            getAnswersFromNetwork(mHousingQuestionList.get(i).getQuestionItemID());
         }*/
       /*  // Adding child data
         List<String> top250 = new ArrayList<String>();
@@ -336,8 +336,8 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
         top250.add("The Dark Knight");
         top250.add("12 Angry Men");
 
-        for(int i=0; i<mHousingDiscussionList.size(); i++){
-          //  mHousingAnswerList.put(mHousingDiscussionList.get(i), top250); // Header, Child data
+        for(int i=0; i<mHousingQuestionList.size(); i++){
+          //  mHousingAnswerList.put(mHousingQuestionList.get(i), top250); // Header, Child data
         }*/
 
 /*        listDataChild.put(listDataHeader.get(1), nowShowing);
@@ -346,13 +346,6 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
 
     public void postQuestionVolley(Context context){
         mQuestionToPost = mQuestionEditText.getText().toString();
-        /*ProgressDialog pDialog;
-        pDialog = new ProgressDialog(this);
-        pDialog.setMessage("Registering...");
-        pDialog.setIndeterminate(false);
-        pDialog.setCancelable(true);
-        pDialog.show();*/
-
         mPostCreateAccountListener.requestStarted();
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest jsonObjReq = new StringRequest(Request.Method.POST, Constants.POST_QUESTION_URL,
@@ -468,10 +461,10 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
                         Log.i(TAG, String.valueOf(success));
                         Log.i(TAG, message);
                         if (success == 1) {
-                            DiscussionItem newDiscussionItem = new DiscussionItem();
-                            newDiscussionItem.setDiscussionItemText(mQuestionToPost);
-                            mHousingDiscussionList.add(0, newDiscussionItem);
-                           // mDiscussionListAdapter.notifyDataSetChanged();
+                            QuestionItem newQuestionItem = new QuestionItem();
+                            newQuestionItem.setQuestionItemText(mQuestionToPost);
+                            mHousingQuestionList.add(0, newQuestionItem);
+                           // mQuestionListAdapter.notifyDataSetChanged();
                         }
                        // pDialog.hide();
                     }
@@ -526,7 +519,7 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
                         ratingDialog.dismiss();
                     }
                 });*/
-            } /*else if(v.getId() == R.id.discussion_board_write_answer_button){ //write answer button
+            } /*else if(v.getId() == R.id.Question_board_write_answer_button){ //write answer button
                 final Dialog writeAnswerDialog = new Dialog(this, R.style.FullHeightDialog);
                 writeAnswerDialog.setContentView(R.layout.write_answer_dialog);
                 writeAnswerDialog.setCancelable(true);

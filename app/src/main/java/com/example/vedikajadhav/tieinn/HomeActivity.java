@@ -26,17 +26,10 @@ import java.util.HashMap;
 
 public class HomeActivity extends ActionBarActivity implements AdapterView.OnItemClickListener{
     private static final String TAG= "HomeActivity";
-    private ProfilePictureView mProfilePictureView;
-    private String mFacebookUserID;
-    private String mUserID;
     private String mProfileName;
-    private String mUsername;
-   // private ImageView mProfileImageView;
     private TextView mProfileNameTextView;
     ListView mainListView;
     SessionManager mSession;
-    public static final String Intent_fb_user_id = "com.example.vedikajadhav.tieinn.Intent_fb_user_id";
-    public static final String Intent_profile_name = "com.example.vedikajadhav.tieinn.Intent_profile_name";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,7 +38,6 @@ public class HomeActivity extends ActionBarActivity implements AdapterView.OnIte
 
         // Session class instance
         mSession = SessionManager.getInstance(getApplicationContext());
-
         // Check user login (this is the important point)
         // If User is not logged in , This will redirect user to LoginActivity
         // and finish current activity from activity stack.
@@ -55,8 +47,7 @@ public class HomeActivity extends ActionBarActivity implements AdapterView.OnIte
 
         // get user data from session
         HashMap<String, String> user = mSession.getUserDetails();
-        mUserID = user.get(SessionManager.KEY_USERID);
-        mUsername = user.get(SessionManager.KEY_USERNAME);
+        mProfileName = user.get(SessionManager.KEY_PROFILE_NAME);
 
         mainListView = (ListView)findViewById(R.id.main_list_view);
         ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(this,
@@ -64,30 +55,15 @@ public class HomeActivity extends ActionBarActivity implements AdapterView.OnIte
                 android.R.id.text1,
                 getResources().getStringArray(R.array.list_menu_items));
         mainListView.setAdapter(listViewAdapter);
-
-        //listView Item click listener
         mainListView.setOnItemClickListener(this);
 
-        mProfileName = getIntent().getStringExtra(Intent_profile_name);
-        mFacebookUserID = getIntent().getStringExtra(Intent_fb_user_id);
-
-       // mProfileImageView = (ImageView) findViewById(R.id.image_profile_view);
         mProfileNameTextView = (TextView) findViewById(R.id.profile_name_text);
-
         mProfileNameTextView.setText("Welcome, " + mProfileName + "!");
       //  Picasso.with(getApplicationContext()).load("https://graph.facebook.com/" + mFacebookUserID + "/picture?type=large").into(mProfileImageView);
-
-       /* mSession = SessionManager.getInstance(getApplicationContext());
-        mSession.createLoginSession(Integer.parseInt(mFacebookUserID), mProfileName, "anroidhive@gmail.com");*/
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //listView clicked item index
-        int itemPosition = position;
-
-        //ListView clicked item value
-        String itemValue = (String)mainListView.getItemAtPosition(position);
 
         switch(position){
             case 0:
@@ -110,9 +86,5 @@ public class HomeActivity extends ActionBarActivity implements AdapterView.OnIte
                 break;
             default:
         }
-    }
-
-    public void close(View view){
-        finish();
     }
 }
