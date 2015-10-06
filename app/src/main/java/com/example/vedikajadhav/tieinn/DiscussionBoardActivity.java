@@ -275,7 +275,7 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
         listDataChild.put(listDataHeader.get(2), comingSoon);*/
     }
 
-    public void postQuestionToNetwork(final Context context, final String questionToPost, final String userID, final String category){
+    public void postQuestionToNetwork(final Context context){
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.POST_QUESTION_URL,
                 new Response.Listener<String>() {
@@ -295,9 +295,9 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
                             if (success == 1) {
                                 QuestionItem newQuestionItem = new QuestionItem();
                                 newQuestionItem.setQuestionItemID(Integer.parseInt(message));
-                                newQuestionItem.setQuestionItemUserID(userID);
-                                newQuestionItem.setQuestionItemText(questionToPost);
-                                newQuestionItem.setQuestionItemCategory(category);
+                                newQuestionItem.setQuestionItemUserID(mUserID);
+                                newQuestionItem.setQuestionItemText(mQuestionToPost);
+                                newQuestionItem.setQuestionItemCategory(mCategory);
                                 mQuestionList.add(0, newQuestionItem);
                                 mDiscussionExpandableListAdapter.notifyDataSetChanged();
                             }
@@ -320,9 +320,9 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("questionUserID", userID);
-                params.put("question", questionToPost);
-                params.put("category", category);
+                params.put("questionUserID", mUserID);
+                params.put("question", mQuestionToPost);
+                params.put("category", mCategory);
 
                 return params;
             }
@@ -343,10 +343,15 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
     public void onClick(View v) {
         if (Util.isNetworkAvailable(getApplicationContext())) {
             mQuestionToPost = mQuestionEditText.getText().toString();
-            postQuestionToNetwork(this, mQuestionToPost, mUserID, mCategory);
+            if(!mQuestionToPost.equalsIgnoreCase("")){
+                mQuestionEditText.setText("");
+                //postQuestionToNetwork(this, mQuestionToPost, mUserID, mCategory);
+                postQuestionToNetwork(this);
+            }else{
+                CustomAlertDialog.showAlertDialog(this, "Empty Question", "Enter a question!!");
+            }
         } else {
-            CustomAlertDialog customAlertDialog = new CustomAlertDialog();
-            customAlertDialog.showAlertDialog(this, "Network Unavailable", "Please check network connection and try again.");
+            CustomAlertDialog.showAlertDialog(this, "Network Unavailable", "Please check network connection and try again.");
         }
     }
 }

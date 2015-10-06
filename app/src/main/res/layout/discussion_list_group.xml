@@ -24,4 +24,17 @@
         android:focusable="false"
         android:text="@string/answer_button_text" />
 
+    <Button
+        android:id="@+id/discussion_board_edit_question_button"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_below="@id/discussion_board_question_text"
+        android:layout_toRightOf="@id/discussion_board_write_answer_button"
+        android:layout_centerHorizontal="true"
+        android:textColor="#343434"
+        android:textSize="10dip"
+        android:layout_marginTop="1dip"
+        android:focusable="false"
+        android:text="@string/edit_question_button_text" />
+
 </RelativeLayout>

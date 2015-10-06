@@ -83,11 +83,12 @@
     <string name="title_activity_discussion_board">DiscussionBoard</string>
     <string name="title_activity_academic_category">Academic</string>
     <string name="recommend_answer_button_text">Recommend</string>
-    <string name="edit_answer_button_text">Edit</string>
     <string name="answer">Answer</string>
     <string name="submit">Submit</string>
     <string name="account_information_text">Account Information:</string>
     <string name="account_username">Username: </string>
     <string name="account_profile_name">Profile Name: </string>
+    <string name="edit_question_button_text">Edit Question</string>
+    <string name="edit_answer_button_text">Edit Answer</string>
 
 </resources>
