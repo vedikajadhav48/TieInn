@@ -3,8 +3,6 @@ package com.example.vedikajadhav.tieinnLibrary;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Typeface;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +11,6 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -27,10 +24,8 @@ import com.example.vedikajadhav.tieinn.R;
 import com.example.vedikajadhav.tieinnModel.AnswerItem;
 import com.example.vedikajadhav.tieinnModel.Constants;
 import com.example.vedikajadhav.tieinnModel.QuestionItem;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +33,7 @@ import java.util.Map;
 /**
  * Created by Vedika Jadhav on 9/19/2015.
  */
-public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
+public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter implements View.OnClickListener {
     private static final String TAG = "DiscussionExpandableListAdapter";
     private Context mContext;
     private List<QuestionItem> mListDataHeader;
@@ -46,6 +41,8 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
     SessionManager mSession;
     private String mUserID;
     private String mAnswerToPost;
+    private String mQuestionToUpdate;
+    private String mAnswerToUpdate;
     private int mQuestionID;
     private int mAnswerID;
 
@@ -119,6 +116,13 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = inflater.inflate(R.layout.discussion_list_group, null);
         }
 
+
+        Button editQuestionButton = (Button)convertView.findViewById(R.id.discussion_board_edit_question_button);
+        editQuestionButton.setTag(questionGroupItem);
+        editQuestionButton.setOnClickListener(this);
+       /* if(questionGroupItem.getQuestionItemUserID() != mUserID){
+            editQuestionButton.setVisibility(View.GONE);
+        }*/
         TextView questionTextView = (TextView) convertView
                 .findViewById(R.id.discussion_board_question_text);
         Button writeAnswerButton=(Button)convertView.findViewById(R.id.discussion_board_write_answer_button);
@@ -126,9 +130,8 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
         questionTextView.setTypeface(null, Typeface.BOLD);
         questionTextView.setText(questionGroupItem.getQuestionItemText());
 
-        writeAnswerButton.setTag(groupPosition);//For passing the list item index
+        writeAnswerButton.setTag(String.valueOf(groupPosition));//For passing the list item index
         writeAnswerButton.setOnClickListener(new View.OnClickListener(){
-
             @Override
             public void onClick(View v) {
                 final Dialog writeAnswerDialog = new Dialog(mContext, R.style.FullHeightDialog);
@@ -142,12 +145,13 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
                     public void onClick(View v) {
                         EditText answerEditText = (EditText) writeAnswerDialog.findViewById(R.id.edit_text_answer);
                         mAnswerToPost = answerEditText.getText().toString();
-                        if(!mAnswerToPost.equalsIgnoreCase("")){
+
+                        if (!mAnswerToPost.equalsIgnoreCase("")) {
                             answerEditText.setText("");
-                            int questionID = (int)getGroupId(groupPosition);
+                            int questionID = (int) getGroupId(groupPosition);
                             postAnswerVolley(mContext, questionID);
                             //postQuestionToNetwork(this, mQuestionToPost, mUserID, mCategory);
-                        }else{
+                        } else {
                             CustomAlertDialog.showAlertDialog(mContext, "Empty Answer", "Enter an answer!!");
                         }
                         writeAnswerDialog.dismiss();
@@ -170,11 +174,14 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.discussion_list_item, null);
         }
+        Button editAnswerButton = (Button)convertView.findViewById(R.id.discussion_board_edit_answer_button);
+        editAnswerButton.setTag(AnswerChildItem);
+        editAnswerButton.setOnClickListener(this);
 
             TextView answerTextView = (TextView) convertView.findViewById(R.id.discussion_board_answer_text);
             Button recommendAnswerButton = (Button) convertView.findViewById(R.id.discussion_board_recommend_answer);
-            final TextView recommendAnswerCountTextView = (TextView) convertView.findViewById(R.id.dicussion_board_recommend_count);
 
+            final TextView recommendAnswerCountTextView = (TextView) convertView.findViewById(R.id.dicussion_board_recommend_count);
             answerTextView.setText(childText);
             recommendAnswerCountTextView.setText(String.valueOf(AnswerChildItem.getAnswerRecommendCount()));
             recommendAnswerButton.setOnClickListener(new View.OnClickListener() {
@@ -224,6 +231,7 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
     }
+
 
     public void postAnswerVolley(final Context context, final int questionID){
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -299,4 +307,176 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter {
         super.onGroupExpanded(groupPosition);
     }
 
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.discussion_board_edit_question_button){
+            final Dialog editQuestionDialog = new Dialog(mContext, R.style.FullHeightDialog);
+            editQuestionDialog.setContentView(R.layout.edit_dialog);
+            editQuestionDialog.setCancelable(true);
+            editQuestionDialog.show();
+
+            //final int groupPosition = (int) v.getTag();
+            //final QuestionItem questionGroupItem = getGroup(groupPosition);
+            final QuestionItem questionGroupItem = (QuestionItem) v.getTag();
+            final EditText questionEditText = (EditText) editQuestionDialog.findViewById(R.id.question_answer_edit_text);
+            questionEditText.setText(questionGroupItem.getQuestionItemText());
+
+            Button doneButton = (Button) editQuestionDialog.findViewById(R.id.question_answer_edit_done_button);
+            doneButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mQuestionToUpdate = questionEditText.getText().toString();
+
+                    if(!mQuestionToUpdate.equalsIgnoreCase("")){
+                        questionEditText.setText("");
+                        updateQuestionVolley(mContext, questionGroupItem);
+                    }else{
+                        CustomAlertDialog.showAlertDialog(mContext, "Empty Question", "Enter a Question!!");
+                    }
+                    editQuestionDialog.dismiss();
+                }
+            });
+        }else if(v.getId() == R.id.discussion_board_edit_answer_button){//edit answer button
+            final Dialog editAnswerDialog = new Dialog(mContext, R.style.FullHeightDialog);
+            editAnswerDialog.setContentView(R.layout.edit_dialog);
+            editAnswerDialog.setCancelable(true);
+            editAnswerDialog.show();
+
+            final AnswerItem answerChildItem = (AnswerItem) v.getTag();
+            final EditText answerEditText = (EditText) editAnswerDialog.findViewById(R.id.question_answer_edit_text);
+            answerEditText.setText(answerChildItem.getAnswerItemText());
+
+            Button doneButton = (Button) editAnswerDialog.findViewById(R.id.question_answer_edit_done_button);
+            doneButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mAnswerToUpdate = answerEditText.getText().toString();
+
+                    if(!mAnswerToUpdate.equalsIgnoreCase("")){
+                        answerEditText.setText("");
+                        updateAnswerVolley(mContext, answerChildItem);
+                    }else{
+                        CustomAlertDialog.showAlertDialog(mContext, "Empty Answer", "Enter an Answer!!");
+                    }
+                    editAnswerDialog.dismiss();
+                }
+            });
+        }
+    }
+
+    public void updateQuestionVolley(final Context context, final QuestionItem questionGroupItem){
+        RequestQueue queue = Volley.newRequestQueue(context);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.UPDATE_QUESTION_URL,
+                new Response.Listener<String>() {
+                    // here Check for success tag
+                    int success;
+                    String message;
+
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i(TAG, response.toString());
+
+                        try {
+                            JSONObject jsonObjectResponse = new JSONObject(response);
+                            success = jsonObjectResponse.getInt("success");
+                            message = jsonObjectResponse.getString("message");
+
+                            if (success == 1) {
+                                questionGroupItem.setQuestionItemText(mQuestionToUpdate);
+                                notifyDataSetChanged();
+                            }
+                            else{
+                                CustomAlertDialog.showAlertDialog(context, "Error Occurred", "Question could not be updated!!");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        //responseCode = json.getStatusLine().getStatusCode();
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("question", mQuestionToUpdate);
+                params.put("questionID", String.valueOf(questionGroupItem.getQuestionItemID()));
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("Content-Type","application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+
+        // Adding request to request queue
+        queue.add(stringRequest);
+    }
+
+    public void updateAnswerVolley(final Context context, final AnswerItem answerChildItem){
+        RequestQueue queue = Volley.newRequestQueue(context);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.UPDATE_ANSWER_URL,
+                new Response.Listener<String>() {
+                    // here Check for success tag
+                    int success;
+                    String message;
+
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i(TAG, response.toString());
+
+                        try {
+                            JSONObject jsonObjectResponse = new JSONObject(response);
+                            success = jsonObjectResponse.getInt("success");
+                            message = jsonObjectResponse.getString("message");
+
+                            if (success == 1) {
+                                answerChildItem.setAnswerItemText(mAnswerToUpdate);
+                                notifyDataSetChanged();
+                            }
+                            else{
+                                CustomAlertDialog.showAlertDialog(context, "Error Occurred", "Answer could not be updated!!");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        //responseCode = json.getStatusLine().getStatusCode();
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("answer", mAnswerToUpdate);
+                params.put("answerID", String.valueOf(answerChildItem.getAnswerItemID()));
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("Content-Type","application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+
+        // Adding request to request queue
+        queue.add(stringRequest);
+    }
 }

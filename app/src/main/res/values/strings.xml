@@ -90,5 +90,6 @@
     <string name="account_profile_name">Profile Name: </string>
     <string name="edit_question_button_text">Edit Question</string>
     <string name="edit_answer_button_text">Edit Answer</string>
+    <string name="edit_dialog_title">Edit</string>
 
 </resources>
