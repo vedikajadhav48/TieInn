@@ -96,15 +96,11 @@ public class CreateAccountActivity extends ActionBarActivity{
                             success = jsonObjectResponse.getInt("success");
                             message = jsonObjectResponse.getString("message");
 
-                            if (success == 1) {
-                                Intent intent = new Intent(CreateAccountActivity.this,LoginActivity.class);
-                                // this finish() method is used to tell android os that we are done with current
-                                // activity now! Moving to other activity
+                            if(success == 1) {
                                 finish();
-                                startActivity(intent);
                             }
                             else{
-                                CustomAlertDialog.showAlertDialog(context, "Error Occurred", "Account could not be created");
+                                CustomAlertDialog.showAlertDialog(context, "Error Occurred", message);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

@@ -68,21 +68,13 @@ public class LoginActivity extends ActionBarActivity{
         mFacebookLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                mFacebookUserID = loginResult.getAccessToken().getUserId();
-                mAccessToken = loginResult.getAccessToken().getToken();
+                mFacebookUserID = loginResult.getAccessToken().getUserId();//UserID
+                mAccessToken = loginResult.getAccessToken().getToken();//AuthToken
+               // loginResult.getAccessToken().
 
                 mUsername = "vedikajadhav";
                 mPassword = "vedika";
-               // tieInnLogin();
-
-                /*info.setText(
-                        "User ID: "
-                                + loginResult.getAccessToken().getUserId()
-                                + "\n" +
-                                "Auth Token: "
-                                + loginResult.getAccessToken().getToken()
-                );
-                profilePictureView.setProfileId(loginResult.getAccessToken().getUserId());*/
+                tieInnLogin(getApplicationContext(), mUsername, mPassword);
                /* GraphRequest request = GraphRequest.newMeRequest(
                         access_Token,
                         new GraphRequest.GraphJSONObjectCallback() {
@@ -195,7 +187,6 @@ public class LoginActivity extends ActionBarActivity{
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("username", username);
                 params.put("password", password);
-
                 return params;
             }
 

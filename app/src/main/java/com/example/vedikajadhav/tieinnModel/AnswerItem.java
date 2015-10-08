@@ -4,6 +4,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import java.util.Date;
+
 /**
  * Created by Vedika Jadhav on 9/14/2015.
  */
@@ -14,6 +16,7 @@ public class AnswerItem {
     private String mAnswerItemText;
     private int mAnswerRecommendCount = 0;
     private Button mAnswerItemRecommendButton;
+    private Date mAnswerItemDate;
     private Button mAnswerItemEditButton;
 
     public int getAnswerItemID() {
@@ -62,5 +65,13 @@ public class AnswerItem {
 
     public void setAnswerItemRecommendButton(Button AnswerItemAnswerButton) {
         mAnswerItemRecommendButton = AnswerItemAnswerButton;
+    }
+
+    public Date getAnswerItemDate() {
+        return mAnswerItemDate;
+    }
+
+    public void setAnswerItemDate(Date answerItemDate) {
+        mAnswerItemDate = answerItemDate;
     }
 }

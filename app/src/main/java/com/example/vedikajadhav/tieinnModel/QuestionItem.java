@@ -9,6 +9,8 @@ import android.widget.ListView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
+
 import static android.view.ViewDebug.trace;
 
 /**
@@ -22,6 +24,7 @@ public class QuestionItem {
     private String mQuestionItemCategory;
     private Button mQuestionItemWriteAnswerButton;
     private Button mQuestionItemEditButton;
+    private Date mQuestionItemDate;
     //private ListView mQuestionItemAnswerList;
 
     public int getQuestionItemID() {
@@ -70,6 +73,14 @@ public class QuestionItem {
 
     public void setQuestionItemEditButton(Button questionItemEditButton) {
         mQuestionItemEditButton = questionItemEditButton;
+    }
+
+    public Date getQuestionItemDate() {
+        return mQuestionItemDate;
+    }
+
+    public void setQuestionItemDate(Date questionItemDate) {
+        mQuestionItemDate = questionItemDate;
     }
 
     public JSONObject getJSONObject() {

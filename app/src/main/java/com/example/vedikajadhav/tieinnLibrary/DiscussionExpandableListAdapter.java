@@ -66,8 +66,15 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter i
         //return (this.mListDataChild.get((int)getGroupId(groupPosition))).size();
         Log.i(TAG, "groupPosition" + String.valueOf(groupPosition));
         Log.i(TAG, "getGroup(groupPosition).getQuestionItemID()" + String.valueOf(getGroup(groupPosition).getQuestionItemID()));
-        Log.i(TAG, "this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID()" + String.valueOf(this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID())));
-        return (this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID())).size();
+        Log.i(TAG,"getGroup answerList" +this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID()));
+//        Log.i(TAG, "size" + this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID()).size());
+       // return (this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID())).size();
+
+        /*if(this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID()) == null){
+            return 1;
+        }else {*/
+            return (this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID())).size();
+        //}
     }
 
     @Override
@@ -83,6 +90,26 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter i
     }
 
     @Override
+    public int getChildType(int groupPosition, int childPosition) {
+        return super.getChildType(groupPosition, childPosition);
+    }
+
+    @Override
+    public int getGroupType(int groupPosition) {
+        return super.getGroupType(groupPosition);
+    }
+
+    @Override
+    public int getChildTypeCount() {
+        return super.getChildTypeCount();
+    }
+
+    @Override
+    public int getGroupTypeCount() {
+        return super.getGroupTypeCount();
+    }
+
+    @Override
     public QuestionItem getGroup(int groupPosition) {
         return this.mListDataHeader.get(groupPosition);
     }
@@ -90,7 +117,13 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter i
     @Override
     public AnswerItem getChild(int groupPosition, int childPosition) {
        // return (this.mListDataChild.get((int)getGroupId(groupPosition))).get(childPosition);
-        return (this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID())).get(childPosition);
+        Log.i(TAG, "childList" + this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID()));
+        //Log.i(TAG, "getChild" + (this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID())).get(childPosition));
+        /*if(this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID()) == null){
+            return null;
+        }else{*/
+            return (this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID())).get(childPosition);
+        //}
     }
 
     @Override
@@ -165,18 +198,22 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter i
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        final AnswerItem AnswerChildItem = getChild(groupPosition, childPosition);
-        String childText = AnswerChildItem.getAnswerItemText();
-        int recommendCount = AnswerChildItem.getAnswerRecommendCount();
-
-        if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) this.mContext
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.discussion_list_item, null);
+       /* if(getChild(groupPosition, childPosition) == null){
+            return convertView;
         }
-        Button editAnswerButton = (Button)convertView.findViewById(R.id.discussion_board_edit_answer_button);
-        editAnswerButton.setTag(AnswerChildItem);
-        editAnswerButton.setOnClickListener(this);
+        else {*/
+            final AnswerItem AnswerChildItem = getChild(groupPosition, childPosition);
+            String childText = AnswerChildItem.getAnswerItemText();
+            int recommendCount = AnswerChildItem.getAnswerRecommendCount();
+
+            if (convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) this.mContext
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.discussion_list_item, null);
+            }
+            Button editAnswerButton = (Button) convertView.findViewById(R.id.discussion_board_edit_answer_button);
+            editAnswerButton.setTag(AnswerChildItem);
+            editAnswerButton.setOnClickListener(this);
 
             TextView answerTextView = (TextView) convertView.findViewById(R.id.discussion_board_answer_text);
             Button recommendAnswerButton = (Button) convertView.findViewById(R.id.discussion_board_recommend_answer);
@@ -193,7 +230,8 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter i
                 }
             });
 
-        return convertView;
+            return convertView;
+       // }
     }
 
     public void updateRecommendationOnNetwork(final TextView recommendAnswerEditText, final AnswerItem childItem, final int count){
@@ -479,4 +517,6 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter i
         // Adding request to request queue
         queue.add(stringRequest);
     }
+
+
 }

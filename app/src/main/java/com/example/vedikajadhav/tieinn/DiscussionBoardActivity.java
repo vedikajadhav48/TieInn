@@ -1,6 +1,8 @@
 package com.example.vedikajadhav.tieinn;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -183,23 +185,25 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
         mDiscussionExpandableListView.setAdapter(mDiscussionExpandableListAdapter);
 
         // Listview Group click listener
-       /* mQuestionExpandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+/*        mDiscussionExpandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
 
+            @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v,
                                         int groupPosition, long id) {
-                 Toast.makeText(getApplicationContext(),
-                 "Group Clicked " + mHousingQuestionList.get(groupPosition),
-                 Toast.LENGTH_SHORT).show();
-               // parent.expandGroup(groupPosition);
-                Constants.QUESTION_GROUP_CLICKED = groupPosition;
-                Constants.QUESTION_ID_GROUP_CLICKED = mHousingQuestionList.get(groupPosition).getQuestionItemID();
-                return false;
+                if(parent.isGroupExpanded(groupPosition)){
+                    parent.collapseGroup(groupPosition);
+                }else{
+                    boolean animateExpansion = false;
+                    parent.expandGroup(groupPosition,animateExpansion);
+                }
+                //telling the listView we have handled the group click, and don't want the default actions.
+                return true;
             }
-        });
+        });*/
 
         // Listview on child click listener
-        mQuestionExpandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+   /*     mQuestionExpandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
 
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
@@ -238,41 +242,6 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
 
             }
         });*/
-    }
-
-    /*
- * Preparing the list data
- */
-    private void prepareListData() {
-/*        listDataHeader = new ArrayList<String>();
-        listDataChild = new HashMap<String, List<String>>();*/
-
-/*        // Adding child data
-        listDataHeader.add("Top 250");
-        listDataHeader.add("Now Showing");
-        listDataHeader.add("Coming Soon..");*/
-
-        /*for(int i=0; i<mHousingQuestionList.size(); i++){
-              //mHousingAnswerList.put(mHousingQuestionList.get(i), top250); // Header, Child data
-            //mHousingAnswerList.put(questionID, answers);
-            getAnswersFromNetwork(mHousingQuestionList.get(i).getQuestionItemID());
-        }*/
-      /*  // Adding child data
-        List<String> top250 = new ArrayList<String>();
-        top250.add("The Shawshank Redemption");
-        top250.add("The Godfather");
-        top250.add("The Godfather: Part II");
-        top250.add("Pulp Fiction");
-        top250.add("The Good, the Bad and the Ugly");
-        top250.add("The Dark Knight");
-        top250.add("12 Angry Men");
-
-        for(int i=0; i<mHousingQuestionList.size(); i++){
-          //  mHousingAnswerList.put(mHousingQuestionList.get(i), top250); // Header, Child data
-        }*/
-
-/*        listDataChild.put(listDataHeader.get(1), nowShowing);
-        listDataChild.put(listDataHeader.get(2), comingSoon);*/
     }
 
     public void postQuestionToNetwork(final Context context){
