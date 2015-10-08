@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
-              android:layout_height="55dip"
-              android:orientation="vertical" >
+              android:layout_height="match_parent"
+              android:orientation="horizontal" >
 
     <TextView
         android:id="@+id/discussion_board_answer_text"
@@ -12,11 +12,6 @@
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
 
     <Button
         android:id="@+id/discussion_board_recommend_answer"
@@ -35,6 +30,8 @@
             android:id="@+id/dicussion_board_recommend_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/discussion_board_answer_text"
+            android:layout_toRightOf="@+id/discussion_board_recommend_answer"
             android:textSize="17dp" />
 
         <Button
@@ -42,6 +39,7 @@
             android:layout_width="100dp"
             android:layout_height="30dp"
             android:layout_below="@id/discussion_board_answer_text"
+            android:layout_toRightOf="@id/dicussion_board_recommend_count"
             android:textColor="#343434"
             android:textSize="10dip"
             android:layout_marginTop="1dip"
@@ -50,6 +48,11 @@
             android:focusable="false"
             android:text="@string/edit_answer_button_text" />
 
-    </LinearLayout>
+    <TextView
+        android:id="@+id/dicussion_board_answer_post_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/discussion_board_recommend_answer"
+        android:textSize="17dp" />
 
-</LinearLayout>
+</RelativeLayout>

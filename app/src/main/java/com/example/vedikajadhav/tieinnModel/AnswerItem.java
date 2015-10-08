@@ -16,7 +16,7 @@ public class AnswerItem {
     private String mAnswerItemText;
     private int mAnswerRecommendCount = 0;
     private Button mAnswerItemRecommendButton;
-    private Date mAnswerItemDate;
+    private String mAnswerItemDate;
     private Button mAnswerItemEditButton;
 
     public int getAnswerItemID() {
@@ -67,11 +67,11 @@ public class AnswerItem {
         mAnswerItemRecommendButton = AnswerItemAnswerButton;
     }
 
-    public Date getAnswerItemDate() {
+    public String getAnswerItemDate() {
         return mAnswerItemDate;
     }
 
-    public void setAnswerItemDate(Date answerItemDate) {
+    public void setAnswerItemDate(String answerItemDate) {
         mAnswerItemDate = answerItemDate;
     }
 }

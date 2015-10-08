@@ -24,7 +24,7 @@ public class QuestionItem {
     private String mQuestionItemCategory;
     private Button mQuestionItemWriteAnswerButton;
     private Button mQuestionItemEditButton;
-    private Date mQuestionItemDate;
+    private String mQuestionItemDate;
     //private ListView mQuestionItemAnswerList;
 
     public int getQuestionItemID() {
@@ -75,11 +75,11 @@ public class QuestionItem {
         mQuestionItemEditButton = questionItemEditButton;
     }
 
-    public Date getQuestionItemDate() {
+    public String getQuestionItemDate() {
         return mQuestionItemDate;
     }
 
-    public void setQuestionItemDate(Date questionItemDate) {
+    public void setQuestionItemDate(String questionItemDate) {
         mQuestionItemDate = questionItemDate;
     }
 
@@ -90,6 +90,7 @@ public class QuestionItem {
             jsonObject.put("questionUserID", mQuestionItemUserID);
             jsonObject.put("questionText", mQuestionItemText);
             jsonObject.put("questionCategory", mQuestionItemCategory);
+            jsonObject.put("questionDate", mQuestionItemDate);
         } catch (JSONException e) {
             Log.i("DefaultListItem.toString JSONException: ", e.getMessage());
         }

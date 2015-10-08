@@ -158,10 +158,12 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter i
         }*/
         TextView questionTextView = (TextView) convertView
                 .findViewById(R.id.discussion_board_question_text);
+        TextView questionDateTextView = (TextView) convertView.findViewById(R.id.dicussion_board_question_post_date);
         Button writeAnswerButton=(Button)convertView.findViewById(R.id.discussion_board_write_answer_button);
 
         questionTextView.setTypeface(null, Typeface.BOLD);
         questionTextView.setText(questionGroupItem.getQuestionItemText());
+        questionDateTextView.setText("Posted On:" + questionGroupItem.getQuestionItemDate());
 
         writeAnswerButton.setTag(String.valueOf(groupPosition));//For passing the list item index
         writeAnswerButton.setOnClickListener(new View.OnClickListener(){
@@ -202,9 +204,7 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter i
             return convertView;
         }
         else {*/
-            final AnswerItem AnswerChildItem = getChild(groupPosition, childPosition);
-            String childText = AnswerChildItem.getAnswerItemText();
-            int recommendCount = AnswerChildItem.getAnswerRecommendCount();
+            final AnswerItem answerChildItem = getChild(groupPosition, childPosition);
 
             if (convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) this.mContext
@@ -212,21 +212,23 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter i
                 convertView = inflater.inflate(R.layout.discussion_list_item, null);
             }
             Button editAnswerButton = (Button) convertView.findViewById(R.id.discussion_board_edit_answer_button);
-            editAnswerButton.setTag(AnswerChildItem);
+            editAnswerButton.setTag(answerChildItem);
             editAnswerButton.setOnClickListener(this);
 
             TextView answerTextView = (TextView) convertView.findViewById(R.id.discussion_board_answer_text);
+            TextView answerDateTextView = (TextView) convertView.findViewById(R.id.dicussion_board_answer_post_date);
+            final TextView recommendAnswerCountTextView = (TextView) convertView.findViewById(R.id.dicussion_board_recommend_count);
             Button recommendAnswerButton = (Button) convertView.findViewById(R.id.discussion_board_recommend_answer);
 
-            final TextView recommendAnswerCountTextView = (TextView) convertView.findViewById(R.id.dicussion_board_recommend_count);
-            answerTextView.setText(childText);
-            recommendAnswerCountTextView.setText(String.valueOf(AnswerChildItem.getAnswerRecommendCount()));
+            answerTextView.setText(answerChildItem.getAnswerItemText());
+            answerDateTextView.setText("Posted On:" + answerChildItem.getAnswerItemDate());
+            recommendAnswerCountTextView.setText(String.valueOf(answerChildItem.getAnswerRecommendCount()));
             recommendAnswerButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //increment recommend counter
-                    int count = AnswerChildItem.getAnswerRecommendCount();
-                    updateRecommendationOnNetwork(recommendAnswerCountTextView, AnswerChildItem, ++count);
+                    int count = answerChildItem.getAnswerRecommendCount();
+                    updateRecommendationOnNetwork(recommendAnswerCountTextView, answerChildItem, ++count);
                 }
             });
 
@@ -289,11 +291,14 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter i
                             message = jsonObjectResponse.getString("message");
 
                             if (success == 1) {
+                                JSONObject answerJSONObject = new JSONObject(message);
                                 AnswerItem newAnswerItem = new AnswerItem();
-                                newAnswerItem.setAnswerItemID(Integer.parseInt(message));
+                               // newAnswerItem.setAnswerItemID(Integer.parseInt(message));
+                                newAnswerItem.setAnswerItemID(answerJSONObject.getInt("AnswerID"));
                                 newAnswerItem.setAnswerUserID(mUserID);
                                 newAnswerItem.setQuestionID(questionID);
                                 newAnswerItem.setAnswerItemText(mAnswerToPost);
+                                newAnswerItem.setAnswerItemDate(answerJSONObject.getString("AnswerDate"));
                                 /*List<AnswerItem> answers = mListDataChild.get((int)getGroupId(groupPosition));
                                 answers.add(newAnswerItem);*/
                                 mListDataChild.get(questionID).add(newAnswerItem);

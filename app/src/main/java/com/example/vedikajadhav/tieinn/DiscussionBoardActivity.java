@@ -32,6 +32,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -96,6 +97,7 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
                             mQuestionItem.setQuestionItemUserID(question.getString("QuestionUserID"));
                             mQuestionItem.setQuestionItemText(question.getString("Question"));
                             mQuestionItem.setQuestionItemCategory(question.getString("Category"));
+                            mQuestionItem.setQuestionItemDate(question.getString("QuestionDate"));
                             mQuestionList.add(0, mQuestionItem);
                         }
                         //Toast.makeText(getApplicationContext(), "Success Questions: " + TAG, Toast.LENGTH_SHORT).show();
@@ -154,6 +156,7 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
                                 mAnswerItem.setQuestionID(answerJSONObject.getInt("QuestionID"));
                                 mAnswerItem.setAnswerItemText(answerJSONObject.getString("Answer"));
                                 mAnswerItem.setAnswerRecommendCount(answerJSONObject.getInt("NumberOfRecommendations"));
+                                mAnswerItem.setAnswerItemDate(answerJSONObject.getString("AnswerDate"));
                                 answers.add(mAnswerItem);
                             }
                             mAnswerList.put(answerJSONObject.getInt("QuestionID"), answers);
@@ -262,11 +265,14 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
                             message = jsonObjectResponse.getString("message");
 
                             if (success == 1) {
+                                JSONObject questionJSONObject = new JSONObject(message);
                                 QuestionItem newQuestionItem = new QuestionItem();
-                                newQuestionItem.setQuestionItemID(Integer.parseInt(message));
+                                //newQuestionItem.setQuestionItemID(Integer.parseInt(message));
+                                newQuestionItem.setQuestionItemID(questionJSONObject.getInt("QuestionID"));
                                 newQuestionItem.setQuestionItemUserID(mUserID);
                                 newQuestionItem.setQuestionItemText(mQuestionToPost);
                                 newQuestionItem.setQuestionItemCategory(mCategory);
+                                newQuestionItem.setQuestionItemDate(questionJSONObject.getString("QuestionDate"));
                                 mQuestionList.add(0, newQuestionItem);
                                 mDiscussionExpandableListAdapter.notifyDataSetChanged();
                             }
@@ -292,7 +298,6 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
                 params.put("questionUserID", mUserID);
                 params.put("question", mQuestionToPost);
                 params.put("category", mCategory);
-
                 return params;
             }
 
