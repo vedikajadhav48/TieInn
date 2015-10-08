@@ -35,6 +35,7 @@
         android:textSize="10dip"
         android:layout_marginTop="1dip"
         android:focusable="false"
+        android:visibility="visible"
         android:text="@string/edit_question_button_text" />
 
     <TextView

@@ -152,7 +152,7 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
                                 answerJSONObject = (JSONObject) answerArrayPerQuestionID.get(j);
                                 AnswerItem mAnswerItem = new AnswerItem();
                                 mAnswerItem.setAnswerItemID(answerJSONObject.getInt("AnswerID"));
-                                mAnswerItem.setAnswerUserID(answerJSONObject.getString("AnswerUserID"));
+                                mAnswerItem.setAnswerItemUserID(answerJSONObject.getString("AnswerUserID"));
                                 mAnswerItem.setQuestionID(answerJSONObject.getInt("QuestionID"));
                                 mAnswerItem.setAnswerItemText(answerJSONObject.getString("Answer"));
                                 mAnswerItem.setAnswerRecommendCount(answerJSONObject.getInt("NumberOfRecommendations"));
@@ -254,6 +254,8 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
                     // here Check for success tag
                     int success;
                     String message;
+                    List<AnswerItem> answersForPostedQuestion = new ArrayList<AnswerItem>();
+                    AnswerItem mAnswerItem = new AnswerItem();
 
                     @Override
                     public void onResponse(String response) {
@@ -274,6 +276,9 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
                                 newQuestionItem.setQuestionItemCategory(mCategory);
                                 newQuestionItem.setQuestionItemDate(questionJSONObject.getString("QuestionDate"));
                                 mQuestionList.add(0, newQuestionItem);
+                                //answersForPostedQuestion.add(mAnswerItem);
+                                mAnswerList.put(newQuestionItem.getQuestionItemID(), answersForPostedQuestion);
+                                //mAnswerList.put(answerJSONObject.getInt("QuestionID"), answers);
                                 mDiscussionExpandableListAdapter.notifyDataSetChanged();
                             }
                             else{

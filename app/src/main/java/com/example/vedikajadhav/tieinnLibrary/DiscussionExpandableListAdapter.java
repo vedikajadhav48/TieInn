@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -64,17 +65,19 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter i
     @Override
     public int getChildrenCount(int groupPosition) {
         //return (this.mListDataChild.get((int)getGroupId(groupPosition))).size();
+        Log.i(TAG,"mListDataHeader" + mListDataHeader.toString());
+        Log.i(TAG,"mListDataChild" + mListDataChild.toString());
         Log.i(TAG, "groupPosition" + String.valueOf(groupPosition));
         Log.i(TAG, "getGroup(groupPosition).getQuestionItemID()" + String.valueOf(getGroup(groupPosition).getQuestionItemID()));
         Log.i(TAG,"getGroup answerList" +this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID()));
 //        Log.i(TAG, "size" + this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID()).size());
        // return (this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID())).size();
 
-        /*if(this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID()) == null){
-            return 1;
+        /*if((this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID()))==null){
+            return 0;
         }else {*/
             return (this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID())).size();
-        //}
+       // }
     }
 
     @Override
@@ -117,7 +120,7 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter i
     @Override
     public AnswerItem getChild(int groupPosition, int childPosition) {
        // return (this.mListDataChild.get((int)getGroupId(groupPosition))).get(childPosition);
-        Log.i(TAG, "childList" + this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID()));
+        //Log.i(TAG, "childList" + this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID()));
         //Log.i(TAG, "getChild" + (this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID())).get(childPosition));
         /*if(this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID()) == null){
             return null;
@@ -135,12 +138,13 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter i
     @Override
     public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         /*if (getChildrenCount(groupPosition) > 0) {
-            indicat
+            parent.findViewById(R.id.discussion_expandable_list_view).setVisibility(parent.INVISIBLE);
+            ImageView inidicatorImage = (ImageView) convertView.findViewById(R.id.explist_indicator);
             //indicator.setVisibility(View.VISIBLE);
-            viewHolder.indicator.setImageResource(
-                    isExpanded ? R.drawable.indicator_expanded : R.drawable.indicator);
+            *//*viewHolder.indicator.setImageResource(
+                    isExpanded ? R.drawable.indicator_expanded : R.drawable.indicator);*//*
         } else {
-            viewHolder.indicator.setVisibility(View.GONE);
+            //viewHolder.indicator.setVisibility(View.GONE);
         }*/
         QuestionItem questionGroupItem = getGroup(groupPosition);
         if (convertView == null) {
@@ -149,13 +153,14 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter i
             convertView = inflater.inflate(R.layout.discussion_list_group, null);
         }
 
-
         Button editQuestionButton = (Button)convertView.findViewById(R.id.discussion_board_edit_question_button);
-        editQuestionButton.setTag(questionGroupItem);
-        editQuestionButton.setOnClickListener(this);
-       /* if(questionGroupItem.getQuestionItemUserID() != mUserID){
-            editQuestionButton.setVisibility(View.GONE);
-        }*/
+        if(!questionGroupItem.getQuestionItemUserID().equalsIgnoreCase(mUserID)){
+            editQuestionButton.setVisibility(parent.INVISIBLE);
+        }else{
+            editQuestionButton.setVisibility(parent.VISIBLE);
+            editQuestionButton.setTag(questionGroupItem);
+            editQuestionButton.setOnClickListener(this);
+        }
         TextView questionTextView = (TextView) convertView
                 .findViewById(R.id.discussion_board_question_text);
         TextView questionDateTextView = (TextView) convertView.findViewById(R.id.dicussion_board_question_post_date);
@@ -211,9 +216,15 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter i
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.discussion_list_item, null);
             }
-            Button editAnswerButton = (Button) convertView.findViewById(R.id.discussion_board_edit_answer_button);
+
+        Button editAnswerButton = (Button) convertView.findViewById(R.id.discussion_board_edit_answer_button);
+        if(!answerChildItem.getAnswerItemUserID().equalsIgnoreCase(mUserID)){
+            editAnswerButton.setVisibility(parent.INVISIBLE);
+        }else{
+            editAnswerButton.setVisibility(parent.VISIBLE);
             editAnswerButton.setTag(answerChildItem);
             editAnswerButton.setOnClickListener(this);
+        }
 
             TextView answerTextView = (TextView) convertView.findViewById(R.id.discussion_board_answer_text);
             TextView answerDateTextView = (TextView) convertView.findViewById(R.id.dicussion_board_answer_post_date);
@@ -272,7 +283,6 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter i
         return true;
     }
 
-
     public void postAnswerVolley(final Context context, final int questionID){
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.POST_ANSWER_URL,
@@ -295,7 +305,7 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter i
                                 AnswerItem newAnswerItem = new AnswerItem();
                                // newAnswerItem.setAnswerItemID(Integer.parseInt(message));
                                 newAnswerItem.setAnswerItemID(answerJSONObject.getInt("AnswerID"));
-                                newAnswerItem.setAnswerUserID(mUserID);
+                                newAnswerItem.setAnswerItemUserID(mUserID);
                                 newAnswerItem.setQuestionID(questionID);
                                 newAnswerItem.setAnswerItemText(mAnswerToPost);
                                 newAnswerItem.setAnswerItemDate(answerJSONObject.getString("AnswerDate"));

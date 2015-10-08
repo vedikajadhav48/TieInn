@@ -11,7 +11,7 @@ import java.util.Date;
  */
 public class AnswerItem {
     private int mAnswerItemID;
-    private String mAnswerUserID;
+    private String mAnswerItemUserID;
     private int mQuestionID;
     private String mAnswerItemText;
     private int mAnswerRecommendCount = 0;
@@ -27,12 +27,12 @@ public class AnswerItem {
         mAnswerItemID = answerItemID;
     }
 
-    public String getAnswerUserID() {
-        return mAnswerUserID;
+    public String getAnswerItemUserID() {
+        return mAnswerItemUserID;
     }
 
-    public void setAnswerUserID(String answerUserID) {
-        mAnswerUserID = answerUserID;
+    public void setAnswerItemUserID(String answerItemUserID) {
+        mAnswerItemUserID = answerItemUserID;
     }
 
     public String getAnswerItemText() {

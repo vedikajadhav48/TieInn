@@ -38,7 +38,8 @@
     <ExpandableListView
         android:id="@+id/discussion_expandable_list_view"
         android:layout_height="match_parent"
-        android:layout_width="match_parent"/>
+        android:layout_width="match_parent" />
+        <!--android:groupIndicator="@android:bool" />-->
 <!--        android:groupIndicator="@android:color/transparent"-->
 
 </LinearLayout>
