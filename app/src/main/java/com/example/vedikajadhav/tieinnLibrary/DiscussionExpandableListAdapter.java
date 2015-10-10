@@ -233,7 +233,7 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter i
 
             answerTextView.setText(answerChildItem.getAnswerItemText());
             answerDateTextView.setText("Posted On:" + answerChildItem.getAnswerItemDate());
-            recommendAnswerCountTextView.setText(String.valueOf(answerChildItem.getAnswerRecommendCount()));
+            recommendAnswerCountTextView.setText(String.valueOf(answerChildItem.getAnswerRecommendCount()) + " Likes");
             recommendAnswerButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -261,7 +261,7 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter i
 
                     if (success == 1) {
                         Log.d("Recommendation updated", message);
-                        recommendAnswerEditText.setText(String.valueOf(count));
+                        recommendAnswerEditText.setText(String.valueOf(count) + " Likes");
                         childItem.setAnswerRecommendCount(count);
                     }
                 } catch (JSONException e) {

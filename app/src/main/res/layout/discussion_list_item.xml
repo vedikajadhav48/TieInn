@@ -13,11 +13,19 @@
         android:paddingBottom="5dp"
         android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
 
+    <TextView
+        android:id="@+id/dicussion_board_answer_post_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/discussion_board_answer_text"
+        android:textSize="17dp"
+        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"/>
+
     <Button
         android:id="@+id/discussion_board_recommend_answer"
         android:layout_width="100dp"
         android:layout_height="30dp"
-        android:layout_below="@id/discussion_board_answer_text"
+        android:layout_below="@id/dicussion_board_answer_post_date"
         android:textColor="#343434"
         android:textSize="10dip"
         android:layout_marginTop="1dip"
@@ -30,7 +38,7 @@
             android:id="@+id/dicussion_board_recommend_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/discussion_board_answer_text"
+            android:layout_below="@id/dicussion_board_answer_post_date"
             android:layout_toRightOf="@+id/discussion_board_recommend_answer"
             android:textSize="17dp" />
 
@@ -38,7 +46,7 @@
             android:id="@+id/discussion_board_edit_answer_button"
             android:layout_width="100dp"
             android:layout_height="30dp"
-            android:layout_below="@id/discussion_board_answer_text"
+            android:layout_below="@id/dicussion_board_answer_post_date"
             android:layout_toRightOf="@id/dicussion_board_recommend_count"
             android:textColor="#343434"
             android:textSize="10dip"
@@ -48,12 +56,5 @@
             android:focusable="false"
             android:visibility="visible"
             android:text="@string/edit_answer_button_text" />
-
-    <TextView
-        android:id="@+id/dicussion_board_answer_post_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/discussion_board_recommend_answer"
-        android:textSize="17dp" />
 
 </RelativeLayout>

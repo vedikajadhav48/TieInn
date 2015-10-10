@@ -188,7 +188,13 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
         mDiscussionExpandableListView.setAdapter(mDiscussionExpandableListAdapter);
 
         // Listview Group click listener
-/*        mDiscussionExpandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+        mDiscussionExpandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                return false;
+            }
+        });
+        /*mDiscussionExpandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
 
             @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
             @Override

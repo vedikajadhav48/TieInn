@@ -121,6 +121,7 @@ public class CreateAccountActivity extends ActionBarActivity{
                 params.put("profileName", profileName);
                 params.put("username", username);
                 params.put("password", password);
+                Log.i(TAG,"params createAccount" + params);
 
                 return params;
             }

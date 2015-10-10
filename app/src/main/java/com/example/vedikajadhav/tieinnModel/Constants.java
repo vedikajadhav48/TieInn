@@ -14,6 +14,8 @@ public class Constants {
     public static final String UPDATE_RECOMMENDATIONS_URL = "http://tieinn.comuv.com/updateRecommendations.php?";
     public static final String UPDATE_QUESTION_URL = "http://tieinn.comuv.com/updateQuestion.php";
     public static final String UPDATE_ANSWER_URL = "http://tieinn.comuv.com/updateAnswer.php";
+    public static final String FACEBOOK_LOGIN_URL = "http://tieinn.comuv.com/facebookLogin.php";
+    public static final String FACEBOOK_LOG_URL = "http://tieinn.comuv.com/facebookLog.php";
 
     public static final String TAG_SUCCESS = "success";
     public static final String TAG_MESSAGE = "message";
