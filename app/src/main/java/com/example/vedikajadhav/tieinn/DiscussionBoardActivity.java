@@ -159,7 +159,7 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
                                     mAnswerItem.setAnswerItemDate(answerJSONObject.getString("AnswerDate"));
                                     answers.add(mAnswerItem);
                                 }
-                                if(answerJSONObject.length()==0){
+                                if(answerArrayPerQuestionID.length()==0){
                                     mAnswerList.put(mQuestionList.get(i).getQuestionItemID(), answers);
                                 }else {
                                     mAnswerList.put(answerJSONObject.getInt("QuestionID"), answers);
