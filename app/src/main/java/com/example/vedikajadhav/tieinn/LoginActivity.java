@@ -54,8 +54,6 @@ public class LoginActivity extends ActionBarActivity{
     private String mPassword;
     private String mUserID;
     private String mProfileName;
-    private String mFacebookUserID;
-    private String mAccessToken;
     private CallbackManager callbackManager;
     SessionManager mSession;
     ProfileTracker profileTracker;
@@ -71,18 +69,25 @@ public class LoginActivity extends ActionBarActivity{
         callbackManager = CallbackManager.Factory.create();
         setContentView(R.layout.activity_login);
 
+        // Session class instance
+        /*mSession = SessionManager.getInstance(getApplicationContext());
+        // Check user login (this is the important point)
+        // If User is not logged in , This will redirect user to LoginActivity
+        // and finish current activity from activity stack.
+        if(mSession.checkLogin()) {
+            finish();
+        }*/
+
         //Initialize the views
         mUserNameEditText = (EditText)findViewById(R.id.edit_text_username_to_login);
         mPasswordEditText = (EditText)findViewById(R.id.edit_text_password_to_login);
         mFacebookLoginButton = (LoginButton)findViewById(R.id.facebook_login_button);
 
-        //Initialize the ProfileTracker and override its
-        // onCurrentProfileChanged(...) method.
+        //Initialize the ProfileTracker and override its onCurrentProfileChanged(...) method.
         profileTracker = new ProfileTracker() {
             @Override
             protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile) {
-                //Whenever the user profile is changed,
-                //this method will be called.
+                //Whenever the user profile is changed, this method will be called.
                 if (newProfile == null) {
                     //profileImageView.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
                     //profileInfoTextView.setText("");
@@ -99,28 +104,18 @@ public class LoginActivity extends ActionBarActivity{
             @Override
             public void onSuccess(LoginResult loginResult) {
                 mUsername = loginResult.getAccessToken().getUserId();//UserID
-                mAccessToken = loginResult.getAccessToken().getToken();//AuthToken
-
-                Profile userProfile = Profile.getCurrentProfile();
-                if (userProfile != null){
-                    setUpImageAndInfo(userProfile);
-                }else{
-                    Log.d(TAG,"Profile is Null");
-                }
-                //mUsername = mFacebookUserID;
+               // mAccessToken = loginResult.getAccessToken().getToken();//AuthToken
                 facebookLogin();
             }
 
             @Override
             public void onCancel() {
                 Log.i(TAG, "onCancel");
-               // mInfo.setText("Login attempt canceled.");
             }
 
             @Override
             public void onError(FacebookException e) {
                 Log.i(TAG, "onError");
-               // mInfo.setText("Login attempt failed.");
             }
         });
     }
@@ -141,9 +136,7 @@ public class LoginActivity extends ActionBarActivity{
                             message = jsonObjectResponse.getString("message");
 
                             if (success == 1) {
-                                //JSONObject userInfoResponse = new JSONObject(message);
                                 mUserID = message;
-                               // mProfileName = userInfoResponse.getString(Constants.TAG_PROFILE_NAME);
                                 mSession = SessionManager.getInstance(getApplicationContext());
                                 mSession.createLoginSession(mUserID, mUsername, mProfileName);
                                 Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
@@ -153,7 +146,7 @@ public class LoginActivity extends ActionBarActivity{
                                 startActivity(intent);
                                 // this finish() method is used to tell android os that we are done with current
                                 // activity now! Moving to other activity
-                                // finish();
+                                 finish();
                             }
                             else{
                                 CustomAlertDialog.showAlertDialog(getApplicationContext(), "Invalid username/password", "Username and password are invalid");
@@ -231,7 +224,7 @@ public class LoginActivity extends ActionBarActivity{
                                 startActivity(intent);
                                 // this finish() method is used to tell android os that we are done with current
                                 // activity now! Moving to other activity
-                                // finish();
+                                finish();
                             }
                             else{
                                 CustomAlertDialog.showAlertDialog(getApplicationContext(), "Invalid username/password", "Username and password are invalid");

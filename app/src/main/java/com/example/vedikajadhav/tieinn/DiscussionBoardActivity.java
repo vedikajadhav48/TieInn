@@ -120,7 +120,7 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
 
     public void getAnswersFromNetwork(){
        // Log.i(TAG, "Network Request for answers");
-        JSONArray jsonQuestionsArray = new JSONArray();
+        final JSONArray jsonQuestionsArray = new JSONArray();
         for (int i=0; i < mQuestionList.size(); i++) {
             jsonQuestionsArray.put(mQuestionList.get(i).getJSONObject());
         }
@@ -148,18 +148,22 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
                             JSONArray answerArrayPerQuestionID = (JSONArray) mAnswersJSONArray.get(i);
                             JSONObject answerJSONObject = new JSONObject();
                             List<AnswerItem> answers = new ArrayList<AnswerItem>();
-                            for(int j = 0; j < answerArrayPerQuestionID.length(); j++) {
-                                answerJSONObject = (JSONObject) answerArrayPerQuestionID.get(j);
-                                AnswerItem mAnswerItem = new AnswerItem();
-                                mAnswerItem.setAnswerItemID(answerJSONObject.getInt("AnswerID"));
-                                mAnswerItem.setAnswerItemUserID(answerJSONObject.getString("AnswerUserID"));
-                                mAnswerItem.setQuestionID(answerJSONObject.getInt("QuestionID"));
-                                mAnswerItem.setAnswerItemText(answerJSONObject.getString("Answer"));
-                                mAnswerItem.setAnswerRecommendCount(answerJSONObject.getInt("NumberOfRecommendations"));
-                                mAnswerItem.setAnswerItemDate(answerJSONObject.getString("AnswerDate"));
-                                answers.add(mAnswerItem);
-                            }
-                            mAnswerList.put(answerJSONObject.getInt("QuestionID"), answers);
+                                for (int j = 0; j < answerArrayPerQuestionID.length(); j++) {
+                                    answerJSONObject = (JSONObject) answerArrayPerQuestionID.get(j);
+                                    AnswerItem mAnswerItem = new AnswerItem();
+                                    mAnswerItem.setAnswerItemID(answerJSONObject.getInt("AnswerID"));
+                                    mAnswerItem.setAnswerItemUserID(answerJSONObject.getString("AnswerUserID"));
+                                    mAnswerItem.setQuestionID(answerJSONObject.getInt("QuestionID"));
+                                    mAnswerItem.setAnswerItemText(answerJSONObject.getString("Answer"));
+                                    mAnswerItem.setAnswerRecommendCount(answerJSONObject.getInt("NumberOfRecommendations"));
+                                    mAnswerItem.setAnswerItemDate(answerJSONObject.getString("AnswerDate"));
+                                    answers.add(mAnswerItem);
+                                }
+                                if(answerJSONObject.length()==0){
+                                    mAnswerList.put(mQuestionList.get(i).getQuestionItemID(), answers);
+                                }else {
+                                    mAnswerList.put(answerJSONObject.getInt("QuestionID"), answers);
+                                }
                         }
                      //   Toast.makeText(getApplicationContext(), "Success Answers: " + TAG, Toast.LENGTH_SHORT).show();
                     }
@@ -283,8 +287,8 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
                                 newQuestionItem.setQuestionItemDate(questionJSONObject.getString("QuestionDate"));
                                 mQuestionList.add(0, newQuestionItem);
                                 //answersForPostedQuestion.add(mAnswerItem);
-                                mAnswerList.put(newQuestionItem.getQuestionItemID(), answersForPostedQuestion);
-                                //mAnswerList.put(answerJSONObject.getInt("QuestionID"), answers);
+                                //mAnswerList.put(newQuestionItem.getQuestionItemID(), answersForPostedQuestion);
+                                mAnswerList.put(questionJSONObject.getInt("QuestionID"), answersForPostedQuestion);
                                 mDiscussionExpandableListAdapter.notifyDataSetChanged();
                             }
                             else{

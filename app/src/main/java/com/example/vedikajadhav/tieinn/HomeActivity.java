@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.media.tv.TvInputService;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.internal.view.menu.ListMenuItemView;
@@ -18,6 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.vedikajadhav.tieinnLibrary.SessionManager;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
 import com.squareup.picasso.Picasso;
 
@@ -34,6 +37,7 @@ public class HomeActivity extends ActionBarActivity implements AdapterView.OnIte
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_home);
 
         // Session class instance
@@ -83,6 +87,24 @@ public class HomeActivity extends ActionBarActivity implements AdapterView.OnIte
                 // This will clear all session data and
                 // redirect user to LoginActivity
                 mSession.logoutUser();
+                LoginManager.getInstance().logOut();
+           /*     Session session = Session.getActiveSession();
+                if (session != null) {
+
+                    if (!session.isClosed()) {
+                        session.closeAndClearTokenInformation();
+                        //clear your preferences if saved
+                    }
+                } else {
+
+                    session = new TvInputService.Session(context);
+                    Session.setActiveSession(session);
+
+                    session.closeAndClearTokenInformation();
+                    //clear your preferences if saved
+
+                }*/
+                finish();
                 break;
             default:
         }

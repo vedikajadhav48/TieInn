@@ -73,11 +73,11 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter i
 //        Log.i(TAG, "size" + this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID()).size());
        // return (this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID())).size();
 
-        /*if((this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID()))==null){
+        if((this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID()))==null){
             return 0;
-        }else {*/
+        }else {
             return (this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID())).size();
-       // }
+        }
     }
 
     @Override
