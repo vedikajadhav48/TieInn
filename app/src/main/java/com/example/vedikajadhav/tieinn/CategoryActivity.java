@@ -8,14 +8,27 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.example.vedikajadhav.tieinnLibrary.SessionManager;
+
 public class CategoryActivity extends ActionBarActivity implements AdapterView.OnItemClickListener{
     private static final String TAG= "CategoryActivity";
     private ListView categoryListView;
+    SessionManager mSession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
+
+        // Session class instance
+        mSession = SessionManager.getInstance(getApplicationContext());
+
+        // Check user login (this is the important point)
+        // If User is not logged in , This will redirect user to LoginActivity
+        // and finish current activity from activity stack.
+        if(mSession.checkLogin()) {
+            finish();
+        }
 
         categoryListView = (ListView)findViewById(R.id.category_list_view);
         ArrayAdapter<String> categoryListViewAdapter = new ArrayAdapter<String>(this,

@@ -1,8 +1,12 @@
 package com.example.vedikajadhav.tieinn;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.Build;
+import android.os.PersistableBundle;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,11 +26,13 @@ public class HomeActivity extends ActionBarActivity implements AdapterView.OnIte
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(TAG, "Vedika HomeActivity: onCreate");
         //FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_home);
 
         // Session class instance
         mSession = SessionManager.getInstance(getApplicationContext());
+
         // Check user login (this is the important point)
         // If User is not logged in , This will redirect user to LoginActivity
         // and finish current activity from activity stack.
@@ -72,7 +78,7 @@ public class HomeActivity extends ActionBarActivity implements AdapterView.OnIte
                 // This will clear all session data and
                 // redirect user to LoginActivity
                 mSession.logoutUser();
-                LoginManager.getInstance().logOut();
+                //LoginManager.getInstance().logOut();
            /*     Session session = Session.getActiveSession();
                 if (session != null) {
 
@@ -93,5 +99,57 @@ public class HomeActivity extends ActionBarActivity implements AdapterView.OnIte
                 break;
             default:
         }
+    }
+    @Override
+    protected void onStart(){
+        super.onStart();
+        Log.i(TAG, "Vedika HomeActivity: onStart");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(TAG, "Vedika HomeActivity: onResume");
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        Log.i(TAG, "Vedika HomeActivity: onPause");
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.i(TAG, "Vedika HomeActivity: onStop");
+        //profileTracker.stopTracking();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.i(TAG, "Vedika HomeActivity: onRestart");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "Vedika HomeActivity: onDestroy");
+    }
+
+    @Override
+    public void onBackPressed() {
+       // super.onBackPressed();
+        Log.i(TAG, "Vedika HomeActivity: onBackPressed");
+        moveTaskToBack(true);
+        return;
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        Log.i(TAG, "Vedika HomeActivity: onSaveInstanceState");
     }
 }

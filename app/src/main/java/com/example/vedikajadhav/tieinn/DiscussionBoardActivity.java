@@ -59,8 +59,16 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
         mDiscussionExpandableListView = (ExpandableListView)findViewById(R.id.discussion_expandable_list_view);
         mCategory = getIntent().getStringExtra(Intent_category);
 
-        // get user data from session
+        // Session class instance
         mSession = SessionManager.getInstance(getApplicationContext());
+
+        // Check user login (this is the important point)
+        // If User is not logged in , This will redirect user to LoginActivity
+        // and finish current activity from activity stack.
+        if(mSession.checkLogin()) {
+            finish();
+        }
+        // get user data from session
         HashMap<String, String> user = mSession.getUserDetails();
         mUserID = user.get(SessionManager.KEY_USERID);
 

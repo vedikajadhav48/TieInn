@@ -15,6 +15,7 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.vedikajadhav.tieinnLibrary.CustomAlertDialog;
+import com.example.vedikajadhav.tieinnLibrary.SessionManager;
 import com.example.vedikajadhav.tieinnModel.Constants;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,6 +37,7 @@ public class CreateAccountActivity extends ActionBarActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
+
         mProfileNameEditText = (EditText)findViewById(R.id.edit_text_profile_name);
         mUsernameEditText = (EditText) findViewById(R.id.edit_text_username);
         mPasswordEditText = (EditText) findViewById(R.id.edit_text_password);
