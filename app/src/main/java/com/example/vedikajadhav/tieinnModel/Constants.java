@@ -7,7 +7,6 @@ public class Constants {
     public static final String LOGIN_URL = "http://tieinn.comuv.com/login.php?";
     public static final String REGISTRATION_URL = "http://tieinn.comuv.com/registration.php?";
     public static final String GET_QUESTIONS_URL = "http://tieinn.comuv.com/getQuestions.php?";
-    public static final String GET_ANSWERS_URL = "http://tieinn.comuv.com/getAnswers.php?";
     public static final String GET_ALL_ANSWERS_URL = "http://tieinn.comuv.com/getAllAnswers.php?";
     public static final String POST_QUESTION_URL = "http://tieinn.comuv.com/postQuestion.php?";
     public static final String POST_ANSWER_URL = "http://tieinn.comuv.com/postAnswer.php?";
@@ -15,15 +14,9 @@ public class Constants {
     public static final String UPDATE_QUESTION_URL = "http://tieinn.comuv.com/updateQuestion.php";
     public static final String UPDATE_ANSWER_URL = "http://tieinn.comuv.com/updateAnswer.php";
     public static final String FACEBOOK_LOGIN_URL = "http://tieinn.comuv.com/facebookLogin.php";
-    public static final String FACEBOOK_LOG_URL = "http://tieinn.comuv.com/facebookLog.php";
 
     public static final String TAG_SUCCESS = "success";
     public static final String TAG_MESSAGE = "message";
     public static final String TAG_PROFILE_NAME = "ProfileName";
     public static final String TAG_USERID = "UserID";
-    public static final String TAG_QUESTION = "question";
-    public static final String TAG_CATEGORY = "Housing";
-
-    public static int QUESTION_GROUP_CLICKED;
-    public static int QUESTION_ID_GROUP_CLICKED;
 }

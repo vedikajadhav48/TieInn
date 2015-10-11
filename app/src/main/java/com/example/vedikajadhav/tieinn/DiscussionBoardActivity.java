@@ -1,8 +1,6 @@
 package com.example.vedikajadhav.tieinn;
-import android.annotation.TargetApi;
+
 import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,11 +30,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 
 public class DiscussionBoardActivity extends ActionBarActivity implements View.OnClickListener {
     private static final String TAG = "DiscussionBoardActivity";

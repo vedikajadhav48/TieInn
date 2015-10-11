@@ -1,17 +1,9 @@
 package com.example.vedikajadhav.tieinnModel;
 
-import android.media.Image;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ListView;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Date;
-
-import static android.view.ViewDebug.trace;
 
 /**
  * Created by Vedika Jadhav on 9/5/2015.

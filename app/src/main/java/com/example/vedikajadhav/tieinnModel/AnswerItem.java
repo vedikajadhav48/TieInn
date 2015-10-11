@@ -1,10 +1,6 @@
 package com.example.vedikajadhav.tieinnModel;
 
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ListView;
-
-import java.util.Date;
 
 /**
  * Created by Vedika Jadhav on 9/14/2015.
