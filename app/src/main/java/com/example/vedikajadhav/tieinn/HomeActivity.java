@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.example.vedikajadhav.tieinnLibrary.SessionManager;
+import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import java.util.HashMap;
 
@@ -27,7 +28,7 @@ public class HomeActivity extends ActionBarActivity implements AdapterView.OnIte
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "Vedika HomeActivity: onCreate");
-        //FacebookSdk.sdkInitialize(getApplicationContext());
+        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_home);
 
         // Session class instance
@@ -78,7 +79,7 @@ public class HomeActivity extends ActionBarActivity implements AdapterView.OnIte
                 // This will clear all session data and
                 // redirect user to LoginActivity
                 mSession.logoutUser();
-                //LoginManager.getInstance().logOut();
+                LoginManager.getInstance().logOut();
            /*     Session session = Session.getActiveSession();
                 if (session != null) {
 

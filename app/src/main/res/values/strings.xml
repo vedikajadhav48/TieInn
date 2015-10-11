@@ -77,7 +77,8 @@
         <item>HOUSING</item>
         <item>FOOD</item>
         <item>TRAVEL</item>
-        <item>OTHER</item>
+        <item>JOB OPPORTUNITIES</item>
+        <item>ADMINISTRATION RESOURCES</item>
     </string-array>
 
     <string name="title_activity_discussion_board">DiscussionBoard</string>

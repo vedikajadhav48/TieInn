@@ -47,7 +47,7 @@ public class LoginActivity extends ActionBarActivity{
     ProfileTracker profileTracker;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "Vedika LoginActivity: onCreate");
         //Initialize Facebook SDK
@@ -79,11 +79,14 @@ public class LoginActivity extends ActionBarActivity{
         mFacebookLoginButton = (LoginButton)findViewById(R.id.facebook_login_button);
 
         //Initialize the ProfileTracker and override its onCurrentProfileChanged(...) method.
-        /*profileTracker = new ProfileTracker() {
+        profileTracker = new ProfileTracker() {
             @Override
             protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile) {
                 //Whenever the user profile is changed, this method will be called.
+                Log.i(TAG, "oldProfile" + oldProfile);
+                Log.i(TAG, "new Profile" + newProfile);
                 if (newProfile == null) {
+                    Log.i(TAG, "new profile is null");
                     //profileImageView.setImageResource(R.drawable.com_facebook_profile_picture_blank_square);
                     //profileInfoTextView.setText("");
                 }else{
@@ -91,7 +94,7 @@ public class LoginActivity extends ActionBarActivity{
                 }
             }
         };
-        profileTracker.startTracking();*/
+        //profileTracker.startTracking();
 
         //Initialize the FacebookCallback and then override its methods
         // for performing actions.
@@ -100,6 +103,9 @@ public class LoginActivity extends ActionBarActivity{
             public void onSuccess(LoginResult loginResult) {
                 mUsername = loginResult.getAccessToken().getUserId();//UserID
                // mAccessToken = loginResult.getAccessToken().getToken();//AuthToken
+                /*Profile userProfile = Profile.getCurrentProfile();
+                setUpImageAndInfo(userProfile);*/
+                profileTracker.startTracking();
                 facebookLogin();
             }
 
@@ -312,6 +318,7 @@ public class LoginActivity extends ActionBarActivity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        profileTracker.stopTracking();
         Log.i(TAG, "Vedika LoginActivity: onDestroy");
     }
 
