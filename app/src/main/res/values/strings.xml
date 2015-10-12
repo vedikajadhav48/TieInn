@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">TieInn</string>
+    <string name="app_name">AztecFAQ</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="edit_text_username">Username</string>
@@ -74,11 +74,12 @@
 
     <string-array name="category_list_menu_items">
         <item>ACADEMIC</item>
+        <item>JOBS</item>
+        <item>ADMINISTRATION</item>
         <item>HOUSING</item>
         <item>FOOD</item>
         <item>TRAVEL</item>
-        <item>JOB OPPORTUNITIES</item>
-        <item>ADMINISTRATION RESOURCES</item>
+        <item>OTHER</item>
     </string-array>
 
     <string name="title_activity_discussion_board">DiscussionBoard</string>

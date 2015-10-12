@@ -1,6 +1,7 @@
 package com.example.vedikajadhav.tieinn;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -67,6 +68,11 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
         // and finish current activity from activity stack.
         if(mSession.checkLogin()) {
             finish();
+        }
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+            actionBar.setSubtitle(mCategory);
         }
         // get user data from session
         HashMap<String, String> user = mSession.getUserDetails();
