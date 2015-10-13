@@ -1,4 +1,4 @@
-package com.example.vedikajadhav.tieinnLibrary;
+package vedikajadhav.sdsu.thesis.aztecFAQLibrary;
 
 import android.app.Application;
 import android.text.TextUtils;

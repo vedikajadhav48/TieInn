@@ -1,4 +1,4 @@
-package com.example.vedikajadhav.tieinn;
+package vedikajadhav.sdsu.thesis.aztecFAQ;
 
 import android.content.Context;
 import android.os.Build;
@@ -19,14 +19,16 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.vedikajadhav.tieinnLibrary.AppController;
-import com.example.vedikajadhav.tieinnLibrary.CustomAlertDialog;
-import com.example.vedikajadhav.tieinnLibrary.DiscussionExpandableListAdapter;
-import com.example.vedikajadhav.tieinnLibrary.SessionManager;
-import com.example.vedikajadhav.tieinnLibrary.Util;
-import com.example.vedikajadhav.tieinnModel.AnswerItem;
-import com.example.vedikajadhav.tieinnModel.Constants;
-import com.example.vedikajadhav.tieinnModel.QuestionItem;
+import com.example.vedikajadhav.tieinn.R;
+
+import vedikajadhav.sdsu.thesis.aztecFAQLibrary.AppController;
+import vedikajadhav.sdsu.thesis.aztecFAQLibrary.CustomAlertDialog;
+import vedikajadhav.sdsu.thesis.aztecFAQLibrary.DiscussionExpandableListAdapter;
+import vedikajadhav.sdsu.thesis.aztecFAQLibrary.SessionManager;
+import vedikajadhav.sdsu.thesis.aztecFAQLibrary.Util;
+import vedikajadhav.sdsu.thesis.aztecFAQModel.AnswerItem;
+import vedikajadhav.sdsu.thesis.aztecFAQModel.Constants;
+import vedikajadhav.sdsu.thesis.aztecFAQModel.QuestionItem;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,7 +46,7 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
     DiscussionExpandableListAdapter mDiscussionExpandableListAdapter;
     List<QuestionItem> mQuestionList = new ArrayList<QuestionItem>();
     HashMap<Integer, List<AnswerItem>> mAnswerList = new HashMap<Integer, List<AnswerItem>>();
-    public static final String Intent_category = "com.example.vedikajadhav.tieinn.Intent_category";
+    public static final String Intent_category = "com.sdsu.thesis.aztecFAQ.Intent_category";
     private String mCategory;
     SessionManager mSession;
     String mUserID;

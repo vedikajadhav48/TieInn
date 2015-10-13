@@ -1,4 +1,4 @@
-package com.example.vedikajadhav.tieinnLibrary;
+package vedikajadhav.sdsu.thesis.aztecFAQLibrary;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

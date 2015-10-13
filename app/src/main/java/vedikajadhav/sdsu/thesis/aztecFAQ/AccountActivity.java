@@ -1,9 +1,12 @@
-package com.example.vedikajadhav.tieinn;
+package vedikajadhav.sdsu.thesis.aztecFAQ;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.widget.TextView;
-import com.example.vedikajadhav.tieinnLibrary.SessionManager;
+
+import com.example.vedikajadhav.tieinn.R;
+
+import vedikajadhav.sdsu.thesis.aztecFAQLibrary.SessionManager;
 import java.util.HashMap;
 
 public class AccountActivity extends ActionBarActivity {

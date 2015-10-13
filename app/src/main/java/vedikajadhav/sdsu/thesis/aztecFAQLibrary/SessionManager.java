@@ -1,9 +1,9 @@
-package com.example.vedikajadhav.tieinnLibrary;
+package vedikajadhav.sdsu.thesis.aztecFAQLibrary;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import com.example.vedikajadhav.tieinn.LoginActivity;
+import vedikajadhav.sdsu.thesis.aztecFAQ.LoginActivity;
 import java.util.HashMap;
 
 /**

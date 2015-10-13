@@ -1,4 +1,4 @@
-package com.example.vedikajadhav.tieinnLibrary;
+package vedikajadhav.sdsu.thesis.aztecFAQLibrary;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -21,9 +21,10 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.vedikajadhav.tieinn.R;
-import com.example.vedikajadhav.tieinnModel.AnswerItem;
-import com.example.vedikajadhav.tieinnModel.Constants;
-import com.example.vedikajadhav.tieinnModel.QuestionItem;
+
+import vedikajadhav.sdsu.thesis.aztecFAQModel.AnswerItem;
+import vedikajadhav.sdsu.thesis.aztecFAQModel.Constants;
+import vedikajadhav.sdsu.thesis.aztecFAQModel.QuestionItem;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.HashMap;

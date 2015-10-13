@@ -1,4 +1,4 @@
-package com.example.vedikajadhav.tieinn;
+package vedikajadhav.sdsu.thesis.aztecFAQ;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.vedikajadhav.tieinnLibrary.SessionManager;
+import com.example.vedikajadhav.tieinn.R;
+
+import vedikajadhav.sdsu.thesis.aztecFAQLibrary.SessionManager;
 
 public class ContactUsActivity extends ActionBarActivity {
     private static final String TAG= "ContactUsActivity";
