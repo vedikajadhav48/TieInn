@@ -18,6 +18,7 @@ import com.facebook.login.LoginManager;
 import java.util.HashMap;
 
 public class HomeActivity extends ActionBarActivity implements AdapterView.OnItemClickListener{
+    //private static final String TAG= "HomeActivity";
     private static final String TAG= "HomeActivity";
     private String mProfileName;
     private TextView mProfileNameTextView;
