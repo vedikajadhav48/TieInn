@@ -1,4 +1,4 @@
-package com.example.vedikajadhav.tieinn;
+package vedikajadhav.sdsu.thesis.aztecFAQ;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -17,9 +17,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.vedikajadhav.tieinnLibrary.CustomAlertDialog;
-import com.example.vedikajadhav.tieinnLibrary.SessionManager;
-import com.example.vedikajadhav.tieinnModel.Constants;
+import vedikajadhav.sdsu.thesis.aztecFAQLibrary.CustomAlertDialog;
+import vedikajadhav.sdsu.thesis.aztecFAQLibrary.SessionManager;
+import vedikajadhav.sdsu.thesis.aztecFAQModel.Constants;
+
+import com.example.vedikajadhav.tieinn.R;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;

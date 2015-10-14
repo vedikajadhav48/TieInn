@@ -1,4 +1,4 @@
-package com.example.vedikajadhav.tieinnModel;
+package vedikajadhav.sdsu.thesis.aztecFAQModel;
 
 import android.widget.Button;
 

@@ -1,4 +1,4 @@
-package com.example.vedikajadhav.tieinn;
+package vedikajadhav.sdsu.thesis.aztecFAQ;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

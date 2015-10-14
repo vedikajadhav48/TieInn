@@ -1,4 +1,4 @@
-package com.example.vedikajadhav.tieinn;
+package vedikajadhav.sdsu.thesis.aztecFAQ;
 
 import android.content.Context;
 import android.support.v7.app.ActionBarActivity;
@@ -14,9 +14,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.vedikajadhav.tieinnLibrary.CustomAlertDialog;
-import com.example.vedikajadhav.tieinnLibrary.SessionManager;
-import com.example.vedikajadhav.tieinnModel.Constants;
+import com.example.vedikajadhav.tieinn.R;
+
+import vedikajadhav.sdsu.thesis.aztecFAQLibrary.CustomAlertDialog;
+import vedikajadhav.sdsu.thesis.aztecFAQModel.Constants;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.HashMap;
