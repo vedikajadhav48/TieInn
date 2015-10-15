@@ -1,6 +1,7 @@
 package com.example.vedikajadhav.tieinn;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.PersistableBundle;
@@ -106,7 +107,7 @@ public class LoginActivity extends ActionBarActivity{
                 /*Profile userProfile = Profile.getCurrentProfile();
                 setUpImageAndInfo(userProfile);*/
                 profileTracker.startTracking();
-                facebookLogin();
+                facebookLogin(getApplicationContext());
             }
 
             @Override
@@ -121,8 +122,8 @@ public class LoginActivity extends ActionBarActivity{
         });
     }
 
-    public void facebookLogin(){
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+    public void facebookLogin(final Context context){
+        RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.FACEBOOK_LOGIN_URL,
                 new Response.Listener<String>() {
                     // here Check for success tag
@@ -138,7 +139,7 @@ public class LoginActivity extends ActionBarActivity{
 
                             if (success == 1) {
                                 mUserID = message;
-                                mSession = SessionManager.getInstance(getApplicationContext());
+                                mSession = SessionManager.getInstance(context);
                                 mSession.createLoginSession(mUserID, mUsername, mProfileName);
                                 Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
                            /* intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -150,7 +151,7 @@ public class LoginActivity extends ActionBarActivity{
                                  finish();
                             }
                             else{
-                                CustomAlertDialog.showAlertDialog(getApplicationContext(), "Invalid username/password", "Username and password are invalid");
+                                CustomAlertDialog.showAlertDialog(context, "Invalid username/password", message);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -193,13 +194,13 @@ public class LoginActivity extends ActionBarActivity{
         if((mUsername.equals("")) || (mPassword.equals(""))){
             CustomAlertDialog.showAlertDialog(this, "Username and/or Password field empty", "Enter Username and Password");
         }else {
-            tieInnLogin();
+            tieInnLogin(this);
         }
     }
 
-    public void tieInnLogin(){
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.LOGIN_URL,
+    public void tieInnLogin(final Context context){
+        RequestQueue queue = Volley.newRequestQueue(context);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.LOG_URL,
                 new Response.Listener<String>() {
                     // here Check for success tag
                     int success;
@@ -216,7 +217,7 @@ public class LoginActivity extends ActionBarActivity{
                                 JSONObject userInfoResponse = new JSONObject(message);
                                 mUserID = userInfoResponse.getString(Constants.TAG_USERID);
                                 mProfileName = userInfoResponse.getString(Constants.TAG_PROFILE_NAME);
-                                mSession = SessionManager.getInstance(getApplicationContext());
+                                mSession = SessionManager.getInstance(context);
                                 mSession.createLoginSession(mUserID, mUsername, mProfileName);
                                 Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
                            /* intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -228,7 +229,7 @@ public class LoginActivity extends ActionBarActivity{
                                 finish();
                             }
                             else{
-                                CustomAlertDialog.showAlertDialog(getApplicationContext(), "Invalid username/password", "Username and password are invalid");
+                                CustomAlertDialog.showAlertDialog(context, "Invalid username/password", message);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

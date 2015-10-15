@@ -120,7 +120,6 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Error Question: " + TAG, Toast.LENGTH_SHORT).show();
                 Log.i(TAG, "Error Response");
             }
         });
@@ -187,7 +186,6 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
                 /* here you can warn the user that there
                       was an error while trying to get the json
                       information from the php  */
-                Toast.makeText(getApplicationContext(), "Error Answers: " + TAG, Toast.LENGTH_SHORT).show();
                 Log.i(TAG, "Error Response", error);
             }
         });
