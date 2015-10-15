@@ -63,15 +63,6 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter i
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        //return (this.mListDataChild.get((int)getGroupId(groupPosition))).size();
-        Log.i(TAG,"mListDataHeader" + mListDataHeader.toString());
-        Log.i(TAG,"mListDataChild" + mListDataChild.toString());
-        Log.i(TAG, "groupPosition" + String.valueOf(groupPosition));
-        Log.i(TAG, "getGroup(groupPosition).getQuestionItemID()" + String.valueOf(getGroup(groupPosition).getQuestionItemID()));
-        Log.i(TAG,"getGroup answerList" +this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID()));
-//        Log.i(TAG, "size" + this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID()).size());
-       // return (this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID())).size();
-
         if((this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID()))==null){
             return 0;
         }else {
@@ -118,14 +109,7 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter i
 
     @Override
     public AnswerItem getChild(int groupPosition, int childPosition) {
-       // return (this.mListDataChild.get((int)getGroupId(groupPosition))).get(childPosition);
-        //Log.i(TAG, "childList" + this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID()));
-        //Log.i(TAG, "getChild" + (this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID())).get(childPosition));
-        /*if(this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID()) == null){
-            return null;
-        }else{*/
             return (this.mListDataChild.get(getGroup(groupPosition).getQuestionItemID())).get(childPosition);
-        //}
     }
 
     @Override
@@ -136,15 +120,6 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter i
 
     @Override
     public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        /*if (getChildrenCount(groupPosition) > 0) {
-            parent.findViewById(R.id.discussion_expandable_list_view).setVisibility(parent.INVISIBLE);
-            ImageView inidicatorImage = (ImageView) convertView.findViewById(R.id.explist_indicator);
-            //indicator.setVisibility(View.VISIBLE);
-            *//*viewHolder.indicator.setImageResource(
-                    isExpanded ? R.drawable.indicator_expanded : R.drawable.indicator);*//*
-        } else {
-            //viewHolder.indicator.setVisibility(View.GONE);
-        }*/
         QuestionItem questionGroupItem = getGroup(groupPosition);
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) this.mContext
@@ -204,10 +179,6 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter i
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-       /* if(getChild(groupPosition, childPosition) == null){
-            return convertView;
-        }
-        else {*/
             final AnswerItem answerChildItem = getChild(groupPosition, childPosition);
 
             if (convertView == null) {
@@ -243,11 +214,10 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter i
             });
 
             return convertView;
-       // }
     }
 
     public void updateRecommendationOnNetwork(final TextView recommendAnswerEditText, final AnswerItem childItem, final int count){
-        Log.i(TAG, "Network Request for questions");
+        //Log.i(TAG, "Network Request for questions");
         String url = Constants.UPDATE_RECOMMENDATIONS_URL + "userID=" + mUserID + "&answerID=" + childItem.getAnswerItemID() + "&numberOfRecommendations=" + count;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             int success;
@@ -302,14 +272,11 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter i
                             if (success == 1) {
                                 JSONObject answerJSONObject = new JSONObject(message);
                                 AnswerItem newAnswerItem = new AnswerItem();
-                               // newAnswerItem.setAnswerItemID(Integer.parseInt(message));
                                 newAnswerItem.setAnswerItemID(answerJSONObject.getInt("AnswerID"));
                                 newAnswerItem.setAnswerItemUserID(mUserID);
                                 newAnswerItem.setQuestionID(questionID);
                                 newAnswerItem.setAnswerItemText(mAnswerToPost);
                                 newAnswerItem.setAnswerItemDate(answerJSONObject.getString("AnswerDate"));
-                                /*List<AnswerItem> answers = mListDataChild.get((int)getGroupId(groupPosition));
-                                answers.add(newAnswerItem);*/
                                 mListDataChild.get(questionID).add(newAnswerItem);
                                 notifyDataSetChanged();
                             }
@@ -367,8 +334,6 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter i
             editQuestionDialog.setCancelable(true);
             editQuestionDialog.show();
 
-            //final int groupPosition = (int) v.getTag();
-            //final QuestionItem questionGroupItem = getGroup(groupPosition);
             final QuestionItem questionGroupItem = (QuestionItem) v.getTag();
             final EditText questionEditText = (EditText) editQuestionDialog.findViewById(R.id.question_answer_edit_text);
             questionEditText.setText(questionGroupItem.getQuestionItemText());
@@ -443,7 +408,6 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter i
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        //responseCode = json.getStatusLine().getStatusCode();
                     }
                 }, new Response.ErrorListener() {
 
@@ -501,7 +465,6 @@ public class DiscussionExpandableListAdapter extends BaseExpandableListAdapter i
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        //responseCode = json.getStatusLine().getStatusCode();
                     }
                 }, new Response.ErrorListener() {
 

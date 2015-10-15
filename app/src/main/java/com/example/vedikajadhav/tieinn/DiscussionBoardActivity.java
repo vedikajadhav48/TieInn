@@ -110,7 +110,6 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
                             mQuestionItem.setQuestionItemDate(question.getString("QuestionDate"));
                             mQuestionList.add(0, mQuestionItem);
                         }
-                        //Toast.makeText(getApplicationContext(), "Success Questions: " + TAG, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -175,7 +174,6 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
                                     mAnswerList.put(answerJSONObject.getInt("QuestionID"), answers);
                                 }
                         }
-                     //   Toast.makeText(getApplicationContext(), "Success Answers: " + TAG, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -289,15 +287,12 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
                             if (success == 1) {
                                 JSONObject questionJSONObject = new JSONObject(message);
                                 QuestionItem newQuestionItem = new QuestionItem();
-                                //newQuestionItem.setQuestionItemID(Integer.parseInt(message));
                                 newQuestionItem.setQuestionItemID(questionJSONObject.getInt("QuestionID"));
                                 newQuestionItem.setQuestionItemUserID(mUserID);
                                 newQuestionItem.setQuestionItemText(mQuestionToPost);
                                 newQuestionItem.setQuestionItemCategory(mCategory);
                                 newQuestionItem.setQuestionItemDate(questionJSONObject.getString("QuestionDate"));
                                 mQuestionList.add(0, newQuestionItem);
-                                //answersForPostedQuestion.add(mAnswerItem);
-                                //mAnswerList.put(newQuestionItem.getQuestionItemID(), answersForPostedQuestion);
                                 mAnswerList.put(questionJSONObject.getInt("QuestionID"), answersForPostedQuestion);
                                 mDiscussionExpandableListAdapter.notifyDataSetChanged();
                             }
@@ -307,7 +302,6 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        //responseCode = json.getStatusLine().getStatusCode();
                     }
                 }, new Response.ErrorListener() {
 
@@ -344,7 +338,6 @@ public class DiscussionBoardActivity extends ActionBarActivity implements View.O
             mQuestionToPost = mQuestionEditText.getText().toString();
             if(!mQuestionToPost.equalsIgnoreCase("")){
                 mQuestionEditText.setText("");
-                //postQuestionToNetwork(this, mQuestionToPost, mUserID, mCategory);
                 postQuestionToNetwork(this);
             }else{
                 CustomAlertDialog.showAlertDialog(this, "Empty Question", "Enter a question!!");

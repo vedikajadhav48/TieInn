@@ -18,7 +18,6 @@ import com.facebook.login.LoginManager;
 import java.util.HashMap;
 
 public class HomeActivity extends ActionBarActivity implements AdapterView.OnItemClickListener{
-    //private static final String TAG= "HomeActivity";
     private static final String TAG= "HomeActivity";
     private String mProfileName;
     private TextView mProfileNameTextView;
@@ -81,22 +80,6 @@ public class HomeActivity extends ActionBarActivity implements AdapterView.OnIte
                 // redirect user to LoginActivity
                 mSession.logoutUser();
                 LoginManager.getInstance().logOut();
-           /*     Session session = Session.getActiveSession();
-                if (session != null) {
-
-                    if (!session.isClosed()) {
-                        session.closeAndClearTokenInformation();
-                        //clear your preferences if saved
-                    }
-                } else {
-
-                    session = new TvInputService.Session(context);
-                    Session.setActiveSession(session);
-
-                    session.closeAndClearTokenInformation();
-                    //clear your preferences if saved
-
-                }*/
                 finish();
                 break;
             default:

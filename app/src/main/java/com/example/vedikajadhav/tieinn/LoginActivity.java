@@ -343,7 +343,7 @@ public class LoginActivity extends ActionBarActivity{
                 "<br/><u>User Id:</u> " + userProfile.getId() +
                 "<br/><u>Profile Link:</u> " + userProfile.getLinkUri().toString();
         Log.i(TAG, "userInfo" + userInfo);
-        mProfileName = userProfile.getFirstName() + userProfile.getLastName();
+        mProfileName = userProfile.getFirstName() + " " + userProfile.getLastName();
         mPassword = userProfile.getFirstName();
         //profileInfoTextView.setText(Html.fromHtml(userInfo));
 
