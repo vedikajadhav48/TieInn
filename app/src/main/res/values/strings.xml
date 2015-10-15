@@ -94,5 +94,6 @@
     <string name="edit_answer_button_text">Edit</string>
     <string name="edit_dialog_title">Edit</string>
     <string name="default_like_count">0 Likes</string>
+    <string name="title_activity_forgot_password">ForgotPasswordActivity</string>
 
 </resources>

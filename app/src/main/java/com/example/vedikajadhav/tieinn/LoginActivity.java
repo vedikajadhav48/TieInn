@@ -271,6 +271,8 @@ public class LoginActivity extends ActionBarActivity{
 
     public void forgotPassword(View button){
         Log.i(TAG, "Forgot Password");
+        Intent forgotPasswordIntent = new Intent(this, ForgotPasswordActivity.class);
+        startActivity(forgotPasswordIntent);
     }
 
     @Override
