@@ -6,7 +6,7 @@ android {
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
     defaultConfig {
-        applicationId "com.example.vedikajadhav.tieinn"
+        applicationId "com.aztecFAQ.vedikajadhav.tieinn"
         minSdkVersion 11
         targetSdkVersion 21
         versionCode 1

@@ -1,4 +1,4 @@
-package com.example.vedikajadhav.tieinn;
+package com.aztecFAQ.vedikajadhav.tieinn;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -12,7 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import com.example.vedikajadhav.tieinnLibrary.SessionManager;
+import com.aztecFAQ.vedikajadhav.tieinnLibrary.SessionManager;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import java.util.HashMap;

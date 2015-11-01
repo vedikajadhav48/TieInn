@@ -1,4 +1,4 @@
-package com.example.vedikajadhav.tieinnModel;
+package com.aztecFAQ.vedikajadhav.tieinnModel;
 
 /**
  * Created by Vedika Jadhav on 9/15/2015.

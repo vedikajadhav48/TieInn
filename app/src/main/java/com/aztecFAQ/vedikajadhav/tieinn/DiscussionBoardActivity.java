@@ -1,4 +1,4 @@
-package com.example.vedikajadhav.tieinn;
+package com.aztecFAQ.vedikajadhav.tieinn;
 
 import android.content.Context;
 import android.os.Build;
@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
-import android.widget.Toast;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -19,14 +19,14 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.vedikajadhav.tieinnLibrary.AppController;
-import com.example.vedikajadhav.tieinnLibrary.CustomAlertDialog;
-import com.example.vedikajadhav.tieinnLibrary.DiscussionExpandableListAdapter;
-import com.example.vedikajadhav.tieinnLibrary.SessionManager;
-import com.example.vedikajadhav.tieinnLibrary.Util;
-import com.example.vedikajadhav.tieinnModel.AnswerItem;
-import com.example.vedikajadhav.tieinnModel.Constants;
-import com.example.vedikajadhav.tieinnModel.QuestionItem;
+import com.aztecFAQ.vedikajadhav.tieinnLibrary.AppController;
+import com.aztecFAQ.vedikajadhav.tieinnLibrary.CustomAlertDialog;
+import com.aztecFAQ.vedikajadhav.tieinnLibrary.DiscussionExpandableListAdapter;
+import com.aztecFAQ.vedikajadhav.tieinnLibrary.SessionManager;
+import com.aztecFAQ.vedikajadhav.tieinnLibrary.Util;
+import com.aztecFAQ.vedikajadhav.tieinnModel.AnswerItem;
+import com.aztecFAQ.vedikajadhav.tieinnModel.Constants;
+import com.aztecFAQ.vedikajadhav.tieinnModel.QuestionItem;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

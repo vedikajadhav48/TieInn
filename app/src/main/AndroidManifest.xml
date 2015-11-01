@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.vedikajadhav.tieinn" >
+    package="com.aztecFAQ.vedikajadhav.tieinn" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- Allow to connect with internet and to know the current network state -->
@@ -8,13 +8,13 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name="com.example.vedikajadhav.tieinnLibrary.AppController"
+        android:name="com.aztecFAQ.vedikajadhav.tieinnLibrary.AppController"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".LoginActivity"
+            android:name="com.aztecFAQ.vedikajadhav.tieinn.LoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CreateAccountActivity"
+            android:name="com.aztecFAQ.vedikajadhav.tieinn.CreateAccountActivity"
             android:label="@string/title_activity_create_account" >
         </activity>
         <activity
@@ -44,32 +44,32 @@
             android:value="@string/facebook_app_id" />
 
         <activity
-            android:name=".HomeActivity"
+            android:name="com.aztecFAQ.vedikajadhav.tieinn.HomeActivity"
             android:label="@string/title_activity_home"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".DiscussionBoardActivity"
+            android:name="com.aztecFAQ.vedikajadhav.tieinn.DiscussionBoardActivity"
             android:label="@string/title_activity_discussion_board"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".AccountActivity"
+            android:name="com.aztecFAQ.vedikajadhav.tieinn.AccountActivity"
             android:label="@string/title_activity_account"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".ContactUsActivity"
+            android:name="com.aztecFAQ.vedikajadhav.tieinn.ContactUsActivity"
             android:label="@string/title_activity_contact_us"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".CategoryActivity"
+            android:name="com.aztecFAQ.vedikajadhav.tieinn.CategoryActivity"
             android:label="@string/title_activity_category"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".ForgotPasswordActivity"
+            android:name="com.aztecFAQ.vedikajadhav.tieinn.ForgotPasswordActivity"
             android:label="@string/title_activity_forgot_password" >
         </activity>
     </application>

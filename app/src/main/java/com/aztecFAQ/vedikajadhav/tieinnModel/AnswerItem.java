@@ -1,4 +1,4 @@
-package com.example.vedikajadhav.tieinnModel;
+package com.aztecFAQ.vedikajadhav.tieinnModel;
 
 import android.widget.Button;
 

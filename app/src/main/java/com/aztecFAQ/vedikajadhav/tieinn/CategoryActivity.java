@@ -1,4 +1,4 @@
-package com.example.vedikajadhav.tieinn;
+package com.aztecFAQ.vedikajadhav.tieinn;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -8,7 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.example.vedikajadhav.tieinnLibrary.SessionManager;
+import com.aztecFAQ.vedikajadhav.tieinnLibrary.SessionManager;
 
 public class CategoryActivity extends ActionBarActivity implements AdapterView.OnItemClickListener{
     private static final String TAG= "CategoryActivity";
