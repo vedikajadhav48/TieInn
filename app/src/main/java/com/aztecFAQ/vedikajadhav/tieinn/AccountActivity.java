@@ -7,7 +7,6 @@ import com.aztecFAQ.vedikajadhav.tieinnLibrary.SessionManager;
 import java.util.HashMap;
 
 public class AccountActivity extends ActionBarActivity {
-    private static final String TAG= "AccountActivity";
     SessionManager mSession;
     private String mUsername;
     private String mProfileName;
