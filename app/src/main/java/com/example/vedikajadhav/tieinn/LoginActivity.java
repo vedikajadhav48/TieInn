@@ -200,7 +200,7 @@ public class LoginActivity extends ActionBarActivity{
 
     public void tieInnLogin(final Context context){
         RequestQueue queue = Volley.newRequestQueue(context);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.LOG_URL,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.LOGIN_URL,
                 new Response.Listener<String>() {
                     // here Check for success tag
                     int success;
